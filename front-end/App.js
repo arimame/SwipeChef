@@ -5,6 +5,7 @@ import Test from './test';
 import SwipeCards from './SwipeCards'
 
 export default class App extends React.Component {
+
   render() {
     return (
       <View style={{flex:1}}>

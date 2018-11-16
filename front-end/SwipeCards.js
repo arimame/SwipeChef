@@ -40,13 +40,29 @@ export default class extends React.Component {
     this.state = {
       cards: [
         {text: 'Tomato', backgroundColor: 'red'},
-        {text: 'Aubergine', backgroundColor: 'purple'},
-        {text: 'Courgette', backgroundColor: 'green'},
-        {text: 'Blueberry', backgroundColor: 'blue'},
+        // {text: 'Aubergine', backgroundColor: 'purple'},
+        // {text: 'Courgette', backgroundColor: 'green'},
+        // {text: 'Blueberry', backgroundColor: 'blue'},
         {text: 'Umm...', backgroundColor: 'cyan'},
         {text: 'orange', backgroundColor: 'orange'},
       ]
     };
+  }
+
+  componentDidMount() {
+    fetch('http://172.46.0.254:3000')
+    .then(results => {
+      // var lol = JSON.parse(results)
+      console.log("TEST")
+      console.log(results._bodyText)
+      let test = results._bodyText
+      let newCards = this.state.cards
+      newCards = newCards.concat({text: test, backgroundColor: 'pink'})
+      console.log('newcards', newCards)
+      this.setState({cards: newCards}, () => {
+        console.log('state', this.state.cards);
+      })      
+    })
   }
 
   handleYup (card) {
@@ -61,6 +77,8 @@ export default class extends React.Component {
   render() {
     // If you want a stack of cards instead of one-per-one view, activate stack mode
     // stack={true}
+    console.log('Im rendering')
+    console.log('wat', this.state.cards);
     return (
       <SwipeCards
         loop={true}
