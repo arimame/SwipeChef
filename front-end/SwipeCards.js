@@ -2,7 +2,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, Button} from 'react-native';
 
 import SwipeCards from 'react-native-swipe-cards';
 
@@ -14,7 +14,19 @@ class Card extends React.Component {
   render() {
     return (
       <View style={[styles.card, {backgroundColor: this.props.backgroundColor}]}>
-        <Text>{this.props.text}</Text>
+        <Text
+          style={{fontSize:18, color:"white", fontWeight:"bold"}}
+        >{this.props.text}
+        </Text>
+        <Image 
+          style={{width:325, height: 325}}
+          source={{uri: 'http://images.media-allrecipes.com/userphotos/960x960/3757723.jpg'}}
+        />
+        <Button
+          onPress={this.props.updateViewItem}
+          title="Details"
+          color="white"
+        />
       </View>
     )
   }
@@ -40,9 +52,9 @@ export default class extends React.Component {
     this.state = {
       cards: [
         {text: 'Tomato', backgroundColor: 'red'},
-        // {text: 'Aubergine', backgroundColor: 'purple'},
-        // {text: 'Courgette', backgroundColor: 'green'},
-        // {text: 'Blueberry', backgroundColor: 'blue'},
+        {text: 'Aubergine', backgroundColor: 'purple'},
+        {text: 'Courgette', backgroundColor: 'green'},
+        {text: 'Blueberry', backgroundColor: 'blue'},
         {text: 'Umm...', backgroundColor: 'cyan'},
         {text: 'orange', backgroundColor: 'orange'},
       ]
@@ -53,19 +65,19 @@ export default class extends React.Component {
     fetch('http://172.46.0.254:3000')
     .then(results => {
       // var lol = JSON.parse(results)
-      console.log("TEST")
-      console.log(results._bodyText)
+      // console.log("TEST")
+      // console.log(results._bodyText)
       let test = results._bodyText
       let newCards = this.state.cards
       newCards = newCards.concat({text: test, backgroundColor: 'pink'})
-      console.log('newcards', newCards)
+      // console.log('newcards', newCards)
       this.setState({cards: newCards}, () => {
-        console.log('state', this.state.cards);
+        // console.log('state', this.state.cards);
       })      
     })
   }
 
-  handleYup (card) {
+  handleYup = (card) => {
     console.log(`Yup for ${card.text}`)
   }
   handleNope (card) {
@@ -77,13 +89,13 @@ export default class extends React.Component {
   render() {
     // If you want a stack of cards instead of one-per-one view, activate stack mode
     // stack={true}
-    console.log('Im rendering')
-    console.log('wat', this.state.cards);
+    // console.log('Im rendering')
+    // console.log('wat', this.state.cards);
     return (
       <SwipeCards
-        loop={true}
+        loop={false}
         cards={this.state.cards}
-        renderCard={(cardData) => <Card {...cardData} />}
+        renderCard={(cardData) => <Card {...cardData} updateViewItem={this.props.updateViewItem} />}
         renderNoMoreCards={() => <NoMoreCards />}
         showYup={false}
         showNope={false}
