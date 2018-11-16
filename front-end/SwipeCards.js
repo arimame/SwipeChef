@@ -18,9 +18,9 @@ class Card extends React.Component {
           style={{fontSize:18, color:"white", fontWeight:"bold"}}
         >{this.props.text}
         </Text>
-        <Image 
+        <Image
           style={{width:325, height: 325}}
-          source={{uri: 'http://images.media-allrecipes.com/userphotos/960x960/3757723.jpg'}}
+          source={{uri: this.props.image}}
         />
         <Button
           onPress={this.props.updateViewItem}
@@ -62,18 +62,35 @@ export default class extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://172.46.0.254:3000')
+    fetch('http://172.46.0.120:3000', {
+      method: "GET",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      }
+    })
     .then(results => {
+      console.log(results._bodyInit)
+      let parsedResults = JSON.parse(results._bodyInit);
+      const newCards = [];
+      for (let match of parsedResults.matches) {
+        let image = match.imageUrlsBySize["90"]
+        let largeImage = image.substring(0, image.length - 5)
+        largeImage += "s1200-c"
+        console.log(largeImage)
+        newCards.push({text: match.recipeName, image: largeImage, backgroundColor: "black"})
+      }
+
       // var lol = JSON.parse(results)
       // console.log("TEST")
-      // console.log(results._bodyText)
-      let test = results._bodyText
-      let newCards = this.state.cards
-      newCards = newCards.concat({text: test, backgroundColor: 'pink'})
+      // console.log(results)
+      // let test = results._bodyText
+      // let newCards = this.state.cards
+      // newCards = newCards.concat({text: test, backgroundColor: 'pink'})
       // console.log('newcards', newCards)
       this.setState({cards: newCards}, () => {
         // console.log('state', this.state.cards);
-      })      
+      })
     })
   }
 
