@@ -22,11 +22,6 @@ class Card extends React.Component {
           style={{width:325, height: 325}}
           source={{uri: this.props.image}}
         />
-        <Button
-          onPress={this.props.updateViewItem}
-          title="Details"
-          color="white"
-        />
       </View>
     )
   }
@@ -61,38 +56,38 @@ export default class extends React.Component {
     };
   }
 
-  componentDidMount() {
-    fetch('http://172.46.0.120:3000', {
-      method: "GET",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      }
-    })
-    .then(results => {
-      console.log(results._bodyInit)
-      let parsedResults = JSON.parse(results._bodyInit);
-      const newCards = [];
-      for (let match of parsedResults.matches) {
-        let image = match.imageUrlsBySize["90"]
-        let largeImage = image.substring(0, image.length - 5)
-        largeImage += "s1200-c"
-        console.log(largeImage)
-        newCards.push({text: match.recipeName, image: largeImage, backgroundColor: "black"})
-      }
+  // componentDidMount() {
+  //   fetch('http://172.46.0.120:3000', {
+  //     method: "GET",
+  //     headers: {
+  //       "Accept": "application/json",
+  //       "Content-Type": "application/json"
+  //     }
+  //   })
+  //   .then(results => {
+  //     console.log(results._bodyInit)
+  //     let parsedResults = JSON.parse(results._bodyInit);
+  //     const newCards = [];
+  //     for (let match of parsedResults.matches) {
+  //       let image = match.imageUrlsBySize["90"]
+  //       let largeImage = image.substring(0, image.length - 5)
+  //       largeImage += "s1200-c"
+  //       console.log(largeImage)
+  //       newCards.push({text: match.recipeName, image: largeImage, backgroundColor: "black"})
+  //     }
 
-      // var lol = JSON.parse(results)
-      // console.log("TEST")
-      // console.log(results)
-      // let test = results._bodyText
-      // let newCards = this.state.cards
-      // newCards = newCards.concat({text: test, backgroundColor: 'pink'})
-      // console.log('newcards', newCards)
-      this.setState({cards: newCards}, () => {
-        // console.log('state', this.state.cards);
-      })
-    })
-  }
+  //     // var lol = JSON.parse(results)
+  //     // console.log("TEST")
+  //     // console.log(results)
+  //     // let test = results._bodyText
+  //     // let newCards = this.state.cards
+  //     // newCards = newCards.concat({text: test, backgroundColor: 'pink'})
+  //     // console.log('newcards', newCards)
+  //     this.setState({cards: newCards}, () => {
+  //       // console.log('state', this.state.cards);
+  //     })
+  //   })
+  // }
 
   handleYup = (card) => {
     console.log(`Yup for ${card.text}`)
