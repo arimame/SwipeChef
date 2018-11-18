@@ -18,6 +18,7 @@ export default class App extends React.Component {
       this.setState({currentScreen: newScreen})
     }
 
+
     this.trx = {
       updateCurrentScreen: updateCurrentScreen
     }

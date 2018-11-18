@@ -20,6 +20,15 @@ class FridgesController < ApplicationController
     end
   end
 
+  def destroy
+    @fridge = Fridge.find_by recipe_id: params[:id], user_id: params[:user_id]
+    @fridge.destroy
+    @message = "item removed from fridge".to_json
+
+    respond_to do |format|
+      format.json { render json: @message}
+    end
+  end
 
 
   private
