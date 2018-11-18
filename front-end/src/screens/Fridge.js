@@ -9,7 +9,7 @@ import Navbar from "../partials/Navbar";
 
 function Fridge (props) {
 
-console.log("------------------book view")
+console.log("------------------Fridge view")
 console.log(props.stateVars.currentScreen);
 
   return (

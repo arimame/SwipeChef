@@ -23,6 +23,22 @@ export default class App extends React.Component {
     }
   }
 
+
+  // componentDidMount() {
+  //   fetch('http://172.46.0.120:3000/recipes/Creamy-Cajun-Chicken-and-Sausage-Pasta-2472083', {
+  //     method: "GET",
+  //     headers: {
+  //       "Accept": "application/json",
+  //       "Content-Type": "application/json"
+  //     }
+  //   }).then(results => {
+  //  console.log(results._bodyInit)
+  //   })
+  // }
+
+
+
+
   render() {
     const stateVars = {
       currentScreen: this.state.currentScreen
