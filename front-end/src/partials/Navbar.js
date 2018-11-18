@@ -21,6 +21,10 @@ console.log(props.stateVars.currentScreen);
     icon: "notebook",
     newScreen: "book"
   };
+  const backButton = {
+    icon: "keyboard-backspace",
+    newScreen: props.stateVars.previousScreen
+  }
 
   let buttonLeft;
   let buttonRight;
@@ -42,17 +46,22 @@ console.log(props.stateVars.currentScreen);
       buttonRight = swipeButton;
       title = "My Coookbook"
       break
+    case "details":
+      buttonLeft = backButton;
+      buttonRight = null;
+      title = "SwipeChef"
+      break
     default:
       console.log("error!!!! the button is wrong");
       break;
   }
 
   leftButtonPress = (e) => {
-    props.trx.updateCurrentScreen(buttonLeft.newScreen)
+    props.trx.updateCurrentScreen(props.stateVars.currentScreen, buttonLeft.newScreen)
   }
 
   rightButtonPress = (e) => {
-    props.trx.updateCurrentScreen(buttonRight.newScreen)
+    props.trx.updateCurrentScreen(props.stateVars.currentScreen, buttonRight.newScreen)
   }
 
   const buttonLeftRender = buttonLeft ?  (<Icon name = {buttonLeft.icon} style={{textAlign: "center", fontSize: 40}} onPress={leftButtonPress}/>) : <Text></Text>

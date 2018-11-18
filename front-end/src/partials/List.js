@@ -13,7 +13,7 @@ console.log(props.recipeItems)
 
 
 const listElements = props.recipeItems.map((recipe) =>
-  <Listitem recipe={recipe} trx={props.trx}/>
+  <Listitem recipe={recipe} trx={props.trx} stateVars={props.stateVars} />
 )
 
 

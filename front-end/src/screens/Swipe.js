@@ -12,7 +12,7 @@ function Swipe (props) {
   return (
     <View style={{flex:1}}>
       <Navbar stateVars={props.stateVars} style={{height: heightPercentageToDP('10%')}} trx={props.trx} />
-      <SwipeCards style={{height: heightPercentageToDP('90%')}}/>
+      <SwipeCards trx={props.trx} style={{height: heightPercentageToDP('90%')}}/>
     </View>
   )
 }

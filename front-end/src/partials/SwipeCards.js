@@ -11,6 +11,10 @@ class Card extends React.Component {
     super(props);
   }
 
+  detailsButtonPress = (e) => {
+    this.props.trx.updateCurrentRecipe(this.props.id, "swipe")
+  } 
+
   render() {
     return (
       <View style={[styles.card, {backgroundColor: this.props.backgroundColor}]}>
@@ -21,6 +25,11 @@ class Card extends React.Component {
         <Image
           style={{width:325, height: 325}}
           source={{uri: this.props.image}}
+        />
+        <Button
+          onPress={this.detailsButtonPress}
+          title="Details"
+          color="white"
         />
       </View>
     )
@@ -127,7 +136,7 @@ export default class extends React.Component {
       <SwipeCards
         loop={false}
         cards={this.state.cards}
-        renderCard={(cardData) => <Card {...cardData} updateViewItem={this.props.updateViewItem} />}
+        renderCard={(cardData) => <Card {...cardData} trx={this.props.trx} />}
         renderNoMoreCards={() => <NoMoreCards />}
         showYup={false}
         showNope={false}

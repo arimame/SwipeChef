@@ -64,7 +64,7 @@ class Fridge extends React.Component  {
 
   render () {
 
-    const fridgeItemsRender = this.state.fridgeItems ? (<List recipeItems={this.state.fridgeItems} trx={this.trx} />) : <Text></Text>
+    const fridgeItemsRender = this.state.fridgeItems ? (<List recipeItems={this.state.fridgeItems} stateVars={this.props.stateVars} trx={this.trx} />) : <Text></Text>
 
    return (
       <View style={{flex:1}}>

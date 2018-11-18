@@ -4,23 +4,29 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 
 import Swipe from './screens/Swipe'
 import Fridge from './screens/Fridge'
-import Detials from './screens/Details'
+import Details from './screens/Details'
 import Book from './screens/Book'
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentScreen: "swipe"
+      currentScreen: "swipe",
+      previousScreen: null,
+      currentRecipe: null
     }
 
-    updateCurrentScreen = (newScreen) => {
-      this.setState({currentScreen: newScreen})
+    updateCurrentScreen = (curScreen, newScreen) => {
+      this.setState({currentScreen: newScreen, previousScreen: curScreen})
     }
 
+    updateCurrentRecipe = (newRecipe, curScreen) => {
+      this.setState({currentRecipe: newRecipe, currentScreen: "details", previousScreen: curScreen})
+    }
 
     this.trx = {
-      updateCurrentScreen: updateCurrentScreen
+      updateCurrentScreen: updateCurrentScreen,
+      updateCurrentRecipe: updateCurrentRecipe
     }
   }
 
@@ -42,7 +48,9 @@ export default class App extends React.Component {
 
   render() {
     const stateVars = {
-      currentScreen: this.state.currentScreen
+      currentScreen: this.state.currentScreen,
+      previousScreen: this.state.previousScreen,
+      currentRecipe: this.state.currentRecipe
     }
 
     switch (this.state.currentScreen) {
