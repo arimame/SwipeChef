@@ -17,7 +17,7 @@ class Book extends React.Component {
     }
 
     removeItem = (itemId) => {
-      fetch(`http://172.46.0.254:3000/users/2/books/${itemId}`, {
+      fetch(`http://172.46.0.120:3000/users/2/books/${itemId}`, {
       method: "DELETE",
       headers: {
         "Accept": "application/json",
