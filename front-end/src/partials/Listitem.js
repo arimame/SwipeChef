@@ -14,7 +14,7 @@ function Listitem (props) {
   const expireDays = Math.floor((864000000 - msDiff) / 86400000);
 
   deleteButtonPress = (e) => {
-    props.trx.removeFridgeItem(props.recipe.id)
+    props.trx.removeItem(props.recipe.id)
   }
 
 

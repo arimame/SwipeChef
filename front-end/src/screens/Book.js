@@ -6,20 +6,67 @@ import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive
 
 import SwipeCards from "../partials/SwipeCards";
 import Navbar from "../partials/Navbar";
+import List from "../partials/List";
 
-function Book (props) {
+class Book extends React.Component {
 
-console.log("------------------book view")
-console.log(props.stateVars.currentScreen);
+  constructor(props) {
+    super(props);
+    this.state = {
+      bookItems: null
+    }
 
-  return (
-    <View style={{flex:1}}>
-      <Navbar stateVars={props.stateVars} style={{height: heightPercentageToDP('10%')}} trx={props.trx} />
-      <View style={{height: heightPercentageToDP('90%')}} >
-        <Text>book</Text>
+    removeItem = (itemId) => {
+      fetch(`http://172.46.3.249:3000/users/2/books/${itemId}`, {
+      method: "DELETE",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      }
+      }).then(results => {
+        console.log(results._bodyInit)
+        const newBookItems = this.state.bookItems.filter(function(item) {
+          return item.id !== itemId
+        });
+        this.setState({bookItems: newBookItems})
+      })
+    }
+    this.trx = props.trx;
+    console.log("--------------this trx")
+    console.log(this.trx);
+    this.trx['removeItem'] = removeItem
+    console.log("--------------new trx")
+    console.log(this.trx);
+
+
+  }
+
+  componentDidMount() {
+    fetch('http://172.46.3.249:3000/users/2/books', {
+      method: "GET",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      }
+    }).then(results => {
+      const parsedResults= JSON.parse(results._bodyInit);
+      this.setState({bookItems: parsedResults})
+    })
+  }
+  render () {
+
+    const bookItemsRender = this.state.bookItems ? (<List recipeItems={this.state.bookItems} trx={this.trx} />) : <Text></Text>
+
+    return (
+      <View style={{flex:1}}>
+        <Navbar stateVars={this.props.stateVars} style={{height: heightPercentageToDP('10%')}} trx={this.trx} />
+        <View style={{height: heightPercentageToDP('90%')}} >
+          <Text>book</Text>
+          {bookItemsRender}
+        </View>
       </View>
-    </View>
-  )
+    )
+  }
 }
 
 
