@@ -33,10 +33,22 @@ class Fridge extends React.Component  {
       })
     }
 
+    addToBook = (itemId) => {
+      fetch(`http://172.46.3.249:3000/users/${props.stateVars.currentUser}/books`, {
+        method: 'POST',
+        headers:
+          {"Accept": "application/json",
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `recipe_id=${itemId}` // <-- Post parameters
+      })
+    }
+
     this.trx = props.trx;
     console.log("--------------this trx")
     console.log(this.trx);
     this.trx['removeItem'] = removeItem
+    this.trx['addToBook'] = addToBook
     console.log("--------------new trx")
     console.log(this.trx);
   }

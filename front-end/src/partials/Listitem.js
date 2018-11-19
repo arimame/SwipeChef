@@ -16,6 +16,10 @@ function Listitem (props) {
   console.log("-------BUTTON--------", props.recipe)
 
 
+  addToBookButtonPress = (e) => {
+    props.trx.addToBook(props.recipe.id)
+  }
+
   deleteButtonPress = (e) => {
     props.trx.removeItem(props.recipe.id)
   }
@@ -23,6 +27,11 @@ function Listitem (props) {
   detailsButtonPress = (e) => {
     props.trx.updateCurrentRecipe(props.recipe.api_ref, props.stateVars.currentScreen)
   }
+
+  console.log("------------------------------- props ----- currentScreen")
+  console.log(props.stateVars.currentScreen)
+
+  addToBookText = props.stateVars.currentScreen === "fridge" ? <Text onPress={addToBookButtonPress}>Add to Recipe Book</Text> : <Text></Text>
 
     return (
       <View style={{flexDirection: 'row', borderColor: "black", borderWidth: 0.5 , justifyContent: "center", marginBottom: 10}}>
@@ -43,7 +52,7 @@ function Listitem (props) {
           </View>
           <View style={{height: heightPercentageToDP('6%'), borderColor: "black", borderWidth: 0.5, flexDirection: 'row'}}>
             <View style={{width: widthPercentageToDP('23.33'), borderColor: "black", borderWidth: 0.5}}><Text onPress={deleteButtonPress}>Delete</Text></View>
-            <View style={{width: widthPercentageToDP('23.33%'), borderColor: "black", borderWidth: 0.5}}></View>
+            <View style={{width: widthPercentageToDP('23.33%'), borderColor: "black", borderWidth: 0.5}}>{addToBookText}</View>
             <View style={{width: widthPercentageToDP('23.34%'), borderColor: "black", borderWidth: 0.5}}></View>
 
           </View>
