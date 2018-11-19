@@ -13,7 +13,8 @@ export default class App extends React.Component {
     this.state = {
       currentScreen: "swipe",
       previousScreen: null,
-      currentRecipe: null
+      currentRecipe: null,
+      currentUser: 2
     }
 
     updateCurrentScreen = (curScreen, newScreen) => {
@@ -50,7 +51,8 @@ export default class App extends React.Component {
     const stateVars = {
       currentScreen: this.state.currentScreen,
       previousScreen: this.state.previousScreen,
-      currentRecipe: this.state.currentRecipe
+      currentRecipe: this.state.currentRecipe,
+      currentUser: this.state.currentUser
     }
 
     switch (this.state.currentScreen) {
