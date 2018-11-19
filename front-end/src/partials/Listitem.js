@@ -17,7 +17,7 @@ function Listitem (props) {
 
 
   deleteButtonPress = (e) => {
-    props.trx.removeFridgeItem(props.recipe.id)
+    props.trx.removeItem(props.recipe.id)
   }
 
   detailsButtonPress = (e) => {

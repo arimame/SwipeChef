@@ -16,7 +16,7 @@ class Fridge extends React.Component  {
       fridgeItems: null
     }
 
-    removeFridgeItem = (itemId) => {
+    removeItem = (itemId) => {
       fetch(`http://172.46.0.254:3000/users/2/fridges/${itemId}`, {
       method: "DELETE",
       headers: {
@@ -31,23 +31,15 @@ class Fridge extends React.Component  {
         this.setState({fridgeItems: newFridgeItems})
 
       })
-  }
+    }
 
     this.trx = props.trx;
     console.log("--------------this trx")
     console.log(this.trx);
-    this.trx['removeFridgeItem'] = removeFridgeItem
-     console.log("--------------new trx")
-     console.log(this.trx);
-
-
+    this.trx['removeItem'] = removeItem
+    console.log("--------------new trx")
+    console.log(this.trx);
   }
-
-
-
-
-
-
   componentDidMount() {
     fetch('http://172.46.0.254:3000/users/2/fridges', {
       method: "GET",
