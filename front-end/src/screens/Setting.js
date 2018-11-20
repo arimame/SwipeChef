@@ -62,7 +62,7 @@ class Setting extends React.Component {
             /></View>
         <View style={{margin: 10}}>
         <ToggleSwitch
-                isOn={this.state.nut_allergy}
+                isOn={this.state.peanut_allergy}
                 onColor='green'
                 offColor='red'
                 label='Peanut Allergy  '
@@ -134,11 +134,5 @@ class Setting extends React.Component {
     )
   }
 }
-
-
-
-
-
-
 
 export default Setting;
