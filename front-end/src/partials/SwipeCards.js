@@ -65,42 +65,45 @@ export default class extends React.Component {
     };
   }
 
-  //componentDidMount() {
-  //  fetch('http://172.46.3.249:3000', {
-  //    method: "GET",
-  //    headers: {
-  //      "Accept": "application/json",
-  //      "Content-Type": "application/json"
-  //    }
-  //  })
-  //  .then(results => {
-  //    console.log(results._bodyInit)
-  //    let parsedResults = JSON.parse(results._bodyInit);
-  //    const newCards = [];
-  //    for (let match of parsedResults.matches) {
-  //      let image = match.imageUrlsBySize["90"]
-  //      let largeImage = image.substring(0, image.length - 5)
-  //      largeImage += "s1200-c"
-  //      console.log(largeImage)
-  //      newCards.push({text: match.recipeName, image: largeImage, backgroundColor: "black", id: match.id})
-  //    }
 
-      // var lol = JSON.parse(results)
-      // console.log("TEST")
-      // console.log(results)
-      // let test = results._bodyText
-      // let newCards = this.state.cards
-      // newCards = newCards.concat({text: test, backgroundColor: 'pink'})
-      // console.log('newcards', newCards)
-  //    this.setState({cards: newCards}, () => {
-        // console.log('state', this.state.cards);
-  //    })
-  //  })
-  //}
+
+//   componentDidMount() {
+//     fetch('http://172.46.0.120:3000', {
+//       method: "GET",
+//       headers: {
+//         "Accept": "application/json",
+//         "Content-Type": "application/json"
+//       }
+//     })
+//     .then(results => {
+//       console.log(results._bodyInit)
+//       let parsedResults = JSON.parse(results._bodyInit);
+//       const newCards = [];
+//       for (let match of parsedResults.matches) {
+//         let image = match.imageUrlsBySize["90"]
+//         let largeImage = image.substring(0, image.length - 5)
+//         largeImage += "s1200-c"
+//         console.log(largeImage)
+//         newCards.push({text: match.recipeName, image: largeImage, backgroundColor: "black", id: match.id})
+//       }
+
+
+//       // var lol = JSON.parse(results)
+//       // console.log("TEST")
+//       // console.log(results)
+//       // let test = results._bodyText
+//       // let newCards = this.state.cards
+//       // newCards = newCards.concat({text: test, backgroundColor: 'pink'})
+//       // console.log('newcards', newCards)
+//       this.setState({cards: newCards}, () => {
+//       //console.log('state', this.state.cards);
+//     })
+//   })
+// }
 
   handleYup = (card) => {
     console.log(`Yup for ${card.text}`)
-      fetch("http://172.46.3.249:3000/recipes", {
+      fetch("http://172.46.0.120:3000/recipes", {
       method: 'POST',
       headers:
         {"Accept": "application/json",
@@ -109,7 +112,7 @@ export default class extends React.Component {
       body: `api_ref=${card.id}&name=${card.text}&image=${card.image}` // <-- Post parameters
     }).then( results => {
        let parsedResults = JSON.parse(results._bodyInit);
-       fetch(`http://172.46.3.249:3000/users/${parsedResults.user_id}/fridges`, {
+       fetch(`http://172.46.0.120:3000/users/${parsedResults.user_id}/fridges`, {
         method: 'POST',
         headers:
           {"Accept": "application/json",
