@@ -3,9 +3,12 @@ class RecipesController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
+    query = URI.decode(params[:query])
+    puts query
+
     @response = RestClient::Request.execute(
       method: :get,
-       url: "http://api.yummly.com/v1/api/recipes?_app_id=#{ENV['ID']}&_app_key=#{ENV['KEY']}&q=pasta&maxResult=2&start=2&requirePictures=true")
+       url: "http://api.yummly.com/v1/api/recipes?_app_id=#{ENV['ID']}&_app_key=#{ENV['KEY']}#{query}")
 
 
     respond_to do |format|
