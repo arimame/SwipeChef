@@ -26,6 +26,11 @@ console.log(props.stateVars.currentScreen);
     newScreen: props.stateVars.previousScreen
   }
 
+  const settingsButton = {
+    icon: "settings-outline",
+    newScreen: "setting"
+  }
+
   let buttonLeft;
   let buttonRight;
   let title;
@@ -42,7 +47,7 @@ console.log(props.stateVars.currentScreen);
       title = "My Fridge"
       break;
     case "book":
-      buttonLeft = null;
+      buttonLeft = settingsButton;
       buttonRight = swipeButton;
       title = "My Coookbook"
       break
@@ -50,6 +55,11 @@ console.log(props.stateVars.currentScreen);
       buttonLeft = backButton;
       buttonRight = null;
       title = "SwipeChef"
+      break
+    case "setting":
+      buttonLeft = null;
+      buttonRight = bookButton;
+      title = "Settings"
       break
     default:
       console.log("error!!!! the button is wrong");

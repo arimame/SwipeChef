@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import {StyleSheet, Text, View, Image, Button, FlatList} from 'react-native';
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
+import ToggleSwitch from 'toggle-switch-react-native';
 
 import Navbar from "../partials/Navbar";
 
@@ -84,7 +85,6 @@ class Details extends React.Component  {
               <Text>Cholesterol: {ourNutritionList[4].value} grams</Text>
               <Text>Fat: {ourNutritionList[6].value} grams</Text>
               <Text>Sodium: {ourNutritionList[7].value} grams</Text>
-
             </View>
         </View>
       )
