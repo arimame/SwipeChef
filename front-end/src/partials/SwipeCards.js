@@ -317,7 +317,7 @@ const buildIngredientsCards = () => {
   cards.push(
     {
       type: 'question',
-      text: 'Ok, time to look at some ingredients.\n\nSwipe right for any ingredients you want to include, or left for any you want to avoid\n\n(Swipe to continue)',
+      text: 'Ok, time to look at some ingredients.\n\nSwipe right for yes, left for no, and up for maybe\n\n(Swipe to continue)',
       yupQuery: '',
     }
   );
@@ -374,13 +374,6 @@ const cuisineCards = buildCusineCards();
 const nutritionCards = [
   {
     type: 'question',
-    text: 'Is health a factor?',
-    yupQuery: '',
-    nopeLastCard: true,
-    prevDeck: "nutrition"
-  },
-  {
-    type: 'question',
     text: 'Good for you! 💪\n\nSwipe right for everything you want to keep into account:\n\n(Swipe to continue)',
     yupQuery: ''
   },
@@ -415,6 +408,23 @@ const nutritionCards = [
   }
 ]
 
+const health = [
+  {
+    type: 'question',
+    text: 'Is health a factor?',
+    yupQuery: '',
+    yupUpdateCards: nutritionCards,
+    nopeLastCard: true,
+    prevDeck: "nutrition"
+  },
+  {
+    type: 'question',
+    text: '',
+    color: 'white',
+    yupQuery: ''
+  },
+]
+
 const xmasCard = [
   {
     type: 'question',
@@ -422,7 +432,7 @@ const xmasCard = [
     yupQuery: '&allowedHoliday[]=holiday^holiday-christmas',
     yupLastCard: true,
     prevDeck: "xmas",
-    nopeUpdateCards: nutritionCards
+    nopeUpdateCards: health
   },
   {
     type: 'question',
@@ -513,7 +523,8 @@ class NoMoreCards extends Component {
   render() {
     return (
       <View>
-        <Text style={styles.noMoreCardsText}>{this.props.query}</Text>
+        <Text style={styles.noMoreCardsText}>No more recipes match your search. You're a swiping machine!</Text>
+        <Text style={styles.noMoreCardsText}>Start a new swipe session to discover new recipes</Text>
       </View>
     )
   }
@@ -583,11 +594,11 @@ export default class extends React.Component {
     else if (card.type === "addFilters") {
       this.index += this.deckSize;
       if (this.prevDeck === "time") {
-        this.setState({cards: xmasCard})
+        this.updateCards(xmasCard)
       } else if (this.prevDeck === "nutrition") {
-        this.setState({cards: cuisineCards})
+        this.updateCards(cuisineCards)
       } else if (this.prevDeck === "cuisine") {
-        this.setState({cards: ingredientsCards})
+        this.updateCards(ingredientsCards)
       }
     }
 
@@ -652,8 +663,31 @@ export default class extends React.Component {
   }
 
   handleMaybe = (card) => {
-    if (card.lastCard) {
-      this.lastCard();
+    if (card.type === "question") {
+      if (this.prevDeck !== "cuisine")
+        this.addToQuery(card.yupQuery);
+      } 
+      if (card.yupUpdateCards) {
+        this.updateCards(card.yupUpdateCards);
+      }
+      if (card.yupLastCard) {
+        this.lastCard();
+        this.prevDeck = card.prevDeck;
+      }
+
+    else if (card.type === "addFilters") {
+      this.index += this.deckSize;
+      if (this.prevDeck === "time") {
+        this.setState({cards: xmasCard})
+      } else if (this.prevDeck === "nutrition") {
+        this.setState({cards: cuisineCards})
+      } else if (this.prevDeck === "cuisine") {
+        this.setState({cards: ingredientsCards})
+      }
+    }
+
+    else {
+      if (card.lastCard) this.updateCards(this.nextDeck);
     }
   }
  
@@ -740,5 +774,6 @@ const styles = StyleSheet.create({
   },
   noMoreCardsText: {
     fontSize: 22,
+    textAlign: 'center'
   }
 })
