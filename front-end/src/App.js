@@ -28,9 +28,14 @@ export default class App extends React.Component {
       this.setState({currentRecipe: newRecipe, currentScreen: "details", previousScreen: curScreen})
     }
 
+    updateCurrentUser = (currentUser) => {
+      this.setState({currentUser: currentUser})
+    }
+
     this.trx = {
       updateCurrentScreen: updateCurrentScreen,
-      updateCurrentRecipe: updateCurrentRecipe
+      updateCurrentRecipe: updateCurrentRecipe,
+      updateCurrentUser: updateCurrentUser
     }
   }
 

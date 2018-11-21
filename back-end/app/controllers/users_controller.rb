@@ -1,6 +1,36 @@
 class UsersController < ApplicationController
   skip_before_action :verify_authenticity_token
 
+  def new
+
+  end
+
+
+  def create
+    user = User.new(user_create_params)
+    if user.save
+
+      payload = user.id
+
+      token = JWT.encode payload, ENV['HMAC_SECRET'], 'HS256'
+
+
+      respond_to do |format|
+        format.json { render json: token}
+      end
+
+    else
+
+      respond_to do |format|
+        format.json { render json: "400 - ERROR - Please make sure your passwords match".to_json}
+      end
+
+    end
+
+  end
+
+
+
   def show
     @user = User.find_by(user_params)
     @userResponse = {
@@ -44,6 +74,10 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def user_create_params
+    params.permit(:user, :username, :email, :password, :password_confirmation)
+  end
 
   def user_params
     params.permit(

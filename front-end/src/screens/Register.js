@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Image, Button, TextInput, TouchableHighlight} from 'react-native';
+import {StyleSheet, Text, View, Image, Button, TextInput, TouchableHighlight, AsyncStorage} from 'react-native';
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 import t from 'tcomb-form-native'
 import Navbar from "../partials/Navbar";
@@ -41,12 +41,43 @@ class Register extends React.Component {
     this.props.trx.updateCurrentScreen("register", "login")
   }
 
+  submitRegister = (e) => {
+    let registerInputs = this.refs.form.getValue()
+    console.log("--------------------------- REGISTER INPUTS")
+    console.log(registerInputs)
+    fetch(`http://172.46.3.249:3000/users`, {
+        method: 'POST',
+        headers:
+          {"Accept": "application/json",
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `email=${registerInputs.email}&username=${registerInputs.username}&password=${registerInputs.password}&password_confirmation=${registerInputs.confirmPassword}` // <-- Post parameters
+    }).then(results => {
+      if (results.slice(0,2) != '400') {
+        console.log(results)
+        var storeData = async () => {
+          try {
+            await AsyncStorage.setItem('swipeChefToken', results._bodyInit);
+          } catch (error) {
+            console.log("Error Saving Data")
+          }
+        }
+        storeData()
+        this.props.trx.updateCurrentUser(results)
+        this.props.trx.updateCurrentScreen("register", "swipe")
+        console.log(await AsyncStorage.getItem('swipeChefToken'))
+      } else {
+        console.log(results)
+      }
+    })
+  }
+
     return (
       <View>
       <Navbar stateVars={this.props.stateVars} style={{height: heightPercentageToDP('10%')}} trx={this.props.trx} />
        <View style={styles.container}>
-        <Form type={User} options={options} />
-         <TouchableHighlight style={styles.button} onPress={this.onPress} underlayColor='#99d9f4'>
+        <Form type={User} options={options} ref="form" />
+         <TouchableHighlight style={styles.button} onPress={submitRegister} underlayColor='#99d9f4'>
           <Text style={styles.buttonText}>Sign up</Text>
         </TouchableHighlight>
         <Text>Already have an account? <Text onPress={buttonPressToLogin}>Login.</Text></Text>

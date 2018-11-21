@@ -17,7 +17,7 @@ class Fridge extends React.Component  {
     }
 
     removeItem = (itemId) => {
-      fetch(`http://172.46.0.120:3000/users/2/fridges/${itemId}`, {
+      fetch(`http://172.46.3.249:3000/users/2/fridges/${itemId}`, {
       method: "DELETE",
       headers: {
         "Accept": "application/json",
@@ -53,14 +53,14 @@ class Fridge extends React.Component  {
     console.log(this.trx);
   }
   componentDidMount() {
-    fetch('http://172.46.0.120:3000/users/2/fridges', {
+    fetch('http://172.46.3.249:3000/users/2/fridges', {
       method: "GET",
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json"
       }
     }).then(results => {
-      const parsedResults= JSON.parse(results._bodyInit);
+      const parsedResults= JSON.parse(results._bodyInit)
       this.setState({fridgeItems: parsedResults})
     })
   }

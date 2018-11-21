@@ -68,7 +68,7 @@ export default class extends React.Component {
 
 
 //   componentDidMount() {
-//     fetch('http://172.46.0.120:3000', {
+//     fetch('http://172.46.3.249:3000', {
 //       method: "GET",
 //       headers: {
 //         "Accept": "application/json",
@@ -103,7 +103,7 @@ export default class extends React.Component {
 
   handleYup = (card) => {
     console.log(`Yup for ${card.text}`)
-      fetch("http://172.46.0.120:3000/recipes", {
+      fetch("http://172.46.3.249:3000/recipes", {
       method: 'POST',
       headers:
         {"Accept": "application/json",
@@ -112,7 +112,7 @@ export default class extends React.Component {
       body: `api_ref=${card.id}&name=${card.text}&image=${card.image}` // <-- Post parameters
     }).then( results => {
        let parsedResults = JSON.parse(results._bodyInit);
-       fetch(`http://172.46.0.120:3000/users/${parsedResults.user_id}/fridges`, {
+       fetch(`http://172.46.3.249:3000/users/${parsedResults.user_id}/fridges`, {
         method: 'POST',
         headers:
           {"Accept": "application/json",

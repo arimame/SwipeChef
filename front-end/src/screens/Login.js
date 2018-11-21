@@ -37,12 +37,27 @@ class Login extends React.Component {
     this.props.trx.updateCurrentScreen("login", "register")
   }
 
+  submitLogin = (e) => {
+    let loginInputs = this.refs.form.getValue()
+
+    fetch(`http://172.46.3.249:3000/sessions`, {
+        method: 'POST',
+        headers:
+          {"Accept": "application/json",
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `email=${loginInputs.email}&password=${loginInputs.password}` // <-- Post parameters
+    })
+
+    //console.log(loginInputs.email)
+  }
+
     return (
       <View>
       <Navbar stateVars={this.props.stateVars} style={{height: heightPercentageToDP('10%')}} trx={this.props.trx} />
        <View style={styles.container}>
-        <Form type={User} options={options} />
-         <TouchableHighlight style={styles.button} onPress={this.onPress} underlayColor='#99d9f4'>
+        <Form type={User} options={options} ref="form" />
+         <TouchableHighlight style={styles.button} onPress={submitLogin} underlayColor='#99d9f4'>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableHighlight>
         <Text>Need an account? <Text onPress={buttonPressToRegister}> Sign up.</Text></Text>
