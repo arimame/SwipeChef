@@ -3,13 +3,16 @@ class RecipesController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    query = URI.decode(params[:query])
-    puts query
+    query = request.original_fullpath[8..-1]
+    decoded = URI.decode(query)
+    puts "THE URL BELOW"
+    puts "http://api.yummly.com/v1/api/recipes?_app_id=#{ENV['ID']}&_app_key=#{ENV['KEY']}#{decoded}"
 
     @response = RestClient::Request.execute(
       method: :get,
-       url: "http://api.yummly.com/v1/api/recipes?_app_id=#{ENV['ID']}&_app_key=#{ENV['KEY']}#{query}")
+       url: "http://api.yummly.com/v1/api/recipes?_app_id=#{ENV['ID']}&_app_key=#{ENV['KEY']}#{decoded}")
 
+    puts @response
 
     respond_to do |format|
       format.json { render json: @response }
@@ -26,7 +29,7 @@ class RecipesController < ApplicationController
    respond_to do |format|
       format.json { render json: @response }
     end
-  end
+  end 
 
   def create
     @recipe = Recipe.find_or_create_by(recipe_params)
