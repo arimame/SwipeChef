@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import {ScrollView, StyleSheet, Text, View, Image, Button} from 'react-native';
+import {ScrollView, StyleSheet, Text, View, Image, Button, AsyncStorage} from 'react-native';
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 import {Permissions} from 'expo';
 
@@ -107,32 +107,37 @@ class Book extends React.Component {
     // })
 
     console.log("FETCH--------------------");
-    fetch('http://172.46.3.249:3000/users/2/books', {
-      method: "GET",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      }
-    }).then(results => {
-      const parsedResults = JSON.parse(results._bodyInit);
-      this.setState({bookItems: parsedResults})
-    }).then(results => {
-      fetch('http://172.46.3.249:3000/users/2', {
+
+    AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+      fetch(`http://172.46.3.249:3000/books?swipeChefToken=${swipeChefToken}`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json"
         }
-      }).then (results => {
-        const userInfoParsed = JSON.parse(results._bodyInit);
-        console.log("------------------user info parsed")
-        console.log(userInfoParsed)
-        this.setState({
-          userImage: userInfoParsed.photo,
-          userTagline: userInfoParsed.tagline,
-          userName: userInfoParsed.username
-        })
+      }).then(results => {
+       console.log("---------------------------------------GET BOOKS")
+       console.log(results)
+       const parsedResults = JSON.parse(results._bodyInit)
+          this.setState({bookItems: parsedResults})
+      }).then(results => {
+        fetch(`http://172.46.3.249:3000/users?swipeChefToken=${swipeChefToken}`, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          }
+        }).then (results => {
+          const userInfoParsed = JSON.parse(results._bodyInit);
+          console.log("------------------user info parsed")
+          console.log(userInfoParsed)
+          this.setState({
+            userImage: userInfoParsed.photo,
+            userTagline: userInfoParsed.tagline,
+            userName: userInfoParsed.username
+          })
 
+        })
       })
     })
 

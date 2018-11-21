@@ -53,7 +53,7 @@ class Register extends React.Component {
         },
         body: `email=${registerInputs.email}&username=${registerInputs.username}&password=${registerInputs.password}&password_confirmation=${registerInputs.confirmPassword}` // <-- Post parameters
     }).then(results => {
-      if (results.slice(0,2) != '400') {
+      if (results._bodyInit.slice(0,2) != '400') {
         console.log(results)
         var storeData = async () => {
           try {
@@ -65,7 +65,11 @@ class Register extends React.Component {
         storeData()
         this.props.trx.updateCurrentUser(results)
         this.props.trx.updateCurrentScreen("register", "swipe")
-        console.log(await AsyncStorage.getItem('swipeChefToken'))
+        //AsyncStorage.getItem('swipeChefToken').then(storageTest => {
+        //  console.log("------------------------------STORAGE TEST")
+        //  console.log(storageTest)
+        //})
+
       } else {
         console.log(results)
       }

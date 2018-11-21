@@ -1,37 +1,73 @@
 class FridgesController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_filter :authorize
+
 
 
   def index
-    @user_fridge = current_user.fridges
-    @user_fridge_recipes = @user_fridge.map {|fridge_item| Recipe.find(fridge_item['recipe_id'])}
-    puts @user_fridge_recipes
+    decoded_token = JWT.decode params[:swipeChefToken], "spaghetti", true, { algorithm: 'HS256' }
 
-    respond_to do |format|
-      format.json { render json: @user_fridge_recipes }
+    if decoded_token
+
+      user_id = decoded_token[0]['id'].to_i
+
+      @user_fridge = User.find(user_id).fridges
+
+      @user_fridge_recipes = @user_fridge.map {|fridge_item| Recipe.find(fridge_item['recipe_id'])}
+      puts @user_fridge_recipes
+
+      respond_to do |format|
+        format.json { render json: @user_fridge_recipes.to_json }
+      end
+    else
+      respond_to do |format|
+        format.json { render json: "register".to_json }
+      end
     end
   end
 
   def create
-    puts "is this working????"
-     @fridge = Fridge.find_or_create_by(fridge_params)
+    decoded_token = JWT.decode book_params[:swipeChefToken], "spaghetti", true, { algorithm: 'HS256' }
 
-    respond_to do |format|
-      format.json { render json: @fridge }
+    if decoded_token
+
+      user_id = decoded_token[0]['id'].to_i
+
+      @fridge = Fridge.find_or_create_by(user_id, :recipe_id)
+
+      respond_to do |format|
+        format.json { render json: @fridge }
+      end
+
+    else
+      respond_to do |format|
+        format.json { render json: "register".to_json }
+      end
     end
   end
 
   def destroy
-    @fridge = Fridge.find_by(fridge_params)
-    @fridge.destroy
-    @message = "item removed from fridge".to_json
+    decoded_token = JWT.decode book_params[:swipeChefToken], "spaghetti", true, { algorithm: 'HS256' }
 
-    respond_to do |format|
-      format.json { render json: @message}
+    if decoded_token
+
+      user_id = decoded_token[0]['id'].to_i
+
+      @fridge = Fridge.find_or_create_by(user_id, :recipe_id)
+
+
+      @fridge = Fridge.find_by(fridge_params)
+      @fridge.destroy
+      @message = "item removed from fridge".to_json
+
+      respond_to do |format|
+        format.json { render json: @message}
+      end
+    else
+      respond_to do |format|
+        format.json { render json: "register".to_json }
+      end
     end
   end
-
 
   private
 

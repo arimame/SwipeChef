@@ -2,19 +2,19 @@ import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
 
-import Swipe from './screens/Swipe'
-import Fridge from './screens/Fridge'
-import Details from './screens/Details'
-import Book from './screens/Book'
-import Setting from './screens/Setting'
-import Login from './screens/Login'
-import Register from './screens/Register'
+import Swipe from './src/screens/Swipe'
+import Fridge from './src/screens/Fridge'
+import Details from './src/screens/Details'
+import Book from './src/screens/Book'
+import Setting from './src/screens/Setting'
+import Login from './src/screens/Login'
+import Register from './src/screens/Register'
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentScreen: "register",
+      currentScreen: "login",
       previousScreen: null,
       currentRecipe: null,
       currentUser: 2
@@ -38,20 +38,6 @@ export default class App extends React.Component {
       updateCurrentUser: updateCurrentUser
     }
   }
-
-
-  // componentDidMount() {
-  //   fetch('http://172.46.3.249:3000/recipes/Creamy-Cajun-Chicken-and-Sausage-Pasta-2472083', {
-  //     method: "GET",
-  //     headers: {
-  //       "Accept": "application/json",
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(results => {
-  //  console.log(results._bodyInit)
-  //   })
-  // }
-
 
 
 

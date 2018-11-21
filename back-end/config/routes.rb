@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   resources :users, only: [:create, :new]
 
+  post 'users/login' => 'users#login'
+
   get '/users' => 'users#show'
 
   patch '/users' => 'users#update'

@@ -1,17 +1,28 @@
 class RecipesController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_filter :authorize
+
 
 
   def index
-    @response = RestClient::Request.execute(
-      method: :get,
-       url: "http://api.yummly.com/v1/api/recipes?_app_id=#{ENV['ID']}&_app_key=#{ENV['KEY']}&q=pasta&maxResult=2&start=2&requirePictures=true")
+    #decoded_token = JWT.decode book_params[:swipeChefToken], "spaghetti", true, { algorithm: 'HS256' }
+
+    #if decoded_token
+
+    #  user_id = decoded_token[0]['id'].to_i
+
+      @response = RestClient::Request.execute(
+        method: :get,
+         url: "http://api.yummly.com/v1/api/recipes?_app_id=#{ENV['ID']}&_app_key=#{ENV['KEY']}&q=pasta&maxResult=2&start=2&requirePictures=true")
 
 
-    respond_to do |format|
-      format.json { render json: @response }
-    end
+      respond_to do |format|
+        format.json { render json: @response }
+      end
+    #else
+    #  respond_to do |format|
+    #    format.json { render json: "register".to_json }
+    #  end
+    #end
   end
 
   def show
