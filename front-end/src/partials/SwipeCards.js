@@ -6,18 +6,382 @@ import {StyleSheet, Text, View, Image, Button} from 'react-native';
 
 import SwipeCards from 'react-native-swipe-cards';
 
+const uniqueNumArr = (maxNum, length) => {
+  const numArr = [];
+  while (numArr.length < length) {
+    const rand = Math.floor(Math.random() * maxNum);
+    if (numArr.indexOf(rand) === -1) numArr.push(rand);
+  }
+  return numArr;
+}
 
+const ingredientsDeck = [
+  {
+    type: 'question',
+    text: 'Chicken',
+    yupQuery: '&q=chicken',
+    nopeQuery: '&excludedIngredient[]=chicken'
+  },
+  {
+    type: 'question',
+    text: 'Beef',
+    yupQuery: '&q=beef',
+    nopeQuery: '&excludedIngredient[]=beef'
+  },
+  {
+    type: 'question',
+    text: 'Pork',
+    yupQuery: '&q=pork',
+    nopeQuery: '&excludedIngredient[]=pork'
+  },
+  {
+    type: 'question',
+    text: 'Seafood',
+    yupQuery: '&q=seafood',
+    nopeQuery: '&excludedIngredient[]=fish'
+  },
+  {
+    type: 'question',
+    text: 'Lamb',
+    yupQuery: '&q=lamb',
+    nopeQuery: '&excludedIngredient[]=lamb'
+  },
+  {
+    type: 'question',
+    text: 'Pasta 🍝',
+    yupQuery: '&q=pasta',
+    nopeQuery: '&excludedIngredient[]=pasta'
+  },
+  {
+    type: 'question',
+    text: 'Rice 🍚',
+    yupQuery: '&q=rice',
+    nopeQuery: '&excludedIngredient[]=rice'
+  },
+  {
+    type: 'question',
+    text: 'Quinoa',
+    yupQuery: '&q=quinoa',
+    nopeQuery: '&excludedIngredient[]=quinoa'
+  },
+  {
+    type: 'question',
+    text: 'Turkey',
+    yupQuery: '&q=turkey',
+    nopeQuery: '&excludedIngredient[]=turkey'
+  },
+  {
+    type: 'question',
+    text: 'Eggs 🥚',
+    yupQuery: '&q=egg',
+    nopeQuery: '&excludedIngredient[]=eggs'
+  },
+  {
+    type: 'question',
+    text: 'Cheese 🧀',
+    yupQuery: '&q=cheese',
+    nopeQuery: '&excludedIngredient[]=cheese'
+  },
+  {
+    type: 'question',
+    text: 'Eggplant 🍆',
+    yupQuery: '&q=eggplant',
+    nopeQuery: '&excludedIngredient[]=eggplant'
+  },
+  {
+    type: 'question',
+    text: 'Butternut Squash',
+    yupQuery: '&q=butternut+squash',
+    nopeQuery: '&excludedIngredient[]=butternut+squash'
+  },
+  {
+    type: 'question',
+    text: 'Zucchini',
+    yupQuery: '&q=zucchini',
+    nopeQuery: '&excludedIngredient[]=zucchini'
+  },
+  {
+    type: 'question',
+    text: 'Mushrooms 🍄',
+    yupQuery: '&q=mushroom',
+    nopeQuery: '&excludedIngredient[]=mushrooms'
+  },
+  {
+    type: 'question',
+    text: 'Tofu',
+    yupQuery: '&q=tofu',
+    nopeQuery: '&excludedIngredient[]=tofu'
+  },
+  {
+    type: 'question',
+    text: 'Avocado 🥑',
+    yupQuery: '&q=avocado',
+    nopeQuery: '&excludedIngredient[]=avocado'
+  },
+  {
+    type: 'question',
+    text: 'Bacon 🥓',
+    yupQuery: '&q=bacon',
+    nopeQuery: '&excludedIngredient[]=bacon'
+  },
+  {
+    type: 'question',
+    text: 'Kale',
+    yupQuery: '&q=kale',
+    nopeQuery: '&excludedIngredient[]=kale'
+  }
+]
+
+const cuisineDeck = [
+  {
+    type: 'question',
+    text: 'American food 🍔',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-american',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-american'
+  },
+  {
+    type: 'question',
+    text: 'Italian food 🍝',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-italian',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-italian'
+  },
+  {
+    type: 'question',
+    text: 'Asian food 🍜',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-asian',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-asian'
+  },
+  {
+    type: 'question',
+    text: 'Mexican food 🌮',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-mexican',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-mexican'
+  },
+  {
+    type: 'question',
+    text: 'Southern & Soul food',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-southern',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-southern'
+  },
+  {
+    type: 'question',
+    text: 'French food 🥖',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-french',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-french'
+  },
+  {
+    type: 'question',
+    text: 'Southwestern food',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-southwestern',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-southwestern'
+  },
+  {
+    type: 'question',
+    text: 'Barbecue 🍖',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-barbecue',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-barbecue'
+  },
+  {
+    type: 'question',
+    text: 'Indian food 🍛',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-indian',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-indian'
+  },
+  {
+    type: 'question',
+    text: 'Chinese food 🥡',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-chinese',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-chinese'
+  },
+  {
+    type: 'question',
+    text: 'Cajun & Creole food 🥡',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-cajun',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-cajun'
+  },
+  {
+    type: 'question',
+    text: 'English food 🇬🇧',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-english',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-english'
+  },
+  {
+    type: 'question',
+    text: 'Mediterranean food',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-mediterranean',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-mediterranean'
+  },
+  {
+    type: 'question',
+    text: 'Greek food 🥗',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-greek',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-greek'
+  },
+  {
+    type: 'question',
+    text: 'Spanish food 🥘',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-spanish',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-spanish'
+  },
+  {
+    type: 'question',
+    text: 'German food 🇩🇪',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-german',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-german'
+  },
+  {
+    type: 'question',
+    text: 'Thai food',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-thai',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-thai'
+  },
+  {
+    type: 'question',
+    text: 'Moroccan food',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-morroccan',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-morroccan'
+  },
+  {
+    type: 'question',
+    text: 'Irish food 🇮🇪',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-irish',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-irish'
+  },
+  {
+    type: 'question',
+    text: 'Japanese food 🍣',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-japanese',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-japanese'
+  },
+  {
+    type: 'question',
+    text: 'Cuban food',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-cuban',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-cuban'
+  },
+  {
+    type: 'question',
+    text: 'Hawaiian food 🍍',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-hawaiian',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-hawaiian'
+  },
+  {
+    type: 'question',
+    text: 'Swedish food',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-swedish',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-swedish'
+  },
+  {
+    type: 'question',
+    text: 'Hungarian food',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-hungarian',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-hungarian'
+  },
+  {
+    type: 'question',
+    text: 'Portugese food',
+    yupQuery: '&allowedCuisine[]=cuisine^cuisine-portugese',
+    nopeQuery: '&excludedCuisine[]=cuisine^cuisine-portugese'
+  }
+]
+
+const flavourDeck = [
+  {
+    type: 'question',
+    text: 'Are you craving something sweet? 🍬',
+    yupQuery: '&flavor.sweet.min=0.3',
+    nopeQuery: '&flavor.sweet.max=0.3'
+  },
+  {
+    type: 'question',
+    text: 'Are you craving something savoury?',
+    yupQuery: '&flavor.meaty.min=0.3',
+    nopeQuery: '&flavor.meaty.max=0.3'
+  },
+  {
+    type: 'question',
+    text: 'Are you craving something salty? 🥨',
+    yupQuery: '&flavor.salty.min=0.3',
+    nopeQuery: '&flavor.salty.max=0.3'
+  },
+  {
+    type: 'question',
+    text: 'Are you craving something spicy? 🔥',
+    yupQuery: '&flavor.piquant.min=0.3',
+    nopeQuery: '&flavor.piquant.max=0.3'
+  }
+]
+
+const buildIngredientsCards = () => {
+  const cards = [];
+  cards.push(
+    {
+      type: 'question',
+      text: 'Ok, time to look at some ingredients.\n\nSwipe right for any ingredients you want to include, or left for any you want to avoid\n\n(Swipe to continue)',
+      yupQuery: '',
+    }
+  );
+  const indexArr = uniqueNumArr(ingredientsDeck.length, 5);
+  for (const num of indexArr) {
+    cards.push(ingredientsDeck[num])
+  }
+  cards[cards.length - 1].yupLastCard = true;
+  cards[cards.length - 1].nopeLastCard = true;
+  cards[cards.length - 1].prevDeck = "ingredients";
+  cards.push(
+    {
+      type: 'question',
+      text: '',
+      color: 'white',
+      yupQuery: ''
+    }
+  )
+  return cards;
+}
+
+const buildCusineCards = () => {
+  const cards = [];
+  cards.push(flavourDeck[Math.floor(Math.random() * 4)]);
+  cards.push(
+    {
+      type: 'question',
+      text: 'Alright, let\'s look at some cuisines\n\nSwipe right for any cuisine you would like to view recipes for\n\n(Swipe to continue)',
+      yupQuery: '',
+    }
+  );
+  const indexArr = uniqueNumArr(cuisineDeck.length, 5);
+  for (const num of indexArr) {
+    cards.push(cuisineDeck[num])
+  }
+  cards[cards.length - 1].yupLastCard = true;
+  cards[cards.length - 1].nopeLastCard = true;
+  cards[cards.length - 1].prevDeck = "cuisine";
+  cards.push(
+    {
+      type: 'question',
+      text: '',
+      color: 'white',
+      yupQuery: ''
+    }
+  )
+  return cards;
+}
+
+const ingredientsCards = buildIngredientsCards();
+
+const cuisineCards = buildCusineCards();
 
 const nutritionCards = [
   {
     type: 'question',
     text: 'Is health a factor?',
     yupQuery: '',
-    nopeUpdateCards: xmasCard
+    nopeLastCard: true,
+    prevDeck: "nutrition"
   },
   {
     type: 'question',
-    text: 'Good for you! 💪 Swipe right for everything you want to keep into account:\n\n(Swipe to continue)',
+    text: 'Good for you! 💪\n\nSwipe right for everything you want to keep into account:\n\n(Swipe to continue)',
     yupQuery: ''
   },
   {
@@ -58,7 +422,7 @@ const xmasCard = [
     yupQuery: '&allowedHoliday[]=holiday^holiday-christmas',
     yupLastCard: true,
     prevDeck: "xmas",
-    nopeUpdateCards: null
+    nopeUpdateCards: nutritionCards
   },
   {
     type: 'question',
@@ -116,16 +480,21 @@ class Card extends React.Component {
   }
 
   render() {
+
+    const image = (
+      <Image
+        style={{width:325, height: 325}}
+        source={{uri: this.props.image}}
+      />
+    )
+
     return (
       <View style={[styles.card, {backgroundColor: this.props.color || 'black'}]}>
         <Text
           style={{fontSize:18, color:"white", fontWeight:"bold", textAlign: 'center'}}
         >{this.props.text}
         </Text>
-        <Image
-          style={{width:325, height: 325}}
-          source={{uri: this.props.image}}
-        />
+        {image}
         <Button
           onPress={this.detailsButtonPress}
           title="Details"
@@ -160,11 +529,12 @@ export default class extends React.Component {
     this.prevDeck = null;
     this.query = '';
     this.nextDeck = null;
-    this.deckSize = 3;
+    this.deckSize = 2;
+    this.moreQuestions = true;
   }
 
   componentDidUpdate() {
-    if (this.prevDeck === "xmas") {
+    if (!this.moreQuestions || this.prevDeck === "xmas" || this.prevDeck === "ingredients") {
       this.index += this.deckSize;
       const OGquery = `http://172.46.0.254:3000?query=${this.query}&start=${this.index}&maxResult=${this.deckSize}`
       const encodedQuery = encodeURI(OGquery)
@@ -214,10 +584,10 @@ export default class extends React.Component {
       this.index += this.deckSize;
       if (this.prevDeck === "time") {
         this.setState({cards: xmasCard})
-      } else if (this.prevDeck === "xmas") {
-        this.setState({cards: xmasCard})
-      } else if (this.prevDeck === "xmas") {
-        this.setState({cards: null})
+      } else if (this.prevDeck === "nutrition") {
+        this.setState({cards: cuisineCards})
+      } else if (this.prevDeck === "cuisine") {
+        this.setState({cards: ingredientsCards})
       }
     }
 
@@ -272,7 +642,12 @@ export default class extends React.Component {
 
     else if (card.type === "addFilters") {
       this.index += this.deckSize
+      this.moreQuestions = false;
       this.lastCard()
+    }
+
+    else {
+      if (card.lastCard) this.updateCards(this.nextDeck);
     }
   }
 
@@ -305,7 +680,7 @@ export default class extends React.Component {
        console.log(largeImage)
        newCards.push({text: match.recipeName, image: largeImage, backgroundColor: "black", id: match.id})
      }
-     if (this.prevDeck !== "xmas") {
+     if (this.moreQuestions && this.prevDeck !== "xmas" && this.prevDeck !== "ingredients") {
       newCards.push(
         {
           type: 'addFilters',
