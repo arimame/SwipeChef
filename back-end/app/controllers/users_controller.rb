@@ -27,7 +27,7 @@ class UsersController < ApplicationController
 
       payload = {id: user.id.to_s}
 
-      token = JWT.encode payload, "spaghetti", 'HS256'
+      token = JWT.encode payload, ENV['HMAC_SECRET'], 'HS256'
 
 
       respond_to do |format|
@@ -75,8 +75,12 @@ class UsersController < ApplicationController
 
 
       user_id = decoded_token[0]['id'].to_i
-
+      puts user_id
+      puts "------------------------------------- user id"
       user = User.find(user_id)
+
+      puts user
+      puts "------------------------------- user"
 
         respond_to do |format|
           format.json { render json: "200 - token verified".to_json}
@@ -111,7 +115,7 @@ class UsersController < ApplicationController
       puts "----------------------------user Response Photo"
 
       respond_to do |format|
-        format.json { render json: @userResponse}
+        format.json { render json: @userResponse.to_json}
       end
     rescue
       respond_to do |format|

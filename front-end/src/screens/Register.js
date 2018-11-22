@@ -46,7 +46,7 @@ class Register extends React.Component {
     let registerInputs = this.refs.form.getValue()
     console.log("--------------------------- REGISTER INPUTS")
     console.log(registerInputs)
-    fetch(`http://172.46.3.249:3000/users`, {
+    fetch(`http://172.46.0.254:3000/users`, {
         method: 'POST',
         headers:
           {"Accept": "application/json",
