@@ -53,9 +53,33 @@ class UsersController < ApplicationController
 
   end
 
+  def verify_token
+
+    begin
+
+      decoded_token = JWT.decode user_params[:swipeChefToken], ENV['HMAC_SECRET'], true, { algorithm: 'HS256' }
+
+      user_id = decoded_token[0]['id'].to_i
+
+      user = User.find(id: user_id)
+
+        respond_to do |format|
+          format.json { render json: "200 - token verified".to_json}
+        end
+
+    rescue
+
+        respond_to do |format|
+          format.json { render json: "400 - no token".to_json}
+        end
+
+    end
+
+  end
+
 
   def show
-    decoded_token = JWT.decode params[:swipeChefToken], "spaghetti", true, { algorithm: 'HS256' }
+    decoded_token = JWT.decode user_params[:swipeChefToken], ENV['HMAC_SECRET'], true, { algorithm: 'HS256' }
 
     if decoded_token
 

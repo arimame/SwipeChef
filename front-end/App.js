@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, AsyncStorage } from 'react-native';
 
 
 import Swipe from './src/screens/Swipe'
@@ -13,6 +13,7 @@ import Register from './src/screens/Register'
 export default class App extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       currentScreen: "swipe",
       previousScreen: null,
@@ -38,7 +39,6 @@ export default class App extends React.Component {
       updateCurrentUser: updateCurrentUser
     }
   }
-
 
 
   render() {
@@ -124,9 +124,30 @@ export default class App extends React.Component {
     //   )
     // }
   }
-
+  componentWillMount() {
+    AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+      if (swipeChefToken) {
+        fetch(`http://172.46.3.249:3000/verify_token`, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          }
+        })
+        .then(results => {
+          let parsedResults = JSON.parse(results._bodyInit);
+          if (results._bodyInit.includes('400')) {
+            this.trx.updateCurrentScreen('swipe', 'register')
+          }
+        })
+      } else {
+        this.props.trx.updateCurrentScreen('swipe', 'register')
+      }
+    })
+  }
 
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -135,4 +156,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
 });

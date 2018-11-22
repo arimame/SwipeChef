@@ -544,6 +544,8 @@ export default class extends React.Component {
     this.moreQuestions = true;
   }
 
+
+
   componentDidUpdate() {
     if (!this.moreQuestions || this.prevDeck === "xmas" || this.prevDeck === "ingredients") {
       this.index += this.deckSize;

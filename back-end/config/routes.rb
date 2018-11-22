@@ -13,6 +13,8 @@ Rails.application.routes.draw do
 
   patch '/users' => 'users#update'
 
+  get '/verify_token' => 'users#verify_token'
+
 
   resources :fridges, only: [:create, :index, :destroy]
 
