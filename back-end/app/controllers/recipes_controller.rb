@@ -8,6 +8,17 @@ class RecipesController < ApplicationController
 
     #if decoded_token
 
+    query = request.original_fullpath[8..-1]
+    decoded = URI.decode(query)
+    puts "THE URL BELOW"
+    puts "http://api.yummly.com/v1/api/recipes?_app_id=#{ENV['ID']}&_app_key=#{ENV['KEY']}#{decoded}"
+
+    @response = RestClient::Request.execute(
+      method: :get,
+       url: "http://api.yummly.com/v1/api/recipes?_app_id=#{ENV['ID']}&_app_key=#{ENV['KEY']}#{decoded}")
+
+    puts @response
+
     #  user_id = decoded_token[0]['id'].to_i
 
       @response = RestClient::Request.execute(
