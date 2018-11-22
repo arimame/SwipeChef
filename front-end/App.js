@@ -9,13 +9,14 @@ import Book from './src/screens/Book'
 import Setting from './src/screens/Setting'
 import Login from './src/screens/Login'
 import Register from './src/screens/Register'
+import Loading from './src/screens/Loading'
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      currentScreen: "swipe",
+      currentScreen: "loading",
       previousScreen: null,
       currentRecipe: null,
       currentUser: 2
@@ -50,6 +51,13 @@ export default class App extends React.Component {
     }
 
     switch (this.state.currentScreen) {
+      case "loading":
+        return (
+          <View style={{flex:1}}>
+            <Loading trx={this.trx} stateVars={stateVars} />
+          </View>
+          );
+        break;
       case "swipe":
         return (
           <View style={{flex:1}}>
@@ -124,10 +132,13 @@ export default class App extends React.Component {
     //   )
     // }
   }
-  componentWillMount() {
+  componentDidMount() {
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+      console.log("---------------------------- SWIPE CHEF TOKEN")
+      console.log(swipeChefToken)
+      console.log("---------------------------- SWIPE CHEF TOKEN")
       if (swipeChefToken) {
-        fetch(`http://172.46.3.249:3000/verify_token`, {
+        fetch(`http://172.46.3.249:3000/verify_token?swipeChefToken=${swipeChefToken}`, {
           method: "GET",
           headers: {
             "Accept": "application/json",
@@ -137,11 +148,13 @@ export default class App extends React.Component {
         .then(results => {
           let parsedResults = JSON.parse(results._bodyInit);
           if (results._bodyInit.includes('400')) {
-            this.trx.updateCurrentScreen('swipe', 'register')
+            this.trx.updateCurrentScreen('loading', 'register')
+          } else {
+            this.trx.updateCurrentScreen('loading', 'swipe')
           }
         })
       } else {
-        this.props.trx.updateCurrentScreen('swipe', 'register')
+        this.trx.updateCurrentScreen('loading', 'register')
       }
     })
   }

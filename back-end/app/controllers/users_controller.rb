@@ -56,12 +56,12 @@ class UsersController < ApplicationController
   def verify_token
 
     begin
-
       decoded_token = JWT.decode user_params[:swipeChefToken], ENV['HMAC_SECRET'], true, { algorithm: 'HS256' }
+
 
       user_id = decoded_token[0]['id'].to_i
 
-      user = User.find(id: user_id)
+      user = User.find(user_id)
 
         respond_to do |format|
           format.json { render json: "200 - token verified".to_json}
