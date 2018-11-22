@@ -2,12 +2,13 @@
 import React, { Component } from 'react';
 import {ScrollView, StyleSheet, Text, View, Image, Button} from 'react-native';
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
-
+import {Permissions} from 'expo';
 
 import SwipeCards from "../partials/SwipeCards";
 import Navbar from "../partials/Navbar";
 import List from "../partials/List";
 import Userinfo from "../partials/UserInfo";
+import ImagePickerComponent from "../partials/ImagePicker";
 
 class Book extends React.Component {
 
@@ -17,9 +18,42 @@ class Book extends React.Component {
       bookItems: null,
       userImage: null,
       userTagline: null,
-      userName: null
+      userName: null,
+      imagePicker: false,
+      editTagline: false
     }
 
+    // This runs the image picker
+    getUserImage = () => {
+      this.setState({imagePicker: true})
+      Permissions.askAsync(Permissions.CAMERA_ROLL)
+    }
+
+    // sets the image in state. The database patch is completed in image picker
+    setUserImage = (image) => {
+      this.setState({userImage: image})
+    }
+
+    //This opens the text input for tagline
+    editTagline = () => {
+      this.setState({editTagline: true})
+    }
+
+    // this submits the tagline to the database
+    submitTagline = (text) => {
+      this.setState({ userTagline: text,
+                      editTagline: false})
+      fetch('http://172.46.3.249:3000/users/2', {
+        method: 'PATCH',
+        headers: {
+        //'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data'
+        },
+        body: `tagline=${text}`
+      })
+    }
+
+    // removes item from book
     removeItem = (itemId) => {
       fetch(`http://172.46.0.254:3000/users/2/books/${itemId}`, {
       method: "DELETE",
@@ -36,11 +70,12 @@ class Book extends React.Component {
       })
     }
     this.trx = props.trx;
-    console.log("--------------this trx")
-    console.log(this.trx);
     this.trx['removeItem'] = removeItem
-    console.log("--------------new trx")
-    console.log(this.trx);
+    this.trx['getUserImage'] = getUserImage
+    this.trx['setUserImage'] = setUserImage
+    this.trx['editTagline'] = editTagline
+    this.trx['submitTagline'] = submitTagline
+
 
 
   }
@@ -64,6 +99,8 @@ class Book extends React.Component {
         }
       }).then (results => {
         const userInfoParsed = JSON.parse(results._bodyInit);
+        console.log("------------------user info parsed")
+        console.log(userInfoParsed)
         this.setState({
           userImage: userInfoParsed.photo,
           userTagline: userInfoParsed.tagline,
@@ -80,10 +117,16 @@ class Book extends React.Component {
     const userVars = {
       userImage: this.state.userImage,
       userTagline: this.state.userTagline,
-      username: this.state.username
+      username: this.state.username,
+      editTagline: this.state.editTagline
     }
 
     const bookItemsRender = this.state.bookItems ? (<List recipeItems={this.state.bookItems} stateVars={this.props.stateVars} trx={this.trx} />) : <Text></Text>
+
+    const imagePickerRender = this.state.imagePicker ? (<ImagePickerComponent trx={this.trx} stateVars={this.props.stateVars} />) : <Text></Text>
+
+    console.log("----------------------USER VARS")
+    console.log(userVars)
 
     return (
       <View style={{flex:1}}>
@@ -92,6 +135,7 @@ class Book extends React.Component {
           <View style={{flex:1}}>
             <Userinfo stateVars={this.props.stateVars}  trx={this.trx} userVars={userVars}/>
           </View>
+          {imagePickerRender}
           <Text>book</Text>
           {bookItemsRender}
         </ScrollView>

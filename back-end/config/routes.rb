@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   resource :tests, only: [:index]
 
-  resources :users, only: [:create, :new, :show] do
+  resources :users, only: [:create, :new, :show, :update] do
     resources :fridges, only: [:create, :index, :destroy]
     resources :books, only: [:create, :index, :destroy]
   end

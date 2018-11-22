@@ -21,7 +21,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription" : "Using the Camera you can take a photo to use for profile image in AdvogaApp Other users will be able to see your profile image",
+        "NSPhotoLibraryUsageDescription" : "Using the Image Gallery, you can select an image to use for profile in AdvogaApp. Other users will be able to see your profile image"
+      }
     }
   }
 }

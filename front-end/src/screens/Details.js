@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import {StyleSheet, Text, View, Image, Button, FlatList} from 'react-native';
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
+import ToggleSwitch from 'toggle-switch-react-native';
 
 import Navbar from "../partials/Navbar";
 
@@ -32,7 +33,19 @@ class Details extends React.Component  {
       const ingredients = this.state.recipeInfo.ingredientLines.map((ingredient) =>
         ({key: ingredient})
       )
-      console.log(ingredients);
+      //console.log(ingredients);
+
+      const nutritionDetails = this.state.recipeInfo.nutritionEstimates;
+      const ourNutrition = ["ENERC_KCAL", "FAT", "SUGAR", "PROCNT", "CHOCDF", "CHOLE", "NA", "FIBTG"]
+      const ourNutritionList = nutritionDetails.filter(function(object) {
+        return ourNutrition.includes(object.attribute)
+      })
+
+      console.log("list of nutr--------", ourNutritionList);
+
+
+
+
 
       return (
         <View style={{flex:1}}>
@@ -63,7 +76,16 @@ class Details extends React.Component  {
               renderItem={({item}) => <Text>- {item.key}</Text>}
             />
           </View>
-
+            <View>
+              <Text>Nutrition</Text>
+              <Text>Calories: {ourNutritionList[5].value}</Text>
+              <Text>Sugar: {ourNutritionList[0].value} grams</Text>
+              <Text>Protien: {ourNutritionList[2].value} grams</Text>
+              <Text>Fiber: {ourNutritionList[1].value} grams</Text>
+              <Text>Cholesterol: {ourNutritionList[4].value} grams</Text>
+              <Text>Fat: {ourNutritionList[6].value} grams</Text>
+              <Text>Sodium: {ourNutritionList[7].value} grams</Text>
+            </View>
         </View>
       )
     } else {

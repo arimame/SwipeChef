@@ -6,6 +6,9 @@ import Swipe from './screens/Swipe'
 import Fridge from './screens/Fridge'
 import Details from './screens/Details'
 import Book from './screens/Book'
+import Setting from './screens/Setting'
+import Login from './screens/Login'
+import Register from './screens/Register'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -82,6 +85,27 @@ export default class App extends React.Component {
           <View style={{flex:1}}>
             <Book trx={this.trx} stateVars={stateVars}/>
           </View>
+          );
+        break;
+      case "setting":
+        return (
+          <View style={{flex:1}}>
+            <Setting trx={this.trx} stateVars={stateVars}/>
+          </View>
+          );
+        break;
+        case "login":
+          return (
+            <View style={{flex:1}}>
+              <Login trx={this.trx} stateVars={stateVars}/>
+            </View>
+          );
+        break;
+          case "register":
+          return (
+            <View style={{flex:1}}>
+              <Register trx={this.trx} stateVars={stateVars}/>
+            </View>
           );
         break;
       default:

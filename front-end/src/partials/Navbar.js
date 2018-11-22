@@ -26,6 +26,11 @@ console.log(props.stateVars.currentScreen);
     newScreen: props.stateVars.previousScreen
   }
 
+  const settingsButton = {
+    icon: "settings-outline",
+    newScreen: "setting"
+  }
+
   let buttonLeft;
   let buttonRight;
   let title;
@@ -42,15 +47,30 @@ console.log(props.stateVars.currentScreen);
       title = "My Fridge"
       break;
     case "book":
-      buttonLeft = null;
+      buttonLeft = settingsButton;
       buttonRight = swipeButton;
-      title = "My Coookbook"
-      break
+      title = "My Coookbook";
+      break;
     case "details":
       buttonLeft = backButton;
       buttonRight = null;
-      title = "SwipeChef"
-      break
+      title = "SwipeChef";
+      break;
+    case "setting":
+      buttonLeft = null;
+      buttonRight = bookButton;
+      title = "Settings";
+      break;
+    case "register":
+      buttonLeft = null;
+      buttonRight = null;
+      title = "SwipeChef";
+      break;
+    case "login":
+      buttonLeft = null;
+      buttonRight = null;
+      title = "SwipeChef";
+      break;
     default:
       console.log("error!!!! the button is wrong");
       break;
@@ -68,12 +88,12 @@ console.log(props.stateVars.currentScreen);
   const buttonRightRender = buttonRight ?  (<Icon name = {buttonRight.icon} style={{textAlign: "center", fontSize: 40}} onPress={rightButtonPress}/>) : <Text></Text>
 
   return (
-    <View style={{flexDirection: 'row', paddingTop: 35, paddingBottom: 15, backgroundColor: "purple", justifyContent: "center"}}>
+    <View style={{flexDirection: 'row', paddingTop: 35, paddingBottom: 15, backgroundColor: "#006442", justifyContent: "center"}}>
       <View style={{width: widthPercentageToDP('15%')}}>
       {buttonLeftRender}
       </View>
       <View style={{width: widthPercentageToDP('70%')}}>
-        <Text style={{textAlign: "center", fontSize: 30}}>
+        <Text style={{textAlign: "center", fontSize: 30, color: "white"}}>
           {title}
         </Text>
       </View>
