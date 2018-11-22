@@ -513,7 +513,7 @@ class Card extends React.Component {
         <Button
           onPress={this.props.reset}
           title="Start New Search"
-          color="white"
+          color="grey"
         />
       </View>
     )
@@ -530,11 +530,6 @@ class NoMoreCards extends Component {
       <View>
         <Text style={styles.noMoreCardsText}>No more recipes match your search. You're a swiping machine!</Text>
         <Text style={styles.noMoreCardsText}>Start a new swipe session to discover new recipes</Text>
-        <Button
-          onPress={this.props.reset}
-          title="Start New Search"
-          color="black"
-        />
       </View>
     )
   }
@@ -561,14 +556,18 @@ export default class extends React.Component {
         const storedIndex = await AsyncStorage.getItem("index");
         const storedPrevDeck = await AsyncStorage.getItem("prevDeck");
         const storedQuery = await AsyncStorage.getItem("query");
-        const storedNextDeck = await AsyncStorage.getItem("nextDeck");
+        // const storedNextDeck = await AsyncStorage.getItem("nextDeck");
+
+        // const test = JSON.parse(storedNextDeck).cards;
         if (storedState) {
           this.setState(JSON.parse(storedState));
           this.index = Number(storedIndex);
           this.prevDeck = storedPrevDeck;
           this.query = storedQuery;
           this.moreQuestions = true;
-          this.nextDeck = JSON.parse(storedNextDeck).cards;
+          // if (test) {
+          //   this.nextDeck = test;
+          // }
         } else {
           this.setState({cards: courseCards});
         }
@@ -583,11 +582,15 @@ export default class extends React.Component {
       try {
         await AsyncStorage.setItem("state", JSON.stringify(this.state));
         await AsyncStorage.setItem("index", this.index.toString());
-        await AsyncStorage.setItem("prevDeck", this.prevDeck);
-        await AsyncStorage.setItem("query", this.query);
-        if (this.nextDeck) {
-          await AsyncStorage.setItem("nextDeck", JSON.stringify({cards: this.nextDeck}))
+        if (this.prevDeck) {
+          await AsyncStorage.setItem("prevDeck", this.prevDeck);
         }
+        if (this.query) {
+          await AsyncStorage.setItem("query", this.query);
+        }
+        // if (this.nextDeck) {
+        //   await AsyncStorage.setItem("nextDeck", JSON.stringify({cards: this.nextDeck}))
+        // }
       } catch (error) {
         console.log(error);
       }
@@ -633,7 +636,7 @@ export default class extends React.Component {
         await AsyncStorage.removeItem("index");
         await AsyncStorage.removeItem("prevDeck");
         await AsyncStorage.removeItem("query");
-        await AsyncStorage.removeItem("nextDeck")
+        // await AsyncStorage.removeItem("nextDeck")
       } catch (error) {
         console.log(error)
       }
@@ -833,7 +836,7 @@ export default class extends React.Component {
         loop={false}
         cards={this.state.cards}
         renderCard={(cardData) => <Card {...cardData} trx={this.props.trx} reset={this.reset} />}
-        renderNoMoreCards={() => <NoMoreCards query={this.query} reset={this.reset} />}
+        renderNoMoreCards={() => <NoMoreCards query={this.query} />}
         showYup={false}
         showNope={false}
         showMaybe={false}
