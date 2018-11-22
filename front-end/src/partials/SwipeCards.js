@@ -2,7 +2,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Image, Button} from 'react-native';
+import {StyleSheet, Text, View, Image, Button, AsyncStorage} from 'react-native';
 
 import SwipeCards from 'react-native-swipe-cards';
 
@@ -510,6 +510,11 @@ class Card extends React.Component {
           title="Details"
           color="white"
         />
+        <Button
+          onPress={this.props.reset}
+          title="Start New Search"
+          color="white"
+        />
       </View>
     )
   }
@@ -525,6 +530,11 @@ class NoMoreCards extends Component {
       <View>
         <Text style={styles.noMoreCardsText}>No more recipes match your search. You're a swiping machine!</Text>
         <Text style={styles.noMoreCardsText}>Start a new swipe session to discover new recipes</Text>
+        <Button
+          onPress={this.props.reset}
+          title="Start New Search"
+          color="black"
+        />
       </View>
     )
   }
@@ -534,20 +544,60 @@ export default class extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cards: courseCards
+      cards: [{type: 'question', text: '', color: 'white', yupQuery: '' }]
     };
     this.index = 0;
     this.prevDeck = null;
     this.query = '';
     this.nextDeck = null;
-    this.deckSize = 2;
+    this.deckSize = 5;
     this.moreQuestions = true;
+  }
+
+  componentDidMount() {
+    (async () => {
+      try {
+        const storedState = await AsyncStorage.getItem("state");
+        const storedIndex = await AsyncStorage.getItem("index");
+        const storedPrevDeck = await AsyncStorage.getItem("prevDeck");
+        const storedQuery = await AsyncStorage.getItem("query");
+        const storedNextDeck = await AsyncStorage.getItem("nextDeck");
+        if (storedState) {
+          this.setState(JSON.parse(storedState));
+          this.index = Number(storedIndex);
+          this.prevDeck = storedPrevDeck;
+          this.query = storedQuery;
+          this.moreQuestions = true;
+          this.nextDeck = JSON.parse(storedNextDeck).cards;
+        } else {
+          this.setState({cards: courseCards});
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }
+
+  componentWillUnmount() {
+    (async () => {
+      try {
+        await AsyncStorage.setItem("state", JSON.stringify(this.state));
+        await AsyncStorage.setItem("index", this.index.toString());
+        await AsyncStorage.setItem("prevDeck", this.prevDeck);
+        await AsyncStorage.setItem("query", this.query);
+        if (this.nextDeck) {
+          await AsyncStorage.setItem("nextDeck", JSON.stringify({cards: this.nextDeck}))
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
   }
 
   componentDidUpdate() {
     if (!this.moreQuestions || this.prevDeck === "xmas" || this.prevDeck === "ingredients") {
       this.index += this.deckSize;
-      const OGquery = `http://172.46.0.254:3000?query=${this.query}&start=${this.index}&maxResult=${this.deckSize}`
+      const OGquery = `http://172.46.0.254:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}`
       const encodedQuery = encodeURI(OGquery)
       console.log('-----------this.query---------------', encodedQuery)
       fetch(encodedQuery, {
@@ -574,6 +624,26 @@ export default class extends React.Component {
         this.nextDeck = newCards;
       })
     }
+  }
+
+  reset = () => {
+    (async () => {
+      try {
+        await AsyncStorage.removeItem("state");
+        await AsyncStorage.removeItem("index");
+        await AsyncStorage.removeItem("prevDeck");
+        await AsyncStorage.removeItem("query");
+        await AsyncStorage.removeItem("nextDeck")
+      } catch (error) {
+        console.log(error)
+      }
+    })();
+    this.setState({cards: courseCards});
+    this.index = 0;
+    this.prevDeck = null;
+    this.query = '';
+    this.nextDeck = null;
+    this.moreQuestions = true;
   }
 
   handleYup = (card) => {
@@ -622,7 +692,12 @@ export default class extends React.Component {
           body: `recipe_id=${parsedResults.recipe_id}` // <-- Post parameters
         })
       })
-      if (card.lastCard) this.updateCards(this.nextDeck);
+      if (card.lastCard) {
+        this.updateCards(this.nextDeck);
+      }
+      else {
+        this.updateCards(this.state.cards.slice(1))
+      }
     }
   }
 
@@ -652,13 +727,18 @@ export default class extends React.Component {
     }
 
     else if (card.type === "addFilters") {
-      this.index += this.deckSize
+      this.index += this.deckSize;
       this.moreQuestions = false;
       this.lastCard()
     }
 
     else {
-      if (card.lastCard) this.updateCards(this.nextDeck);
+      if (card.lastCard) {
+        this.updateCards(this.nextDeck);
+      }
+      else {
+        this.updateCards(this.state.cards.slice(1))
+      }
     }
   }
 
@@ -687,12 +767,17 @@ export default class extends React.Component {
     }
 
     else {
-      if (card.lastCard) this.updateCards(this.nextDeck);
+      if (card.lastCard) {
+        this.updateCards(this.nextDeck);
+      }
+      else {
+        this.updateCards(this.state.cards.slice(1))
+      }
     }
   }
  
   lastCard = () => {
-    const OGquery = `http://172.46.0.254:3000?query=${this.query}&start=${this.index}&maxResult=${this.deckSize}`
+    const OGquery = `http://172.46.0.254:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}`
     const encodedQuery = encodeURI(OGquery)
     console.log('-----------this.query---------------', encodedQuery)
     fetch(encodedQuery, {
@@ -747,8 +832,8 @@ export default class extends React.Component {
       <SwipeCards
         loop={false}
         cards={this.state.cards}
-        renderCard={(cardData) => <Card {...cardData} trx={this.props.trx} />}
-        renderNoMoreCards={() => <NoMoreCards query={this.query} />}
+        renderCard={(cardData) => <Card {...cardData} trx={this.props.trx} reset={this.reset} />}
+        renderNoMoreCards={() => <NoMoreCards query={this.query} reset={this.reset} />}
         showYup={false}
         showNope={false}
         showMaybe={false}
