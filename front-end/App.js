@@ -16,7 +16,7 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {
-      currentScreen: "loading",
+      currentScreen: "register",
       previousScreen: null,
       currentRecipe: null,
       currentUser: 2
@@ -132,32 +132,32 @@ export default class App extends React.Component {
     //   )
     // }
   }
-  componentDidMount() {
-    AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-      console.log("---------------------------- SWIPE CHEF TOKEN")
-      console.log(swipeChefToken)
-      console.log("---------------------------- SWIPE CHEF TOKEN")
-      if (swipeChefToken) {
-        fetch(`http://172.46.3.249:3000/verify_token?swipeChefToken=${swipeChefToken}`, {
-          method: "GET",
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          }
-        })
-        .then(results => {
-          let parsedResults = JSON.parse(results._bodyInit);
-          if (results._bodyInit.includes('400')) {
-            this.trx.updateCurrentScreen('loading', 'register')
-          } else {
-            this.trx.updateCurrentScreen('loading', 'swipe')
-          }
-        })
-      } else {
-        this.trx.updateCurrentScreen('loading', 'register')
-      }
-    })
-  }
+  //componentDidMount() {
+  //  AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+  //    console.log("---------------------------- SWIPE CHEF TOKEN")
+  //    console.log(swipeChefToken)
+  //    console.log("---------------------------- SWIPE CHEF TOKEN")
+  //    if (swipeChefToken) {
+  //      fetch(`http://172.46.3.249:3000/verify_token?swipeChefToken=${swipeChefToken}`, {
+  //        method: "GET",
+  //        headers: {
+  //          "Accept": "application/json",
+  //          "Content-Type": "application/json"
+  //        }
+  //      })
+  //      .then(results => {
+  //        let parsedResults = JSON.parse(results._bodyInit);
+  //        if (results._bodyInit.includes('400')) {
+  //          this.trx.updateCurrentScreen('loading', 'register')
+  //        } else {
+  //          this.trx.updateCurrentScreen('loading', 'swipe')
+  //        }
+  //      })
+  //    } else {
+  //      this.trx.updateCurrentScreen('loading', 'register')
+  //    }
+  //  })
+  //}
 
 }
 

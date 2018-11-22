@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_20_225043) do
+ActiveRecord::Schema.define(version: 2018_11_22_184805) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,17 @@ ActiveRecord::Schema.define(version: 2018_11_20_225043) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "password_digest"
+    t.boolean "vegan"
+    t.boolean "vegetarian"
+    t.boolean "gluten_allergy"
+    t.boolean "peanut_allergy"
+    t.boolean "seafood_allergy"
+    t.boolean "dairy_allergy"
+    t.boolean "egg_allergy"
+    t.boolean "soy_allergy"
+    t.boolean "tree_nut_allergy"
+    t.boolean "wheat_allergy"
+    t.string "query_string"
   end
 
   add_foreign_key "books", "recipes"
