@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Image, Button} from 'react-native';
+import {StyleSheet, Text, View, Image, Button, AsyncStorage} from 'react-native';
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 
 
@@ -17,30 +17,40 @@ class Fridge extends React.Component  {
     }
 
     removeItem = (itemId) => {
-      fetch(`http://172.46.0.254:3000/users/2/fridges/${itemId}`, {
-      method: "DELETE",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      }
-      }).then(results => {
-        console.log(results._bodyInit)
-        const newFridgeItems = this.state.fridgeItems.filter(function(item) {
-          return item.id !== itemId
-        });
-        this.setState({fridgeItems: newFridgeItems})
 
+      AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+        fetch(`http://172.46.0.254:3000/fridges/${itemId}?swipeChefToken=${swipeChefToken}`, {
+        method: "DELETE",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        }
+        }).then(results => {
+          const parsedResults = JSON.parse(results._bodyInit)
+
+          if (parsedResults === "register") {
+            this.props.trx.updateCurrentScreen("fridge", "register")
+
+          } else {
+            const newFridgeItems = this.state.fridgeItems.filter(function(item) {
+              return item.id !== itemId
+            });
+            this.setState({fridgeItems: newFridgeItems})
+          }
+        })
       })
     }
 
     addToBook = (itemId) => {
-      fetch(`http://172.46.0.254:3000/users/${props.stateVars.currentUser}/books`, {
-        method: 'POST',
-        headers:
-          {"Accept": "application/json",
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `recipe_id=${itemId}` // <-- Post parameters
+      AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+        fetch(`http://172.46.0.254:3000/books?swipeChefToken=${swipeChefToken}`, {
+          method: 'POST',
+          headers:
+            {"Accept": "application/json",
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `recipe_id=${itemId}` // <-- Post parameters
+        })
       })
     }
 
@@ -53,15 +63,17 @@ class Fridge extends React.Component  {
     console.log(this.trx);
   }
   componentDidMount() {
-    fetch('http://172.46.0.254:3000/users/2/fridges', {
-      method: "GET",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      }
-    }).then(results => {
-      const parsedResults= JSON.parse(results._bodyInit);
-      this.setState({fridgeItems: parsedResults})
+    AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+      fetch(`http://172.46.0.254:3000/fridges?swipeChefToken=${swipeChefToken}`, {
+        method: "GET",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        }
+      }).then(results => {
+        const parsedResults= JSON.parse(results._bodyInit)
+        this.setState({fridgeItems: parsedResults})
+      })
     })
   }
 

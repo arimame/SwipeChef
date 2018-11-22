@@ -533,7 +533,7 @@ class NoMoreCards extends Component {
       </View>
     )
   }
-} 
+}
 
 export default class extends React.Component {
   constructor(props) {
@@ -608,7 +608,7 @@ export default class extends React.Component {
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json"
-        } 
+        }
       })
       .then(results => {
         // console.log("------------------TEST")
@@ -674,26 +674,28 @@ export default class extends React.Component {
         this.updateCards(ingredientsCards)
       }
     }
-
     else {
-      console.log(`Yup for ${card.text}`)
-      fetch("http://172.46.0.254:3000/recipes", {
-        method: 'POST',
-        headers:
-          {"Accept": "application/json",
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `api_ref=${card.id}&name=${card.text}&image=${card.image}` // <-- Post parameters
-      }).then( results => {
-         let parsedResults = JSON.parse(results._bodyInit);
-         fetch(`http://172.46.0.254:3000/users/${parsedResults.user_id}/fridges`, {
+      AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+        console.log(`Yup for ${card.text}`)
+        fetch(`http://172.46.0.254:3000/recipes`, {
           method: 'POST',
           headers:
             {"Accept": "application/json",
             'Content-Type': 'application/x-www-form-urlencoded'
           },
-          body: `recipe_id=${parsedResults.recipe_id}` // <-- Post parameters
+          body: `api_ref=${card.id}&name=${card.text}&image=${card.image}` // <-- Post parameters
+        }).then( results => {
+           let parsedResults = JSON.parse(results._bodyInit);
+           fetch(`http://172.46.0.254:3000/fridges?swipeChefToken=${swipeChefToken}`, {
+            method: 'POST',
+            headers:
+              {"Accept": "application/json",
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `recipe_id=${parsedResults.recipe_id}` // <-- Post parameters
+          })
         })
+        if (card.lastCard) this.updateCards(this.nextDeck);
       })
       if (card.lastCard) {
         this.updateCards(this.nextDeck);
@@ -715,7 +717,7 @@ export default class extends React.Component {
   }
 
   handleNope = (card) => {
-    
+
     if (card.type === "question") {
       if (card.nopeQuery) {
         this.addToQuery(card.nopeQuery);
@@ -749,7 +751,7 @@ export default class extends React.Component {
     if (card.type === "question") {
       if (this.prevDeck !== "cuisine")
         this.addToQuery(card.yupQuery);
-      } 
+      }
       if (card.yupUpdateCards) {
         this.updateCards(card.yupUpdateCards);
       }
@@ -778,7 +780,7 @@ export default class extends React.Component {
       }
     }
   }
- 
+
   lastCard = () => {
     const OGquery = `http://172.46.0.254:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}`
     const encodedQuery = encodeURI(OGquery)
@@ -788,7 +790,7 @@ export default class extends React.Component {
      headers: {
        "Accept": "application/json",
        "Content-Type": "application/json"
-     } 
+     }
    })
    .then(results => {
      let parsedResults = JSON.parse(results._bodyInit);

@@ -5,10 +5,22 @@ Rails.application.routes.draw do
 
   resource :tests, only: [:index]
 
-  resources :users, only: [:create, :new, :show, :update] do
-    resources :fridges, only: [:create, :index, :destroy]
-    resources :books, only: [:create, :index, :destroy]
-  end
+  resources :users, only: [:create, :new]
+
+  post 'users/login' => 'users#login'
+
+  get '/users' => 'users#show'
+
+  patch '/users' => 'users#update'
+
+  get '/verify_token' => 'users#verify_token'
+
+
+  resources :fridges, only: [:create, :index, :destroy]
+
+  resources :books, only: [:create, :index, :destroy]
+
+  resources :sessions, only: [:new, :create, :destroy]
 
   resources :recipes, only: [:create, :new, :show, :index, :destroy]
 end

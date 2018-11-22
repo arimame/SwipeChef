@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Image, View } from 'react-native';
+import { Button, Image, View, AsyncStorage } from 'react-native';
 import { ImagePicker, FileSystem } from 'expo';
 
 export default class ImagePickerComponent extends React.Component {
@@ -43,14 +43,22 @@ export default class ImagePickerComponent extends React.Component {
         type: 'multipart/form-data'
       })
 
-      fetch('http://172.46.3.249:3000/users/2', {
-        method: 'PATCH',
-        headers: {
-        //'Accept': 'application/json',
-        'Content-Type': 'multipart/form-data'
-        },
-        body: data
+      AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+        data.append("swipeChefToken", swipeChefToken)
+
+        fetch('http://172.46.0.254:3000/users', {
+          method: 'PATCH',
+          headers: {
+          //'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data'
+          },
+          body: data
+        })
       })
+
+
+
+
 
 
     }

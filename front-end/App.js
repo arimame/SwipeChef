@@ -1,20 +1,22 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, AsyncStorage } from 'react-native';
 
 
-import Swipe from './screens/Swipe'
-import Fridge from './screens/Fridge'
-import Details from './screens/Details'
-import Book from './screens/Book'
-import Setting from './screens/Setting'
-import Login from './screens/Login'
-import Register from './screens/Register'
+import Swipe from './src/screens/Swipe'
+import Fridge from './src/screens/Fridge'
+import Details from './src/screens/Details'
+import Book from './src/screens/Book'
+import Setting from './src/screens/Setting'
+import Login from './src/screens/Login'
+import Register from './src/screens/Register'
+import Loading from './src/screens/Loading'
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      currentScreen: "swipe",
+      currentScreen: "loading",
       previousScreen: null,
       currentRecipe: null,
       currentUser: 2
@@ -28,26 +30,16 @@ export default class App extends React.Component {
       this.setState({currentRecipe: newRecipe, currentScreen: "details", previousScreen: curScreen})
     }
 
+    updateCurrentUser = (currentUser) => {
+      this.setState({currentUser: currentUser})
+    }
+
     this.trx = {
       updateCurrentScreen: updateCurrentScreen,
-      updateCurrentRecipe: updateCurrentRecipe
+      updateCurrentRecipe: updateCurrentRecipe,
+      updateCurrentUser: updateCurrentUser
     }
   }
-
-
-  // componentDidMount() {
-  //   fetch('http://172.46.3.249:3000/recipes/Creamy-Cajun-Chicken-and-Sausage-Pasta-2472083', {
-  //     method: "GET",
-  //     headers: {
-  //       "Accept": "application/json",
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(results => {
-  //  console.log(results._bodyInit)
-  //   })
-  // }
-
-
 
 
   render() {
@@ -59,6 +51,13 @@ export default class App extends React.Component {
     }
 
     switch (this.state.currentScreen) {
+      case "loading":
+        return (
+          <View style={{flex:1}}>
+            <Loading trx={this.trx} stateVars={stateVars} />
+          </View>
+          );
+        break;
       case "swipe":
         return (
           <View style={{flex:1}}>
@@ -133,9 +132,36 @@ export default class App extends React.Component {
     //   )
     // }
   }
-
+  componentDidMount() {
+    AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+      console.log("---------------------------- SWIPE CHEF TOKEN")
+      console.log(swipeChefToken)
+      console.log("---------------------------- SWIPE CHEF TOKEN")
+      if (swipeChefToken) {
+        fetch(`http://172.46.0.254:3000/verify_token?swipeChefToken=${swipeChefToken}`, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          }
+        })
+        .then(results => {
+          console.log(results._bodyInit)
+          let parsedResults = JSON.parse(results._bodyInit);
+          if (results._bodyInit.includes('400')) {
+            this.trx.updateCurrentScreen('loading', 'register')
+          } else {
+            this.trx.updateCurrentScreen('loading', 'swipe')
+          }
+        })
+      } else {
+        this.trx.updateCurrentScreen('loading', 'register')
+      }
+    })
+  }
 
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -144,4 +170,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
 });

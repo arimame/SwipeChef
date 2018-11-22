@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import {ScrollView, StyleSheet, Text, View, Image, Button} from 'react-native';
+import {ScrollView, StyleSheet, Text, View, Image, Button, AsyncStorage} from 'react-native';
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 import {Permissions} from 'expo';
 
@@ -43,30 +43,35 @@ class Book extends React.Component {
     submitTagline = (text) => {
       this.setState({ userTagline: text,
                       editTagline: false})
-      fetch('http://172.46.3.249:3000/users/2', {
-        method: 'PATCH',
-        headers: {
-        //'Accept': 'application/json',
-        'Content-Type': 'multipart/form-data'
-        },
-        body: `tagline=${text}`
+
+      AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+        fetch(`http://172.46.0.254:3000/users?swipeChefToken=${swipeChefToken}`, {
+          method: 'PATCH',
+          headers: {
+          //'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data'
+          },
+          body: `tagline=${text}`
+        })
       })
     }
 
     // removes item from book
     removeItem = (itemId) => {
-      fetch(`http://172.46.0.254:3000/users/2/books/${itemId}`, {
-      method: "DELETE",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      }
-      }).then(results => {
-        console.log(results._bodyInit)
-        const newBookItems = this.state.bookItems.filter(function(item) {
-          return item.id !== itemId
-        });
-        this.setState({bookItems: newBookItems})
+      AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+        fetch(`http://172.46.0.254:3000/books/${itemId}?swipeChefToken=${swipeChefToken}`, {
+        method: "DELETE",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        }
+        }).then(results => {
+          console.log(results._bodyInit)
+          const newBookItems = this.state.bookItems.filter(function(item) {
+            return item.id !== itemId
+          });
+          this.setState({bookItems: newBookItems})
+        })
       })
     }
     this.trx = props.trx;
@@ -80,33 +85,64 @@ class Book extends React.Component {
 
   }
 
+// function fetchBooks() {
+//   const token = AsyncStorage.get("token")
+//   fetch('http://172.46.0.254:3000/books', {
+//       method: "GET",
+//       headers: {
+//         "Accept": "application/json",
+//         "Authorization": `Bearer ${token}`,
+//         "Content-Type": "application/json"
+//       }
+//     }).then(res => res.json())
+//     .then(data => data)
+// }
+
+//       const parsedResults = JSON.parse(results._bodyInit);
+//       this.setState({bookItems: parsedResults})
+
+
+
   componentDidMount() {
-    fetch('http://172.46.0.254:3000/users/2/books', {
-      method: "GET",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      }
-    }).then(results => {
-      const parsedResults = JSON.parse(results._bodyInit);
-      this.setState({bookItems: parsedResults})
-    }).then(results => {
-      fetch('http://172.46.0.254:3000/users/2', {
+
+    // fetchBooks()
+    //   .then(books => {
+    //      // debugger
+    //     this.setState({books: books })
+    // })
+
+    console.log("FETCH--------------------");
+
+    AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+      fetch(`http://172.46.0.254:3000/books?swipeChefToken=${swipeChefToken}`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json"
         }
-      }).then (results => {
-        const userInfoParsed = JSON.parse(results._bodyInit);
-        console.log("------------------user info parsed")
-        console.log(userInfoParsed)
-        this.setState({
-          userImage: userInfoParsed.photo,
-          userTagline: userInfoParsed.tagline,
-          userName: userInfoParsed.username
-        })
+      }).then(results => {
+       console.log("---------------------------------------GET BOOKS")
+       console.log(results)
+       const parsedResults = JSON.parse(results._bodyInit)
+          this.setState({bookItems: parsedResults})
+      }).then(results => {
+        fetch(`http://172.46.0.254:3000/users?swipeChefToken=${swipeChefToken}`, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          }
+        }).then (results => {
+          const userInfoParsed = JSON.parse(results._bodyInit);
+          console.log("------------------user info parsed")
+          console.log(userInfoParsed)
+          this.setState({
+            userImage: userInfoParsed.photo,
+            userTagline: userInfoParsed.tagline,
+            userName: userInfoParsed.username
+          })
 
+        })
       })
     })
 

@@ -9,11 +9,11 @@ function Userinfo (props) {
 
   let randNum = Math.round(Math.random() * 50,0)
 
-  const userImage = props.userVars.userImage ? <Image source={{uri:`http://172.46.3.249:3000/${props.userVars.userImage}?spaghetti=${randNum}`}} style= {{width: 150, height: 150, borderColor: "black", borderWidth: 0.5}} /> : <Text>No Picture</Text> ;
+  const userImage = props.userVars.userImage ? <Image source={{uri:`http://172.46.0.254:3000/${props.userVars.userImage}?spaghetti=${randNum}`}} style= {{width: 150, height: 150, borderColor: "black", borderWidth: 0.5}} /> : <Text>No Picture</Text> ;
 
   let userTagline = null
 
-  if (props.userVars.userTagline) {
+  if (props.userVars.userTagline || props.userVars.editTagline) {
       if (props.userVars.editTagline) {
         userTagline =
         <TextInput

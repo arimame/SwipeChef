@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Image, Button, TextInput, TouchableHighlight} from 'react-native';
+import {StyleSheet, Text, View, Image, Button, TextInput, TouchableHighlight, AsyncStorage} from 'react-native';
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 import t from 'tcomb-form-native'
 import Navbar from "../partials/Navbar";
@@ -37,12 +37,44 @@ class Login extends React.Component {
     this.props.trx.updateCurrentScreen("login", "register")
   }
 
+  submitLogin = (e) => {
+    let loginInputs = this.refs.form.getValue()
+
+    fetch(`http://172.46.0.254:3000/users/login`, {
+        method: 'POST',
+        headers:
+          {"Accept": "application/json",
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `email=${loginInputs.email}&password=${loginInputs.password}` // <-- Post parameters
+    }).then(results => {
+
+      console.log(results._bodyInit)
+    if (!results._bodyInit.includes('400')) {
+      console.log(results)
+      var storeData = async () => {
+        try {
+          await AsyncStorage.setItem('swipeChefToken', results._bodyInit);
+        } catch (error) {
+          console.log("Error Saving Data")
+        }
+      }
+      storeData()
+      this.props.trx.updateCurrentUser(results)
+      this.props.trx.updateCurrentScreen("login", "swipe")
+    } else {
+      console.log(results)
+    }
+  })
+    //console.log(loginInputs.email)
+  }
+
     return (
       <View>
       <Navbar stateVars={this.props.stateVars} style={{height: heightPercentageToDP('10%')}} trx={this.props.trx} />
        <View style={styles.container}>
-        <Form type={User} options={options} />
-         <TouchableHighlight style={styles.button} onPress={this.onPress} underlayColor='#99d9f4'>
+        <Form type={User} options={options} ref="form" />
+         <TouchableHighlight style={styles.button} onPress={submitLogin} underlayColor='#99d9f4'>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableHighlight>
         <Text>Need an account? <Text onPress={buttonPressToRegister}> Sign up.</Text></Text>
