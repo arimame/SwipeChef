@@ -13,7 +13,7 @@ function Userinfo (props) {
 
   let userTagline = null
 
-  if (props.userVars.userTagline) {
+  if (props.userVars.userTagline || props.userVars.editTagline) {
       if (props.userVars.editTagline) {
         userTagline =
         <TextInput

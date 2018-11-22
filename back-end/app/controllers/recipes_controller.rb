@@ -51,13 +51,12 @@ class RecipesController < ApplicationController
   def create
     @recipe = Recipe.find_or_create_by(recipe_params)
 
-    @recipe_user_ids = {
-      recipe_id: @recipe['id'],
-      user_id: current_user['id']
+    @recipe_id = {
+      recipe_id: @recipe['id']
     }.to_json
 
     respond_to do |format|
-      format.json { render json: @recipe_user_ids }
+      format.json { render json: @recipe_id }
     end
   end
 
@@ -67,7 +66,8 @@ class RecipesController < ApplicationController
     params.permit(
       :api_ref,
       :name,
-      :image
+      :image,
+      :swipeChefToken
       )
   end
 

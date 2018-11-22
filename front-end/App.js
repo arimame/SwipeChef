@@ -14,7 +14,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentScreen: "login",
+      currentScreen: "swipe",
       previousScreen: null,
       currentRecipe: null,
       currentUser: 2

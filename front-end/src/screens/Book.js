@@ -43,30 +43,35 @@ class Book extends React.Component {
     submitTagline = (text) => {
       this.setState({ userTagline: text,
                       editTagline: false})
-      fetch('http://172.46.3.249:3000/users/2', {
-        method: 'PATCH',
-        headers: {
-        //'Accept': 'application/json',
-        'Content-Type': 'multipart/form-data'
-        },
-        body: `tagline=${text}`
+
+      AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+        fetch(`http://172.46.3.249:3000/users?swipeChefToken=${swipeChefToken}`, {
+          method: 'PATCH',
+          headers: {
+          //'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data'
+          },
+          body: `tagline=${text}`
+        })
       })
     }
 
     // removes item from book
     removeItem = (itemId) => {
-      fetch(`http://172.46.3.249:3000/users/2/books/${itemId}`, {
-      method: "DELETE",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      }
-      }).then(results => {
-        console.log(results._bodyInit)
-        const newBookItems = this.state.bookItems.filter(function(item) {
-          return item.id !== itemId
-        });
-        this.setState({bookItems: newBookItems})
+      AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+        fetch(`http://172.46.3.249:3000/books/${itemId}?swipeChefToken=${swipeChefToken}`, {
+        method: "DELETE",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        }
+        }).then(results => {
+          console.log(results._bodyInit)
+          const newBookItems = this.state.bookItems.filter(function(item) {
+            return item.id !== itemId
+          });
+          this.setState({bookItems: newBookItems})
+        })
       })
     }
     this.trx = props.trx;

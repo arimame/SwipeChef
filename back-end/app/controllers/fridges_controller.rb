@@ -26,13 +26,14 @@ class FridgesController < ApplicationController
   end
 
   def create
-    decoded_token = JWT.decode book_params[:swipeChefToken], "spaghetti", true, { algorithm: 'HS256' }
+    decoded_token = JWT.decode params[:swipeChefToken], "spaghetti", true, { algorithm: 'HS256' }
 
     if decoded_token
 
       user_id = decoded_token[0]['id'].to_i
+      puts user_id
 
-      @fridge = Fridge.find_or_create_by(user_id, :recipe_id)
+      @fridge = Fridge.find_or_create_by(recipe_id: params[:recipe_id], user_id: user_id)
 
       respond_to do |format|
         format.json { render json: @fridge }
@@ -46,16 +47,14 @@ class FridgesController < ApplicationController
   end
 
   def destroy
-    decoded_token = JWT.decode book_params[:swipeChefToken], "spaghetti", true, { algorithm: 'HS256' }
+    decoded_token = JWT.decode params[:swipeChefToken], "spaghetti", true, { algorithm: 'HS256' }
 
     if decoded_token
 
       user_id = decoded_token[0]['id'].to_i
 
-      @fridge = Fridge.find_or_create_by(user_id, :recipe_id)
+      @fridge = Fridge.find_or_create_by(user_id: user_id, recipe_id: params[:id])
 
-
-      @fridge = Fridge.find_by(fridge_params)
       @fridge.destroy
       @message = "item removed from fridge".to_json
 
@@ -74,7 +73,8 @@ class FridgesController < ApplicationController
   def fridge_params
     params.permit(
       :recipe_id,
-      :user_id
+      :user_id,
+      :swipeChefToken
       )
   end
 

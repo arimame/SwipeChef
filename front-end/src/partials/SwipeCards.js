@@ -2,7 +2,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Image, Button} from 'react-native';
+import {StyleSheet, Text, View, Image, Button, AsyncStorage} from 'react-native';
 
 import SwipeCards from 'react-native-swipe-cards';
 
@@ -547,7 +547,7 @@ export default class extends React.Component {
   componentDidUpdate() {
     if (!this.moreQuestions || this.prevDeck === "xmas" || this.prevDeck === "ingredients") {
       this.index += this.deckSize;
-      const OGquery = `http://172.46.0.254:3000?query=${this.query}&start=${this.index}&maxResult=${this.deckSize}`
+      const OGquery = `http://172.46.3.249:3000?query=${this.query}&start=${this.index}&maxResult=${this.deckSize}`
       const encodedQuery = encodeURI(OGquery)
       console.log('-----------this.query---------------', encodedQuery)
       fetch(encodedQuery, {
@@ -602,26 +602,28 @@ export default class extends React.Component {
       }
     }
     else {
-      console.log(`Yup for ${card.text}`)
-      fetch("http://172.46.0.254:3000/recipes", {
-        method: 'POST',
-        headers:
-          {"Accept": "application/json",
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `api_ref=${card.id}&name=${card.text}&image=${card.image}` // <-- Post parameters
-      }).then( results => {
-         let parsedResults = JSON.parse(results._bodyInit);
-         fetch(`http://172.46.0.254:3000/users/${parsedResults.user_id}/fridges`, {
+      AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+        console.log(`Yup for ${card.text}`)
+        fetch(`http://172.46.3.249:3000/recipes`, {
           method: 'POST',
           headers:
             {"Accept": "application/json",
             'Content-Type': 'application/x-www-form-urlencoded'
           },
-          body: `recipe_id=${parsedResults.recipe_id}` // <-- Post parameters
+          body: `api_ref=${card.id}&name=${card.text}&image=${card.image}` // <-- Post parameters
+        }).then( results => {
+           let parsedResults = JSON.parse(results._bodyInit);
+           fetch(`http://172.46.3.249:3000/fridges?swipeChefToken=${swipeChefToken}`, {
+            method: 'POST',
+            headers:
+              {"Accept": "application/json",
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `recipe_id=${parsedResults.recipe_id}` // <-- Post parameters
+          })
         })
+        if (card.lastCard) this.updateCards(this.nextDeck);
       })
-      if (card.lastCard) this.updateCards(this.nextDeck);
     }
   }
 
@@ -691,7 +693,7 @@ export default class extends React.Component {
   }
 
   lastCard = () => {
-    const OGquery = `http://172.46.0.254:3000?query=${this.query}&start=${this.index}&maxResult=${this.deckSize}`
+    const OGquery = `http://172.46.3.249:3000?query=${this.query}&start=${this.index}&maxResult=${this.deckSize}`
     const encodedQuery = encodeURI(OGquery)
     console.log('-----------this.query---------------', encodedQuery)
     fetch(encodedQuery, {

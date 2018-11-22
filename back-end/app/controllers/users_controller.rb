@@ -86,6 +86,8 @@ class UsersController < ApplicationController
 
     decoded_token = JWT.decode user_params[:swipeChefToken], ENV['HMAC_SECRET'], true, { algorithm: 'HS256' }
 
+    user_id = decoded_token[0]['id'].to_i
+
     puts decoded_token
 
       if user_params[:photo]
@@ -93,13 +95,13 @@ class UsersController < ApplicationController
         path = File.join("public", "images", name)
         File.open(path, "wb") { |f| f.write(params[:photo].read) }
 
-        @user = User.find(user_params[:id])
+        @user = User.find(user_id)
         @user.photo = "images/#{params[:photo].original_filename}"
         @user.save
       end
 
       if user_params[:tagline]
-        @user = User.find(user_params[:id])
+        @user = User.find(user_id)
         @user.tagline = user_params[:tagline]
         @user.save
 

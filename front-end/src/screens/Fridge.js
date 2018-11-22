@@ -19,7 +19,7 @@ class Fridge extends React.Component  {
     removeItem = (itemId) => {
 
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-        fetch(`http://172.46.3.249:3000/fridges/?${itemId}&swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.3.249:3000/fridges/${itemId}?swipeChefToken=${swipeChefToken}`, {
         method: "DELETE",
         headers: {
           "Accept": "application/json",

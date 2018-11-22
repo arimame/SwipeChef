@@ -30,7 +30,7 @@ class BooksController < ApplicationController
 
       user_id = decoded_token[0]['id'].to_i
 
-      @book = Book.find_or_create_by(user_id, :recipe_id)
+      @book = Book.find_or_create_by(user_id: user_id, recipe_id: params[:recipe_id])
 
       respond_to do |format|
         format.json { render json: @book}
@@ -39,13 +39,13 @@ class BooksController < ApplicationController
   end
 
   def destroy
-    decoded_token = JWT.decode book_params[:swipeChefToken], "spaghetti", true, { algorithm: 'HS256' }
+    decoded_token = JWT.decode params[:swipeChefToken], "spaghetti", true, { algorithm: 'HS256' }
 
     if decoded_token
 
       user_id = decoded_token[0]['id'].to_i
 
-      @book = Book.find_by(user_id, :recipe_id)
+      @book = Book.find_by(user_id: user_id, recipe_id: params[:id])
       @book.destroy
       @message = "Item removed from the book".to_json
 
