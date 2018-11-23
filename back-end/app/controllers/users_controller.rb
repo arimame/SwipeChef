@@ -172,18 +172,21 @@ class UsersController < ApplicationController
         @user.write_attribute(setting_string, setting_value_boolean)
 
         vegan_string            = @user.vegan ? "&allowedDiet[]=386^Vegan" : ""
-        vegetarian_string       = @user.vegetarian ? "&allowedDiet[]=387^Lacto-ovo vegetarian" : ""
+        vegetarian_string       = @user.vegetarian ? "&allowedDiet[]=387^Lacto-ovo+vegetarian" : ""
         gluten_allergy_string   = @user.gluten_allergy ? "&allowedAllergy[]=393^Gluten-Free" : ""
         peanut_allergy_string   = @user.peanut_allergy ? "&allowedAllergy[]=394^Peanut-Free" : ""
         seafood_allergy_string  = @user.seafood_allergy ? "&allowedAllergy[]=398^Seafood-Free" : ""
         dairy_allergy_string    = @user.dairy_allergy ? "&allowedAllergy[]=396^Dairy-Free" : ""
         egg_allergy_string      = @user.egg_allergy ? "&allowedAllergy[]=397^Egg-Free" : ""
         soy_allergy_string      = @user.soy_allergy ? "&allowedAllergy[]=400^Soy-Free" : ""
-        tree_nut_allergy_string = @user.tree_nut_allergy ? "&allowedAllergy[]=395^Tree Nut-Free" : ""
+        tree_nut_allergy_string = @user.tree_nut_allergy ? "&allowedAllergy[]=395^Tree+Nut-Free" : ""
         wheat_allergy_string    = @user.wheat_allergy ? "&allowedAllergy[]=392^Wheat-Free" : ""
 
-
+        puts vegan_string
+        puts "--------------------------------------------------- query_string"
         query_string_string = vegan_string + vegetarian_string + gluten_allergy_string + peanut_allergy_string + seafood_allergy_string + dairy_allergy_string + egg_allergy_string + soy_allergy_string + tree_nut_allergy_string + wheat_allergy_string
+        puts query_string_string
+        puts "--------------------------------------------------- query_string"
 
         @user.query_string = query_string_string
 
