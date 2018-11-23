@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Image, Button, AsyncStorage} from 'react-native';
+import {StyleSheet, Text, View, Image, Button, AsyncStorage, ScrollView} from 'react-native';
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 import ToggleSwitch from 'toggle-switch-react-native'
 
@@ -26,9 +26,16 @@ class Setting extends React.Component {
     }
   }
 
+  logMeOut = (e) => {
+    AsyncStorage.removeItem('swipeChefToken').then(results => {
+      this.props.trx.updateCurrentScreen(null, 'login')
+    })
+
+  }
+
   componentDidMount() {
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-      fetch(`http://172.46.0.254:3000/user_settings?swipeChefToken=${swipeChefToken}`, {
+      fetch(`http://172.46.3.249:3000/user_settings?swipeChefToken=${swipeChefToken}`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -65,68 +72,9 @@ class Setting extends React.Component {
 
   render () {
 
-
-    onToggleVegan = (e) => {
-      const endState = !this.state.vegan
-      this.setState({vegan: !this.state.vegan})
-      submitSettingsUpdate("vegan", endState)
-    }
-
-    onToggleVegetarian = (e) => {
-      const endState = !this.state.vegetarian
-      this.setState({vegetarian: !this.state.vegetarian})
-      submitSettingsUpdate("vegetarian", endState)
-    }
-
-    onToggleGluten = (e) => {
-      const endState = !this.state.gluten_allergy
-      this.setState({gluten_allergy: !this.state.gluten_allergy})
-      submitSettingsUpdate("gluten_allergy", endState)
-    }
-
-    onTogglePeanut = (e) => {
-      const endState = !this.state.peanut_allergy
-      this.setState({peanut_allergy: !this.state.peanut_allergy})
-      submitSettingsUpdate("peanut_allergy", endState)
-    }
-
-    onToggleSeafood = (e) => {
-      const endState = !this.state.seafood_allergy
-      this.setState({seafood_allergy: !this.state.seafood_allergy})
-      submitSettingsUpdate("seafood_allergy", endState)
-    }
-    onToggleDairy = (e) => {
-      const endState = !this.state.dairy_allergy
-      this.setState({dairy_allergy: !this.state.dairy_allergy})
-      submitSettingsUpdate("dairy_allergy", endState)
-    }
-    onToggleEgg = (e) => {
-      const endState = !this.state.egg_allergy
-      this.setState({egg_allergy: !this.state.egg_allergy})
-      submitSettingsUpdate("egg_allergy", endState)
-    }
-
-    onToggleSoy = (e) => {
-      const endState = !this.state.soy_allergy
-      this.setState({soy_allergy: !this.state.soy_allergy})
-      submitSettingsUpdate("soy_allergy", endState)
-    }
-
-    onToggleTreeNut = (e) => {
-      const endState = !this.state.tree_nut_allergy
-      this.setState({tree_nut_allergy: !this.state.tree_nut_allergy})
-      submitSettingsUpdate("tree_nut_allergy", endState)
-    }
-
-    onToggleWheat = (e) => {
-      const endState = !this.state.wheat_allergy
-      this.setState({wheat_allergy: !this.state.wheat_allergy})
-      submitSettingsUpdate("wheat_allergy", endState)
-    }
-
     submitSettingsUpdate = (setting, setting_value) => {
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-        fetch(`http://172.46.0.254:3000/users?swipeChefToken=${swipeChefToken}&setting=${setting}&setting_value=${setting_value}`, {
+        fetch(`http://172.46.3.249:3000/users?swipeChefToken=${swipeChefToken}&setting=${setting}&setting_value=${setting_value}`, {
           method: 'PATCH',
           headers: {
           "Accept": "application/json",
@@ -136,9 +84,8 @@ class Setting extends React.Component {
       })
     }
 
-    const settingButtons = this.state.loading ? (<View></View>) : (<View style={{margin: 10}}>
+    const settingButtons = this.state.loading ? (<View></View>) : (<ScrollView style={{margin: 10}}>
       <View>
-
         <ToggleSwitch
                 isOn={this.state.vegan}
                 onColor='green'
@@ -239,7 +186,13 @@ class Setting extends React.Component {
                 ref='wheat_allergy'
                 onToggle={this.onToggleBuilder('wheat_allergy')}
             /></View>
-          </View>)
+            <Button
+                title="Logout"
+                color="red"
+                onPress={this.logMeOut}
+            />
+          </ScrollView>)
+
 
 
 

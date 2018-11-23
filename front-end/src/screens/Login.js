@@ -40,7 +40,7 @@ class Login extends React.Component {
   submitLogin = (e) => {
     let loginInputs = this.refs.form.getValue()
 
-    fetch(`http://172.46.0.254:3000/users/login`, {
+    fetch(`http://172.46.3.249:3000/users/login`, {
         method: 'POST',
         headers:
           {"Accept": "application/json",

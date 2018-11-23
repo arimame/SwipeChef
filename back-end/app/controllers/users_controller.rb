@@ -15,13 +15,13 @@ class UsersController < ApplicationController
     user.peanut_allergy = false
     user.seafood_allergy = false
     user.dairy_allergy = false
-    user.egg_allergy = false
     user.soy_allergy = false
-    user.tree_nut_allergy = false
     user.egg_allergy = false
     user.tree_nut_allergy = false
     user.wheat_allergy = false
+
     user.query_string = ""
+    user.photo = "https://i.stack.imgur.com/l60Hf.png"
 
     if user.save
 
@@ -104,7 +104,11 @@ class UsersController < ApplicationController
 
       user_id = decoded_token[0]['id'].to_i
 
-      @user = User.find(user_id)
+      if params[:usernameToVisit].length >= 1
+        @user = User.find_by username: params[:usernameToVisit]
+      else
+        @user = User.find(user_id)
+      end
 
       @userResponse = {
         username: @user.username,

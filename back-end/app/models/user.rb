@@ -4,6 +4,14 @@ class User < ApplicationRecord
   has_many :fridges
   has_many :books
 
+  validates :username, length: { minimum: 3 }
+
+  validates :username, uniqueness: true
+  validates :email, uniqueness: true
+
+  validates :password_digest, presence: true
+
+
   def self.authenticate_with_credentials(email, password)
     email = self.login_email_validation(email)
 

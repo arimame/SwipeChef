@@ -47,9 +47,15 @@ console.log(props.stateVars.currentScreen);
       title = "My Fridge"
       break;
     case "book":
-      buttonLeft = settingsButton;
-      buttonRight = swipeButton;
-      title = "My Coookbook";
+      if (props.stateVars.visitor) {
+        buttonLeft = backButton;
+        buttonRight = null;
+        title = props.stateVars.usernameToVisit;
+      } else {
+        buttonLeft = settingsButton;
+        buttonRight = swipeButton;
+        title = "My Coookbook";
+      }
       break;
     case "details":
       buttonLeft = backButton;
@@ -71,6 +77,11 @@ console.log(props.stateVars.currentScreen);
       buttonRight = null;
       title = "SwipeChef";
       break;
+    case "friends":
+      buttonLeft = backButton;
+      buttonRight = null;
+      title = "My Friends";
+      break;
     default:
       console.log("error!!!! the button is wrong");
       break;
@@ -78,6 +89,9 @@ console.log(props.stateVars.currentScreen);
 
   leftButtonPress = (e) => {
     props.trx.updateCurrentScreen(props.stateVars.currentScreen, buttonLeft.newScreen)
+    if (props.stateVars.visitor) {
+      props.trx.endVisiting()
+    }
   }
 
   rightButtonPress = (e) => {

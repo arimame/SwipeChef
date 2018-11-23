@@ -10,6 +10,7 @@ import Setting from './src/screens/Setting'
 import Login from './src/screens/Login'
 import Register from './src/screens/Register'
 import Loading from './src/screens/Loading'
+import Friends from './src/screens/Friends'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -19,7 +20,9 @@ export default class App extends React.Component {
       currentScreen: "loading",
       previousScreen: null,
       currentRecipe: null,
-      currentUser: 2
+      currentUser: 2,
+      visitor: false,
+      usernameToVisit: ""
     }
 
     updateCurrentScreen = (curScreen, newScreen) => {
@@ -34,10 +37,26 @@ export default class App extends React.Component {
       this.setState({currentUser: currentUser})
     }
 
+    startVisiting = (username) => {
+      this.setState({ visitor: true,
+                      usernameToVisit: username,
+                      currentScreen: 'book',
+                      previousScreen: 'friends'})
+    }
+
+    endVisiting = () => {
+      this.setState({ visitor: false,
+                      usernameToVisit: "",
+                      currentScreen: 'friends',
+                      previousScreen: 'book'})
+    }
+
     this.trx = {
       updateCurrentScreen: updateCurrentScreen,
       updateCurrentRecipe: updateCurrentRecipe,
-      updateCurrentUser: updateCurrentUser
+      updateCurrentUser: updateCurrentUser,
+      startVisiting: startVisiting,
+      endVisiting: endVisiting
     }
   }
 
@@ -47,7 +66,9 @@ export default class App extends React.Component {
       currentScreen: this.state.currentScreen,
       previousScreen: this.state.previousScreen,
       currentRecipe: this.state.currentRecipe,
-      currentUser: this.state.currentUser
+      currentUser: this.state.currentUser,
+      visitor: this.state.visitor,
+      usernameToVisit: this.state.usernameToVisit
     }
 
     switch (this.state.currentScreen) {
@@ -107,6 +128,13 @@ export default class App extends React.Component {
             </View>
           );
         break;
+          case "friends":
+          return (
+            <View style={{flex:1}}>
+              <Friends trx={this.trx} stateVars={stateVars}/>
+            </View>
+          );
+        break;
       default:
         console.log("error!!: invalid screen variable for currentScreen");
         break;
@@ -138,7 +166,7 @@ export default class App extends React.Component {
       console.log(swipeChefToken)
       console.log("---------------------------- SWIPE CHEF TOKEN")
       if (swipeChefToken) {
-        fetch(`http://172.46.0.254:3000/verify_token?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.3.249:3000/verify_token?swipeChefToken=${swipeChefToken}`, {
           method: "GET",
           headers: {
             "Accept": "application/json",
