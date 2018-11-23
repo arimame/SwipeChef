@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Image, Button, TouchableHighlight} from 'react-native';
+import {StyleSheet, Text, View, Image, Button, TouchableHighlight, ScrollView} from 'react-native';
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 import TimeAgo from 'javascript-time-ago';
-import en from 'javascript-time-ago/locale/en'
+import en from 'javascript-time-ago/locale/en';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 
 
@@ -31,35 +32,98 @@ function Listitem (props) {
   console.log("------------------------------- props ----- currentScreen")
   console.log(props.stateVars.currentScreen)
 
-  addToBookText = props.stateVars.currentScreen === "fridge" ? <Text onPress={addToBookButtonPress}>Add to Recipe Book</Text> : <Text></Text>
+  addToBookText = props.stateVars.currentScreen === "fridge" ? <Icon name="book-open-variant" style={{fontSize: 30, textAlign: "center", color:"#E88532"}} onPress={addToBookButtonPress} /> : <Text></Text>
 
     return (
-      <View style={{flexDirection: 'row', borderColor: "black", borderWidth: 0.5 , justifyContent: "center", marginBottom: 10}}>
-        <View style={{width: widthPercentageToDP('25%'), height: heightPercentageToDP('12%'), borderColor: "black", borderWidth: 0.5}}>
+      <View style={styles.list_container}>
+        <View style={{width: widthPercentageToDP('25%'), height: heightPercentageToDP('13%')}}>
         <TouchableHighlight onPress={this.detailsButtonPress}>
           <Image
             source={{uri: props.recipe.image}}
-            style= {{width:90, height: 90}}
+            style= {{width:90, height: 90, borderRadius: 5}}
           />
         </TouchableHighlight>
         </View>
-        <View style={{width: widthPercentageToDP('70%'), flexDirection: 'column', borderColor: "black", borderWidth: 0.5}}>
-          <View style={{height: heightPercentageToDP('4%'), borderColor: "black", borderWidth: 0.5}} >
-            <Text>{props.recipe.name}</Text>
+        <View style={styles.list_info_container}>
+          <View style={styles.recipe_name_container} >
+            <Text style={styles.recipe_name}>{props.recipe.name}</Text>
           </View>
-          <View style={{height: heightPercentageToDP('2%'), borderColor: "black", borderWidth: 0.5}}>
-            <Text>Expires in: {expireDays} days</Text>
+          <View style={styles.expire_container}>
+            <Text style={styles.expire}>Expires in: {expireDays} days</Text>
           </View>
-          <View style={{height: heightPercentageToDP('6%'), borderColor: "black", borderWidth: 0.5, flexDirection: 'row'}}>
-            <View style={{width: widthPercentageToDP('23.33'), borderColor: "black", borderWidth: 0.5}}><Text onPress={deleteButtonPress}>Delete</Text></View>
-            <View style={{width: widthPercentageToDP('23.33%'), borderColor: "black", borderWidth: 0.5}}>{addToBookText}</View>
-            <View style={{width: widthPercentageToDP('23.34%'), borderColor: "black", borderWidth: 0.5}}></View>
+          <View style={styles.button_container}>
+            <View style={styles.delete_button}><Icon name="trash-can" onPress={deleteButtonPress} style={{fontSize: 30, textAlign: "center", color:"#E88532"
+}}/></View>
+            <View style={styles.add_button}>{addToBookText}</View>
+            <View style={styles.list_button}><Icon name="playlist-edit" style={{fontSize: 30, textAlign: "center", color:"#E88532"
+}}/></View>
 
           </View>
         </View>
       </View>
     )
 }
+
+
+const styles = StyleSheet.create({
+
+  list_container: {
+    flexDirection: 'row',
+
+    marginRight: 2,
+    marginLeft: 2,
+    justifyContent: "center",
+    marginBottom: 10,
+    paddingRight: 0,
+
+  },
+
+  list_info_container: {
+    width: widthPercentageToDP('70%'),
+    flexDirection: 'column',
+    margin: 0,
+    marginLeft: 2,
+     borderColor: '#0F2F47',
+    borderWidth: 2,
+    borderRadius: 5,
+
+  },
+  recipe_name_container: {
+   height: heightPercentageToDP('4%'),
+   backgroundColor: '#F3C05F',
+   margin: 0
+  },
+  recipe_name: {
+    textAlign: 'center',
+    fontFamily: "pacifico-regular",
+    color: "#0F2F47"
+},
+  expire_container: {
+    height: heightPercentageToDP('3%')
+  },
+  expire: {
+    textAlign: "center",
+    fontSize: 10,
+    lineHeight: 20,
+    color: "#C53A32"
+  },
+  button_container: {
+    height: heightPercentageToDP('5%'),
+    flexDirection: 'row'
+  },
+
+  delete_button: {
+    width: widthPercentageToDP('23.33'),
+    textAlign: "center"
+
+  },
+  add_button: {
+    width: widthPercentageToDP('23.33')
+  },
+  list_button: {
+    width: widthPercentageToDP('23.33')
+  }
+});
 
 
 export default Listitem;

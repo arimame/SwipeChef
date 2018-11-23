@@ -46,7 +46,7 @@ export default class ImagePickerComponent extends React.Component {
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
         data.append("swipeChefToken", swipeChefToken)
 
-        fetch('http://172.46.0.254:3000/users', {
+        fetch('http://172.46.0.120:3000/users', {
           method: 'PATCH',
           headers: {
           //'Accept': 'application/json',

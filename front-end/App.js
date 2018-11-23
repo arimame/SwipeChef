@@ -11,15 +11,18 @@ import Login from './src/screens/Login'
 import Register from './src/screens/Register'
 import Loading from './src/screens/Loading'
 
+import { Font } from 'expo';
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      currentScreen: "loading",
+      currentScreen: "fridge",
       previousScreen: null,
       currentRecipe: null,
-      currentUser: 2
+      currentUser: 2,
+      fontLoaded: false,
     }
 
     updateCurrentScreen = (curScreen, newScreen) => {
@@ -47,7 +50,8 @@ export default class App extends React.Component {
       currentScreen: this.state.currentScreen,
       previousScreen: this.state.previousScreen,
       currentRecipe: this.state.currentRecipe,
-      currentUser: this.state.currentUser
+      currentUser: this.state.currentUser,
+      fontLoaded: this.state.fontLoaded
     }
 
     switch (this.state.currentScreen) {
@@ -132,13 +136,21 @@ export default class App extends React.Component {
     //   )
     // }
   }
-  componentDidMount() {
+
+
+
+  async componentDidMount() {
+    await Font.loadAsync({
+    'pacifico-regular': require('./assets/fonts/Pacifico/Pacifico-Regular.ttf'),
+    'arimo-regular': require('./assets/fonts/Arimo/Arimo-Regular.ttf')
+  });
+    this.setState({ fontLoaded: true });
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
       console.log("---------------------------- SWIPE CHEF TOKEN")
       console.log(swipeChefToken)
       console.log("---------------------------- SWIPE CHEF TOKEN")
       if (swipeChefToken) {
-        fetch(`http://172.46.0.254:3000/verify_token?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.0.120:3000/verify_token?swipeChefToken=${swipeChefToken}`, {
           method: "GET",
           headers: {
             "Accept": "application/json",
@@ -151,7 +163,7 @@ export default class App extends React.Component {
           if (results._bodyInit.includes('400')) {
             this.trx.updateCurrentScreen('loading', 'register')
           } else {
-            this.trx.updateCurrentScreen('loading', 'swipe')
+            this.trx.updateCurrentScreen('loading', 'fridge')
           }
         })
       } else {

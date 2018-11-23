@@ -18,7 +18,7 @@ const listElements = props.recipeItems.map((recipe) =>
 
 
   return (
-    <View style={{flex:1}}>
+    <View style={{flex:1, marginTop: 10}}>
     {listElements}
     </View>
   )

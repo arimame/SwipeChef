@@ -45,7 +45,7 @@ class Register extends React.Component {
     let registerInputs = this.refs.form.getValue()
     console.log("--------------------------- REGISTER INPUTS")
     console.log(registerInputs)
-    fetch(`http://172.46.0.254:3000/users`, {
+    fetch(`http://172.46.0.120:3000/users`, {
         method: 'POST',
         headers:
           {"Accept": "application/json",
@@ -101,15 +101,15 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#ffffff',
   },
-      buttonText: {
+  buttonText: {
     fontSize: 18,
     color: 'white',
     alignSelf: 'center'
   },
   button: {
     height: 36,
-    backgroundColor: '#D8A800',
-    borderColor: '#48BBEC',
+    backgroundColor: '#C53A32',
+    borderColor: '#C53A32',
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: 10,
