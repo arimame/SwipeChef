@@ -564,12 +564,13 @@ export default class extends React.Component {
           this.index = Number(storedIndex);
           this.prevDeck = storedPrevDeck;
           this.query = storedQuery;
-          if (cards) {
+          if (cards !== "false") {
             this.nextDeck = cards;
           }
-        } else {
+         else {
           this.setState({cards: courseCards});
         }
+      }
       } catch (error) {
         console.log(error);
       }
@@ -589,6 +590,8 @@ export default class extends React.Component {
         }
         if (this.nextDeck) {
           await AsyncStorage.setItem("nextDeck", JSON.stringify({cards: this.nextDeck}))
+        } else {
+          await AsyncStorage.setItem("nextDeck", "false")
         }
       } catch (error) {
         console.log(error);
