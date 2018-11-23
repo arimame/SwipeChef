@@ -17,6 +17,7 @@ class Details extends React.Component  {
 
   componentDidMount() {
     fetch(`http://172.46.0.120:3000/recipes/${this.props.stateVars.currentRecipe}`, {
+
       method: "GET",
       headers: {
         "Accept": "application/json",

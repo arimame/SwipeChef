@@ -39,12 +39,13 @@ export default class ImagePickerComponent extends React.Component {
       // this is where the actual image file is attached to the request
       data.append("photo", {
         uri: result.uri,
-        name: `userimage${this.props.stateVars.currentUser}${extension}`,
+        name: `userimage${extension}`,
         type: 'multipart/form-data'
       })
 
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
         data.append("swipeChefToken", swipeChefToken)
+
 
         fetch('http://172.46.0.120:3000/users', {
           method: 'PATCH',

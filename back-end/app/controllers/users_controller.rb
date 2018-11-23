@@ -8,6 +8,21 @@ class UsersController < ApplicationController
 
   def create
     user = User.new(user_create_params)
+
+    user.vegan = false
+    user.vegetarian = false
+    user.gluten_allergy = false
+    user.peanut_allergy = false
+    user.seafood_allergy = false
+    user.dairy_allergy = false
+    user.soy_allergy = false
+    user.egg_allergy = false
+    user.tree_nut_allergy = false
+    user.wheat_allergy = false
+
+    user.query_string = ""
+    user.photo = "https://i.stack.imgur.com/l60Hf.png"
+
     if user.save
 
       payload = {id: user.id.to_s}
@@ -83,13 +98,17 @@ class UsersController < ApplicationController
 
 
   def show
-    decoded_token = JWT.decode user_params[:swipeChefToken], ENV['HMAC_SECRET'], true, { algorithm: 'HS256' }
+    begin
 
-    if decoded_token
+      decoded_token = JWT.decode user_params[:swipeChefToken], ENV['HMAC_SECRET'], true, { algorithm: 'HS256' }
 
       user_id = decoded_token[0]['id'].to_i
 
-      @user = User.find(user_id)
+      if params[:usernameToVisit].length >= 1
+        @user = User.find_by username: params[:usernameToVisit]
+      else
+        @user = User.find(user_id)
+      end
 
       @userResponse = {
         username: @user.username,
@@ -102,7 +121,7 @@ class UsersController < ApplicationController
       respond_to do |format|
         format.json { render json: @userResponse.to_json}
       end
-    else
+    rescue
       respond_to do |format|
         format.json { render json: "400 ERROR - Wrong_Token".to_json}
       end
@@ -119,12 +138,21 @@ class UsersController < ApplicationController
     puts decoded_token
 
       if user_params[:photo]
-        name = params[:photo].original_filename #params[:photo][:file].original_filename
+        original_filename = params[:photo].original_filename
+
+        extension_index = original_filename.rindex('.')
+
+        filename_body = original_filename.slice(0, extension_index)
+
+        filename_extension = original_filename.slice(extension_index,)
+
+        name = filename_body + user_id.to_s + filename_extension
+
         path = File.join("public", "images", name)
         File.open(path, "wb") { |f| f.write(params[:photo].read) }
 
         @user = User.find(user_id)
-        @user.photo = "images/#{params[:photo].original_filename}"
+        @user.photo = "images/#{name}"
         @user.save
       end
 
@@ -135,12 +163,90 @@ class UsersController < ApplicationController
 
       end
 
+      if params[:setting]
+
+        setting_string = params[:setting]
+
+        setting_value_boolean = params[:setting_value] == "true" ? true : false
+
+        puts params[:setting]
+        puts "------------------------ setting"
+
+        @user = User.find(user_id)
+        @user.write_attribute(setting_string, setting_value_boolean)
+
+        vegan_string            = @user.vegan ? "&allowedDiet[]=386^Vegan" : ""
+        vegetarian_string       = @user.vegetarian ? "&allowedDiet[]=387^Lacto-ovo+vegetarian" : ""
+        gluten_allergy_string   = @user.gluten_allergy ? "&allowedAllergy[]=393^Gluten-Free" : ""
+        peanut_allergy_string   = @user.peanut_allergy ? "&allowedAllergy[]=394^Peanut-Free" : ""
+        seafood_allergy_string  = @user.seafood_allergy ? "&allowedAllergy[]=398^Seafood-Free" : ""
+        dairy_allergy_string    = @user.dairy_allergy ? "&allowedAllergy[]=396^Dairy-Free" : ""
+        egg_allergy_string      = @user.egg_allergy ? "&allowedAllergy[]=397^Egg-Free" : ""
+        soy_allergy_string      = @user.soy_allergy ? "&allowedAllergy[]=400^Soy-Free" : ""
+        tree_nut_allergy_string = @user.tree_nut_allergy ? "&allowedAllergy[]=395^Tree+Nut-Free" : ""
+        wheat_allergy_string    = @user.wheat_allergy ? "&allowedAllergy[]=392^Wheat-Free" : ""
+
+        puts vegan_string
+        puts "--------------------------------------------------- query_string"
+        query_string_string = vegan_string + vegetarian_string + gluten_allergy_string + peanut_allergy_string + seafood_allergy_string + dairy_allergy_string + egg_allergy_string + soy_allergy_string + tree_nut_allergy_string + wheat_allergy_string
+        puts query_string_string
+        puts "--------------------------------------------------- query_string"
+
+        @user.query_string = query_string_string
+
+        @user.save
+
+      end
+
     respond_to do |format|
       format.json { render json: "hello".to_json}
     end
 
 
   end
+
+  def settings
+
+    begin
+      decoded_token = JWT.decode user_params[:swipeChefToken], ENV['HMAC_SECRET'], true, { algorithm: 'HS256' }
+
+      user_id = decoded_token[0]['id'].to_i
+
+      @user = User.find(user_id)
+
+      @response = { vegan: @user.vegan,
+                    vegetarian: @user.vegetarian,
+                    gluten_allergy: @user.gluten_allergy,
+                    peanut_allergy: @user.peanut_allergy,
+                    seafood_allergy: @user.seafood_allergy,
+                    dairy_allergy: @user.dairy_allergy,
+                    egg_allergy: @user.egg_allergy,
+                    soy_allergy: @user.soy_allergy,
+                    tree_nut_allergy: @user.tree_nut_allergy,
+                    wheat_allergy: @user.wheat_allergy
+                  }
+
+      puts "------------------- RESPONSE USER"
+      puts @response
+      puts "------------------- RESPONSE USER"
+
+
+
+      respond_to do |format|
+        format.json { render json: @response.to_json}
+      end
+
+    rescue
+
+      respond_to do |format|
+        format.json { render json: "400".to_json}
+      end
+
+    end
+
+
+  end
+
 
   private
 
@@ -153,7 +259,9 @@ class UsersController < ApplicationController
       :id,
       :photo,
       :tagline,
-      :swipeChefToken
+      :swipeChefToken,
+      :setting,
+      :setting_value
       )
   end
 

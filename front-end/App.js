@@ -10,6 +10,7 @@ import Setting from './src/screens/Setting'
 import Login from './src/screens/Login'
 import Register from './src/screens/Register'
 import Loading from './src/screens/Loading'
+import Friends from './src/screens/Friends'
 
 import { Font } from 'expo';
 
@@ -23,6 +24,8 @@ export default class App extends React.Component {
       currentRecipe: null,
       currentUser: 2,
       fontLoaded: false,
+      visitor: false,
+      usernameToVisit: ""
     }
 
     updateCurrentScreen = (curScreen, newScreen) => {
@@ -37,10 +40,26 @@ export default class App extends React.Component {
       this.setState({currentUser: currentUser})
     }
 
+    startVisiting = (username) => {
+      this.setState({ visitor: true,
+                      usernameToVisit: username,
+                      currentScreen: 'book',
+                      previousScreen: 'friends'})
+    }
+
+    endVisiting = () => {
+      this.setState({ visitor: false,
+                      usernameToVisit: "",
+                      currentScreen: 'friends',
+                      previousScreen: 'book'})
+    }
+
     this.trx = {
       updateCurrentScreen: updateCurrentScreen,
       updateCurrentRecipe: updateCurrentRecipe,
-      updateCurrentUser: updateCurrentUser
+      updateCurrentUser: updateCurrentUser,
+      startVisiting: startVisiting,
+      endVisiting: endVisiting
     }
   }
 
@@ -52,6 +71,8 @@ export default class App extends React.Component {
       currentRecipe: this.state.currentRecipe,
       currentUser: this.state.currentUser,
       fontLoaded: this.state.fontLoaded
+      visitor: this.state.visitor,
+      usernameToVisit: this.state.usernameToVisit
     }
 
     switch (this.state.currentScreen) {
@@ -108,6 +129,13 @@ export default class App extends React.Component {
           return (
             <View style={{flex:1}}>
               <Register trx={this.trx} stateVars={stateVars}/>
+            </View>
+          );
+        break;
+          case "friends":
+          return (
+            <View style={{flex:1}}>
+              <Friends trx={this.trx} stateVars={stateVars}/>
             </View>
           );
         break;

@@ -2,24 +2,32 @@ class BooksController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    decoded_token = JWT.decode book_params[:swipeChefToken], "spaghetti", true, { algorithm: 'HS256' }
 
-    if decoded_token
+    begin
+
+      decoded_token = JWT.decode book_params[:swipeChefToken], "spaghetti", true, { algorithm: 'HS256' }
 
       user_id = decoded_token[0]['id'].to_i
 
-      @user = User.find(user_id)
+      if params[:usernameToVisit].length >= 1
+        @user = User.find_by username: params[:usernameToVisit]
+      else
+        @user = User.find(user_id)
+      end
 
       @user_book = @user.books
       @user_book_recipes = @user_book.map {|book_item| Recipe.find(book_item['recipe_id'])}
-      puts "---------------------------- user book recipes"
-      puts @user_book_recipes
-      puts "---------------------------- user book recipes"
 
       respond_to do |format|
         format.json { render json: @user_book_recipes.to_json }
       end
+    rescue
+      respond_to do |format|
+        format.json { render json: "INCORRECT TOKEN ".to_json }
+      end
+
     end
+
   end
 
  # CHECK in Fridge we didn't have a to_json, so I didn't put one here ...

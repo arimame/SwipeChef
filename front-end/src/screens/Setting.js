@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Image, Button} from 'react-native';
+import {StyleSheet, Text, View, Image, Button, AsyncStorage, ScrollView} from 'react-native';
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 import ToggleSwitch from 'toggle-switch-react-native'
 
@@ -21,24 +21,79 @@ class Setting extends React.Component {
       egg_allergy: false,
       soy_allergy: false,
       tree_nut_allergy: false,
-      wheat_allergy: false
+      wheat_allergy: false,
+      loading: true
     }
   }
 
+  logMeOut = (e) => {
+    AsyncStorage.removeItem('swipeChefToken').then(results => {
+      this.props.trx.updateCurrentScreen(null, 'login')
+    })
+
+  }
+
+  componentDidMount() {
+    AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+      fetch(`http://172.46.3.249:3000/user_settings?swipeChefToken=${swipeChefToken}`, {
+        method: "GET",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        }
+      }).then(results => {
+
+        const parsedResults = JSON.parse(results._bodyInit)
+       this.setState({
+         vegan: parsedResults.vegan,
+         vegetarian: parsedResults.vegetarian,
+         gluten_allergy: parsedResults.gluten_allergy,
+         peanut_allergy: parsedResults.peanut_allergy,
+         seafood_allergy: parsedResults.seafood_allergy,
+         dairy_allergy: parsedResults.dairy_allergy,
+         egg_allergy: parsedResults.egg_allergy,
+         soy_allergy: parsedResults.soy_allergy,
+         tree_nut_allergy: parsedResults.tree_nut_allergy,
+         wheat_allergy: parsedResults.wheat_allergy,
+         loading: false
+       })
+      })
+    })
+  }
+
+  onToggleBuilder(allergyKey) {
+    return (e) => {
+      const endState = !this.state[allergyKey];
+      this.setState({[allergyKey]: !this.state[allergyKey]})
+      submitSettingsUpdate([allergyKey], endState);
+    }
+  }
+
+
   render () {
-    return (
+
+    submitSettingsUpdate = (setting, setting_value) => {
+      AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+        fetch(`http://172.46.3.249:3000/users?swipeChefToken=${swipeChefToken}&setting=${setting}&setting_value=${setting_value}`, {
+          method: 'PATCH',
+          headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+          }
+        })
+      })
+    }
+
+    const settingButtons = this.state.loading ? (<View></View>) : (<ScrollView style={{margin: 10}}>
       <View>
-        <Navbar stateVars={this.props.stateVars} style={{height: heightPercentageToDP('10%')}} trx={this.props.trx} />
-        <View style={{margin: 10}}>
         <ToggleSwitch
                 isOn={this.state.vegan}
                 onColor='green'
                 offColor='red'
-                label='Vegan                '
+                label='Vegan'
                 labelStyle={{color: 'black', fontWeight: '900'}}
                 size='large'
-                onToggle={ (isOn) => {this.setState({vegan: !this.state.vegan})}}
-
+                onToggle={this.onToggleBuilder('vegan')}
             /></View>
         <View style={{margin: 10}}>
         <ToggleSwitch
@@ -48,7 +103,7 @@ class Setting extends React.Component {
                 label='Vegetarian        '
                 labelStyle={{color: 'black', fontWeight: '900'}}
                 size='large'
-                onToggle={ (isOn) => {this.setState({vegetarian: !this.state.vegetarian})}}
+                onToggle={this.onToggleBuilder('vegetarian')}
             /></View>
         <View style={{margin: 10}}>
         <ToggleSwitch
@@ -58,7 +113,7 @@ class Setting extends React.Component {
                 label='Gluten Allergy  '
                 labelStyle={{color: 'black', fontWeight: '900'}}
                 size='large'
-                onToggle={ (isOn) => {this.setState({gluten_allergy: !this.state.gluten_allergy})}}
+                onToggle={this.onToggleBuilder('gluten_allergy')}
             /></View>
         <View style={{margin: 10}}>
         <ToggleSwitch
@@ -68,7 +123,7 @@ class Setting extends React.Component {
                 label='Peanut Allergy  '
                 labelStyle={{color: 'black', fontWeight: '900'}}
                 size='large'
-                onToggle={ (isOn) => {this.setState({peanut_allergy: !this.state.peanut_allergy})}}
+                onToggle={this.onToggleBuilder('peanut_allergy')}
             /></View>
           <View style={{margin: 10}}>
           <ToggleSwitch
@@ -78,7 +133,7 @@ class Setting extends React.Component {
                 label='Seafood Allergy'
                 labelStyle={{color: 'black', fontWeight: '900'}}
                 size='large'
-                onToggle={ (isOn) => {this.setState({seafood_allergy: !this.state.seafood_allergy})}}
+                onToggle={this.onToggleBuilder('seafood_allergy')}
             /></View>
           <View style={{margin: 10}}>
           <ToggleSwitch
@@ -88,7 +143,7 @@ class Setting extends React.Component {
                 label='Dairy Allergy      '
                 labelStyle={{color: 'black', fontWeight: '900'}}
                 size='large'
-                onToggle={ (isOn) => {this.setState({dairy_allergy: !this.state.dairy_allergy})}}
+                onToggle={this.onToggleBuilder('dairy_allergy')}
             /></View>
           <View style={{margin: 10}}>
           <ToggleSwitch
@@ -98,7 +153,7 @@ class Setting extends React.Component {
                 label='Egg Allergy        '
                 labelStyle={{color: 'black', fontWeight: '900'}}
                 size='large'
-                onToggle={ (isOn) => {this.setState({egg_allergy: !this.state.egg_allergy})}}
+                onToggle={this.onToggleBuilder('egg_allergy')}
             /></View>
           <View style={{margin: 10}}>
           <ToggleSwitch
@@ -108,7 +163,7 @@ class Setting extends React.Component {
                 label='Soy Allergy        '
                 labelStyle={{color: 'black', fontWeight: '900'}}
                 size='large'
-                onToggle={ (isOn) => {this.setState({soy_allergy: !this.state.soy_allergy})}}
+                onToggle={this.onToggleBuilder('soy_allergy')}
             /></View>
           <View style={{margin: 10}}>
           <ToggleSwitch
@@ -118,7 +173,7 @@ class Setting extends React.Component {
                 label='Tree nut Allergy'
                 labelStyle={{color: 'black', fontWeight: '900'}}
                 size='large'
-                onToggle={ (isOn) => {this.setState({tree_nut_allergy: !this.state.tree_nut_allergy})}}
+                onToggle={this.onToggleBuilder('tree_nut_allergy')}
             /></View>
           <View style={{margin: 10}}>
           <ToggleSwitch
@@ -128,8 +183,23 @@ class Setting extends React.Component {
                 label='Wheat Allergy     '
                 labelStyle={{color: 'black', fontWeight: '900'}}
                 size='large'
-                onToggle={ (isOn) => {this.setState({wheat_allergy: !this.state.wheat_allergy})}}
+                ref='wheat_allergy'
+                onToggle={this.onToggleBuilder('wheat_allergy')}
             /></View>
+            <Button
+                title="Logout"
+                color="red"
+                onPress={this.logMeOut}
+            />
+          </ScrollView>)
+
+
+
+
+    return (
+      <View>
+        <Navbar stateVars={this.props.stateVars} style={{height: heightPercentageToDP('10%')}} trx={this.props.trx} />
+        {settingButtons}
       </View>
     )
   }

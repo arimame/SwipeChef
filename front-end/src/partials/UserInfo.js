@@ -9,7 +9,9 @@ function Userinfo (props) {
 
   let randNum = Math.round(Math.random() * 50,0)
 
+
   const userImage = props.userVars.userImage ? <Image source={{uri:`http://172.46.0.120:3000/${props.userVars.userImage}?spaghetti=${randNum}`}} style= {{width: 150, height: 150, borderColor: "black", borderWidth: 0.5}} /> : <Text>No Picture</Text> ;
+
 
   let userTagline = null
 
@@ -51,13 +53,17 @@ function Userinfo (props) {
     console.log("asdfasdfasdfasdfasdfasdfadsfasdfasdfasdfasdfasdfadsfadsff")
   }
 
-  const taglineOption = props.userVars.editTagline ? <Text onPress={submitUserTaglineButtonPress}>Submit Tagline</Text> : <Text onPress={setUserTaglineButtonPress}>Set Tagline</Text>
+  const taglineOption = props.userVars.editTagline ? <Text onPress={submitUserTaglineButtonPress}>Submit Tagline</Text> : ( props.stateVars.visitor ? <View></View> : <Text onPress={setUserTaglineButtonPress}>Set Tagline</Text> )
+
+  const setImageRender = !props.userVars.imagePicker && props.stateVars.visitor ? <View></View> : <Text onPress={setUserImageButtonPress}>Set User Image</Text>
+
+
 
   return (
     <View style={{height: heightPercentageToDP('40%')}}>
       <View style={{height: heightPercentageToDP('20%'), justifyContent: 'center', alignItems: 'center'}}>
         {userImage}
-        <Text onPress={setUserImageButtonPress}>Set User Image</Text>
+        {setImageRender}
       </View>
       <View style={{height: heightPercentageToDP('20%'), padding: 40}}>
         {userTagline}

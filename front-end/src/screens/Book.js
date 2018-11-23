@@ -23,6 +23,9 @@ class Book extends React.Component {
       editTagline: false
     }
 
+
+
+
     // This runs the image picker
     getUserImage = () => {
       this.setState({imagePicker: true})
@@ -105,16 +108,13 @@ class Book extends React.Component {
 
   componentDidMount() {
 
-    // fetchBooks()
-    //   .then(books => {
-    //      // debugger
-    //     this.setState({books: books })
-    // })
+    usernameToVisit = this.props.stateVars.usernameToVisit
 
     console.log("FETCH--------------------");
 
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-      fetch(`http://172.46.0.120:3000/books?swipeChefToken=${swipeChefToken}`, {
+      fetch(`http://172.46.0.120:3000/books?swipeChefToken=${swipeChefToken}&usernameToVisit=${usernameToVisit}`, {
+
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -126,7 +126,7 @@ class Book extends React.Component {
        const parsedResults = JSON.parse(results._bodyInit)
           this.setState({bookItems: parsedResults})
       }).then(results => {
-        fetch(`http://172.46.0.120:3000/users?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.0.120:3000/users?swipeChefToken=${swipeChefToken}&usernameToVisit=${usernameToVisit}`, {
           method: "GET",
           headers: {
             "Accept": "application/json",
@@ -148,18 +148,28 @@ class Book extends React.Component {
 
 
   }
+
+  onFriendsPress = (e) => {
+    this.props.trx.updateCurrentScreen("book", "friends")
+  }
+
   render () {
 
     const userVars = {
       userImage: this.state.userImage,
       userTagline: this.state.userTagline,
       username: this.state.username,
-      editTagline: this.state.editTagline
+      editTagline: this.state.editTagline,
+      imagePicker: this.state.imagePicker
     }
+
+
 
     const bookItemsRender = this.state.bookItems ? (<List recipeItems={this.state.bookItems} stateVars={this.props.stateVars} trx={this.trx} />) : <Text></Text>
 
-    const imagePickerRender = this.state.imagePicker ? (<ImagePickerComponent trx={this.trx} stateVars={this.props.stateVars} />) : <Text></Text>
+    const imagePickerRender = this.state.imagePicker && !this.props.stateVars.visitor ? (<ImagePickerComponent trx={this.trx} stateVars={this.props.stateVars} />) : <Text></Text>
+
+    const friendsButton = this.props.stateVars.visitor ? <View></View> : <Button onPress={this.onFriendsPress} title="Your Friends" color="blue" />
 
     console.log("----------------------USER VARS")
     console.log(userVars)
@@ -172,6 +182,7 @@ class Book extends React.Component {
             <Userinfo stateVars={this.props.stateVars}  trx={this.trx} userVars={userVars}/>
           </View>
           {imagePickerRender}
+          {friendsButton}
           <Text>book</Text>
           {bookItemsRender}
         </ScrollView>

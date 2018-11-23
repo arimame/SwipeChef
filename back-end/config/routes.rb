@@ -15,6 +15,9 @@ Rails.application.routes.draw do
 
   get '/verify_token' => 'users#verify_token'
 
+  get '/user_settings' => 'users#settings'
+
+  get '/friend_search' => 'friends#search'
 
   resources :fridges, only: [:create, :index, :destroy]
 
