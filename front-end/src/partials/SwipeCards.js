@@ -556,18 +556,17 @@ export default class extends React.Component {
         const storedIndex = await AsyncStorage.getItem("index");
         const storedPrevDeck = await AsyncStorage.getItem("prevDeck");
         const storedQuery = await AsyncStorage.getItem("query");
-        // const storedNextDeck = await AsyncStorage.getItem("nextDeck");
+        const storedNextDeck = await AsyncStorage.getItem("nextDeck");
 
-        // const test = JSON.parse(storedNextDeck).cards;
+        const cards = JSON.parse(storedNextDeck).cards;
         if (storedState) {
           this.setState(JSON.parse(storedState));
           this.index = Number(storedIndex);
           this.prevDeck = storedPrevDeck;
           this.query = storedQuery;
-          this.moreQuestions = true;
-          // if (test) {
-          //   this.nextDeck = test;
-          // }
+          if (cards) {
+            this.nextDeck = cards;
+          }
         } else {
           this.setState({cards: courseCards});
         }
@@ -588,9 +587,9 @@ export default class extends React.Component {
         if (this.query) {
           await AsyncStorage.setItem("query", this.query);
         }
-        // if (this.nextDeck) {
-        //   await AsyncStorage.setItem("nextDeck", JSON.stringify({cards: this.nextDeck}))
-        // }
+        if (this.nextDeck) {
+          await AsyncStorage.setItem("nextDeck", JSON.stringify({cards: this.nextDeck}))
+        }
       } catch (error) {
         console.log(error);
       }
@@ -599,33 +598,34 @@ export default class extends React.Component {
 
   componentDidUpdate() {
     if (!this.moreQuestions || this.prevDeck === "xmas" || this.prevDeck === "ingredients") {
-      this.index += this.deckSize;
-      const OGquery = `http://172.46.0.254:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}`
-      const encodedQuery = encodeURI(OGquery)
-      // console.log('-----------this.query---------------', encodedQuery)
-      console.log("I AM IN HERE")
-      fetch(encodedQuery, {
-        method: "GET",
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        }
-      })
-      .then(results => {
-        // console.log("------------------TEST")
-        // console.log(results)
-        // console.log("------------------TEST")
-        let parsedResults = JSON.parse(results._bodyInit);
-        const newCards = [];
-        for (let match of parsedResults.matches) {
-          let image = match.imageUrlsBySize["90"]
-          let largeImage = image.substring(0, image.length - 5)
-          largeImage += "s1200-c"
-          // console.log(largeImage)
-          newCards.push({text: match.recipeName, image: largeImage, backgroundColor: "black", id: match.id})
-        }
-        newCards[newCards.length - 1].lastCard = true;
-        this.nextDeck = newCards;
+      AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+        this.index += this.deckSize;
+        const OGquery = `http://172.46.0.254:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}&swipeChefToken=${swipeChefToken}`
+        const encodedQuery = encodeURI(OGquery)
+        console.log('-----------this.query---------------', encodedQuery)
+        fetch(encodedQuery, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          }
+        })
+        .then(results => {
+          // console.log("------------------TEST")
+          // console.log(results)
+          // console.log("------------------TEST")
+          let parsedResults = JSON.parse(results._bodyInit);
+          const newCards = [];
+          for (let match of parsedResults.matches) {
+            let image = match.imageUrlsBySize["90"]
+            let largeImage = image.substring(0, image.length - 5)
+            largeImage += "s1200-c"
+            console.log(largeImage)
+            newCards.push({text: match.recipeName, image: largeImage, backgroundColor: "black", id: match.id})
+          }
+          newCards[newCards.length - 1].lastCard = true;
+          this.nextDeck = newCards;
+        })
       })
     }
   }
@@ -637,7 +637,7 @@ export default class extends React.Component {
         await AsyncStorage.removeItem("index");
         await AsyncStorage.removeItem("prevDeck");
         await AsyncStorage.removeItem("query");
-        // await AsyncStorage.removeItem("nextDeck")
+        await AsyncStorage.removeItem("nextDeck")
       } catch (error) {
         console.log(error)
       }
@@ -739,7 +739,6 @@ export default class extends React.Component {
     }
 
     else {
-      console.log("----INDEX----", this.index)
       if (card.lastCard) {
         this.updateCards(this.nextDeck);
       }
@@ -784,50 +783,52 @@ export default class extends React.Component {
   }
 
   lastCard = () => {
-    const OGquery = `http://172.46.0.254:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}`
+    AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+    const OGquery = `http://172.46.0.254:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}&swipeChefToken=${swipeChefToken}`
     const encodedQuery = encodeURI(OGquery)
     // console.log('-----------this.query---------------', encodedQuery)
     fetch(encodedQuery, {
-     method: "GET",
-     headers: {
-       "Accept": "application/json",
-       "Content-Type": "application/json"
-     }
-   })
-   .then(results => {
-     let parsedResults = JSON.parse(results._bodyInit);
-     const newCards = [];
-     for (let match of parsedResults.matches) {
-       console.log("----------MATCH")
-       console.log(match);
-       let image = match.imageUrlsBySize["90"]
-       let largeImage = image.substring(0, image.length - 5)
-       largeImage += "s1200-c"
-      //  console.log(largeImage)
-       newCards.push({text: match.recipeName, image: largeImage, backgroundColor: "black", id: match.id})
-     }
-     if (this.moreQuestions && this.prevDeck !== "xmas" && this.prevDeck !== "ingredients") {
-      newCards.push(
-        {
-          type: 'addFilters',
-          text: 'Would you like to add more filters to your search?'
-        }
-      );
-    } else {
-      newCards[newCards.length - 1].lastCard = true;
-    }
-      newCards.push(
-        {
-          type: 'question',
-          text: '',
-          color: 'white',
-        }
-      )
+      method: "GET",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+    .then(results => {
+      let parsedResults = JSON.parse(results._bodyInit);
+      const newCards = [];
+      for (let match of parsedResults.matches) {
+        console.log("----------MATCH")
+        console.log(match);
+        let image = match.imageUrlsBySize["90"]
+        let largeImage = image.substring(0, image.length - 5)
+        largeImage += "s1200-c"
+        console.log(largeImage)
+        newCards.push({text: match.recipeName, image: largeImage, backgroundColor: "black", id: match.id})
+      }
+      if (this.moreQuestions && this.prevDeck !== "xmas" && this.prevDeck !== "ingredients") {
+       newCards.push(
+         {
+           type: 'addFilters',
+           text: 'Would you like to add more filters to your search?'
+          }
+        );
+      } else {
+        newCards[newCards.length - 1].lastCard = true;
+      }
+        newCards.push(
+          {
+            type: 'question',
+            text: '',
+            color: 'white',
+          }
+        )
 
-    // console.log("-------------")
-    //  console.log('NEWCARDS', newCards)
-     this.setState({cards: newCards})
-   })
+        console.log("-------------")
+        console.log('NEWCARDS', newCards)
+        this.setState({cards: newCards})
+      })
+    })
   }
 
   render() {

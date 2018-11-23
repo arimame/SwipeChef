@@ -42,6 +42,7 @@ class Register extends React.Component {
   }
 
   submitRegister = (e) => {
+    console.log('CHECK--------------------------------')
     let registerInputs = this.refs.form.getValue()
     console.log("--------------------------- REGISTER INPUTS")
     console.log(registerInputs)

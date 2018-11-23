@@ -39,7 +39,7 @@ export default class ImagePickerComponent extends React.Component {
       // this is where the actual image file is attached to the request
       data.append("photo", {
         uri: result.uri,
-        name: `userimage${this.props.stateVars.currentUser}${extension}`,
+        name: `userimage${extension}`,
         type: 'multipart/form-data'
       })
 
