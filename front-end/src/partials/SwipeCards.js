@@ -602,7 +602,8 @@ export default class extends React.Component {
       this.index += this.deckSize;
       const OGquery = `http://172.46.0.254:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}`
       const encodedQuery = encodeURI(OGquery)
-      console.log('-----------this.query---------------', encodedQuery)
+      // console.log('-----------this.query---------------', encodedQuery)
+      console.log("I AM IN HERE")
       fetch(encodedQuery, {
         method: "GET",
         headers: {
@@ -620,7 +621,7 @@ export default class extends React.Component {
           let image = match.imageUrlsBySize["90"]
           let largeImage = image.substring(0, image.length - 5)
           largeImage += "s1200-c"
-          console.log(largeImage)
+          // console.log(largeImage)
           newCards.push({text: match.recipeName, image: largeImage, backgroundColor: "black", id: match.id})
         }
         newCards[newCards.length - 1].lastCard = true;
@@ -650,8 +651,8 @@ export default class extends React.Component {
   }
 
   handleYup = (card) => {
-    console.log("PREVDECK:", this.prevDeck)
-    console.log("NEXTDECK:", this.nextDeck)
+    // console.log("PREVDECK:", this.prevDeck)
+    // console.log("NEXTDECK:", this.nextDeck)
 
     if (card.type === "question") {
       this.addToQuery(card.yupQuery);
@@ -738,6 +739,7 @@ export default class extends React.Component {
     }
 
     else {
+      console.log("----INDEX----", this.index)
       if (card.lastCard) {
         this.updateCards(this.nextDeck);
       }
@@ -784,7 +786,7 @@ export default class extends React.Component {
   lastCard = () => {
     const OGquery = `http://172.46.0.254:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}`
     const encodedQuery = encodeURI(OGquery)
-    console.log('-----------this.query---------------', encodedQuery)
+    // console.log('-----------this.query---------------', encodedQuery)
     fetch(encodedQuery, {
      method: "GET",
      headers: {
@@ -801,7 +803,7 @@ export default class extends React.Component {
        let image = match.imageUrlsBySize["90"]
        let largeImage = image.substring(0, image.length - 5)
        largeImage += "s1200-c"
-       console.log(largeImage)
+      //  console.log(largeImage)
        newCards.push({text: match.recipeName, image: largeImage, backgroundColor: "black", id: match.id})
      }
      if (this.moreQuestions && this.prevDeck !== "xmas" && this.prevDeck !== "ingredients") {
@@ -822,8 +824,8 @@ export default class extends React.Component {
         }
       )
 
-    console.log("-------------")
-     console.log('NEWCARDS', newCards)
+    // console.log("-------------")
+    //  console.log('NEWCARDS', newCards)
      this.setState({cards: newCards})
    })
   }

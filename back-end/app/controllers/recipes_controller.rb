@@ -21,9 +21,9 @@ class RecipesController < ApplicationController
 
     #  user_id = decoded_token[0]['id'].to_i
 
-      @response = RestClient::Request.execute(
-        method: :get,
-         url: "http://api.yummly.com/v1/api/recipes?_app_id=#{ENV['ID']}&_app_key=#{ENV['KEY']}&q=pasta&maxResult=2&start=2&requirePictures=true")
+      # @response = RestClient::Request.execute(
+      #   method: :get,
+      #    url: "http://api.yummly.com/v1/api/recipes?_app_id=#{ENV['ID']}&_app_key=#{ENV['KEY']}&q=pasta&maxResult=2&start=2&requirePictures=true")
 
 
       respond_to do |format|
