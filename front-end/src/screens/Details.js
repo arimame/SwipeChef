@@ -42,10 +42,23 @@ class Details extends React.Component  {
         return ourNutrition.includes(object.attribute)
       })
 
+      const ourNutritionListRender= ourNutritionList.map((object) =>
+          <Text style={styles.nutrition_item}>{object.description} : {object.value} {object.unit.name}s</Text>
+        );
+
+    const getRating = () => {
+      const ratingN = this.state.recipeInfo.rating
+      console.log(ratingN)
+      let ratingS = ""
+      for (var i = 0; i < ratingN; i++) {
+        ratingS += "⭐"
+      }
+      return ratingS
+    }
+
+    const recipeRating = getRating();
+
       console.log("list of nutr--------", ourNutritionList);
-
-
-
 
 
       return (
@@ -60,11 +73,12 @@ class Details extends React.Component  {
             </View>
             <View style={styles.info_container}>
               <View style={styles.name_container} >
-                <Text style={styles.recipe_name}>{this.state.recipeInfo.name}</Text>
+                <Text adjustsFontSizeToFit
+              numberOfLines={1} style={styles.recipe_name}>{this.state.recipeInfo.name}</Text>
               </View>
               <View style={styles.rating_time_container}>
-                <View style={styles.rating_time}><Text style={styles.rating_time}>Rating: {this.state.recipeInfo.rating}</Text></View>
-                <View style={styles.rating_time}><Text style={styles.rating_time}>Time: {this.state.recipeInfo.totalTime}</Text></View>
+                <View style={styles.rating_time}><Text style={styles.rating_time}>Rating: {recipeRating}</Text></View>
+                <View style={styles.rating_time}><Text style={styles.rating_time}>⏲: {this.state.recipeInfo.totalTime}</Text></View>
               </View>
             </View>
           </View>
@@ -84,13 +98,7 @@ class Details extends React.Component  {
           </View>
             <View style={styles.nutrition_container}>
               <Text style={styles.nutrition_title}>Nutrition</Text>
-              <Text style={styles.nutrition_item}>Calories: {ourNutritionList[5].value}</Text>
-              <Text style={styles.nutrition_item}>Sugar: {ourNutritionList[0].value} grams</Text>
-              <Text style={styles.nutrition_item}>Protien: {ourNutritionList[2].value} grams</Text>
-              <Text style={styles.nutrition_item}>Fiber: {ourNutritionList[1].value} grams</Text>
-              <Text style={styles.nutrition_item}>Cholesterol: {ourNutritionList[4].value} grams</Text>
-              <Text style={styles.nutrition_item}>Fat: {ourNutritionList[6].value} grams</Text>
-              <Text style={styles.nutrition_item}>Sodium: {ourNutritionList[7].value} grams</Text>
+              {ourNutritionListRender}
             </View>
 
         </View>
@@ -140,7 +148,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: "pacifico-regular",
     color: "#E9E2BB",
-    fontSize: 20
+    lineHeight: 50
   },
   rating_time_container: {
     height: heightPercentageToDP('4%'),

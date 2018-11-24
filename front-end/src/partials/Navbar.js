@@ -54,7 +54,7 @@ console.log(props.stateVars.currentScreen);
       } else {
         buttonLeft = settingsButton;
         buttonRight = swipeButton;
-        title = "My Coookbook";
+        title = "My Cookbook";
       }
       break;
     case "details":

@@ -169,7 +169,7 @@ class Book extends React.Component {
 
     const imagePickerRender = this.state.imagePicker && !this.props.stateVars.visitor ? (<ImagePickerComponent trx={this.trx} stateVars={this.props.stateVars} />) : <Text></Text>
 
-    const friendsButton = this.props.stateVars.visitor ? <View></View> : <Button onPress={this.onFriendsPress} title="Your Friends" color="blue" />
+    const friendsButton = this.props.stateVars.visitor ? <View></View> : <View style={{alignItems: 'center', justifyContent: 'center', marginBottom: 30}}><Button onPress={this.onFriendsPress} title="👋 Your Friends 🥂" color="#0F2F47"/></View>
 
     console.log("----------------------USER VARS")
     console.log(userVars)
@@ -178,12 +178,11 @@ class Book extends React.Component {
       <View style={{flex:1}}>
         <Navbar stateVars={this.props.stateVars} style={{height: heightPercentageToDP('10%')}} trx={this.trx} />
         <ScrollView>
-          <View style={{flex:1}}>
+          <View style={{flex:1, marginTop: 25}}>
             <Userinfo stateVars={this.props.stateVars}  trx={this.trx} userVars={userVars}/>
           </View>
           {imagePickerRender}
           {friendsButton}
-          <Text>book</Text>
           {bookItemsRender}
         </ScrollView>
       </View>
@@ -191,5 +190,14 @@ class Book extends React.Component {
   }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+});
 
 export default Book;

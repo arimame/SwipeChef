@@ -10,7 +10,7 @@ function Userinfo (props) {
   let randNum = Math.round(Math.random() * 50,0)
 
 
-  const userImage = props.userVars.userImage ? <Image source={{uri:`http://172.46.0.120:3000/${props.userVars.userImage}?spaghetti=${randNum}`}} style= {{width: 150, height: 150, borderColor: "black", borderWidth: 0.5}} /> : <Text>No Picture</Text> ;
+  const userImage = props.userVars.userImage ? <Image source={{uri:`http://172.46.0.120:3000/${props.userVars.userImage}?spaghetti=${randNum}`}} style= {{width: 150, height: 150, borderColor: "#C53A32", borderRadius: 5, borderWidth: 2}} /> : <Text>No Picture</Text> ;
 
 
   let userTagline = null
@@ -19,11 +19,11 @@ function Userinfo (props) {
       if (props.userVars.editTagline) {
         userTagline =
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          style={{height: 40, borderColor: '"#0F2F47"', borderWidth: 2, borderRadius: 5, padding: 5}}
           onChangeText={(text) => taglineInput = text}
         />
       } else {
-        userTagline = <Text style={{textAlign: 'center', borderColor: "black", borderWidth: 0.5}}>{props.userVars.userTagline}</Text>
+        userTagline = <Text style={{textAlign: 'center', backgroundColor: "#C53A32", borderRadius: 5, height: 40, fontFamily: 'fredokaone-regular', fontSize: 20, color: "#E9E2BB", lineHeight: 40}}>"{props.userVars.userTagline}"</Text>
       }
 
   } else {
@@ -53,9 +53,9 @@ function Userinfo (props) {
     console.log("asdfasdfasdfasdfasdfasdfadsfasdfasdfasdfasdfasdfadsfadsff")
   }
 
-  const taglineOption = props.userVars.editTagline ? <Text onPress={submitUserTaglineButtonPress}>Submit Tagline</Text> : ( props.stateVars.visitor ? <View></View> : <Text onPress={setUserTaglineButtonPress}>Set Tagline</Text> )
+  const taglineOption = props.userVars.editTagline ? <Text onPress={submitUserTaglineButtonPress} style={{fontFamily: "pacifico-regular"}}>Submit Tagline</Text> : ( props.stateVars.visitor ? <View></View> : <Text onPress={setUserTaglineButtonPress} style={{textAlign: "right", fontFamily: "pacifico-regular", color:"#0F2F47"}}>edit</Text> )
 
-  const setImageRender = !props.userVars.imagePicker && props.stateVars.visitor ? <View></View> : <Text onPress={setUserImageButtonPress}>Set User Image</Text>
+  const setImageRender = !props.userVars.imagePicker && props.stateVars.visitor ? <View></View> : <Text onPress={setUserImageButtonPress} style={{fontFamily: "pacifico-regular", color:"#0F2F47"}}>edit</Text>
 
 
 

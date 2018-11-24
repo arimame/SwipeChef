@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Image, Button, AsyncStorage, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, Image, Button, AsyncStorage} from 'react-native';
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 
 
@@ -85,11 +85,9 @@ class Fridge extends React.Component  {
    return (
       <View style={styles.container}>
         <Navbar stateVars={this.props.stateVars} style={styles.navbar} trx={this.trx} />
-        <ScrollView>
         <View style={styles.recipeContainer} >
           {fridgeItemsRender}
         </View>
-        </ScrollView>
       </View>
     )
   }

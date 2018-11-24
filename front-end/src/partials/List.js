@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Image, Button} from 'react-native';
+import {StyleSheet, Text, View, Image, Button, ScrollView} from 'react-native';
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 
 
@@ -19,7 +19,9 @@ const listElements = props.recipeItems.map((recipe) =>
 
   return (
     <View style={{flex:1, marginTop: 10}}>
+    <ScrollView>
     {listElements}
+    </ScrollView>
     </View>
   )
 }

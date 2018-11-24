@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Image, Button, TouchableHighlight, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, Image, Button, TouchableHighlight, ScrollView, TouchableOpacity} from 'react-native';
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
@@ -13,6 +13,7 @@ function Listitem (props) {
   const msNow = Date.now();
   const msDiff = msNow - Date.parse(props.recipe.created_at);
   const expireDays = Math.floor((864000000 - msDiff) / 86400000);
+  const expireDaysRender = props.stateVars.currentScreen === "fridge" ? <Text style={styles.expire}>Expires in: {expireDays} days</Text> : <Text></Text>
 
   console.log("-------BUTTON--------", props.recipe)
 
@@ -32,7 +33,7 @@ function Listitem (props) {
   console.log("------------------------------- props ----- currentScreen")
   console.log(props.stateVars.currentScreen)
 
-  addToBookText = props.stateVars.currentScreen === "fridge" ? <Icon name="book-open-variant" style={{fontSize: 30, textAlign: "center", color:"#E88532"}} onPress={addToBookButtonPress} /> : <Text></Text>
+  addToBookText = props.stateVars.currentScreen === "fridge" ? <Icon name="book-open-variant" style={{fontSize: 30, textAlign: "center", color:"#E88532"}}  /> : <Text></Text>
 
     return (
       <View style={styles.list_container}>
@@ -46,15 +47,16 @@ function Listitem (props) {
         </View>
         <View style={styles.list_info_container}>
           <View style={styles.recipe_name_container} >
-            <Text style={styles.recipe_name}>{props.recipe.name}</Text>
+            <Text adjustsFontSizeToFit
+              numberOfLines={1} style={styles.recipe_name}>{props.recipe.name}</Text>
           </View>
           <View style={styles.expire_container}>
-            <Text style={styles.expire}>Expires in: {expireDays} days</Text>
+            {expireDaysRender}
           </View>
           <View style={styles.button_container}>
             <View style={styles.delete_button}><Icon name="trash-can" onPress={deleteButtonPress} style={{fontSize: 30, textAlign: "center", color:"#E88532"
 }}/></View>
-            <View style={styles.add_button}>{addToBookText}</View>
+            <View style={styles.add_button}><TouchableOpacity onPress={addToBookButtonPress}>{addToBookText}</TouchableOpacity></View>
             <View style={styles.list_button}><Icon name="playlist-edit" style={{fontSize: 30, textAlign: "center", color:"#E88532"
 }}/></View>
 
