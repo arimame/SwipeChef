@@ -2,7 +2,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Image, Button, AsyncStorage} from 'react-native';
+import {StyleSheet, Text, View, Image, Button, AsyncStorage, TouchableHighlight} from 'react-native';
 
 import SwipeCards from 'react-native-swipe-cards';
 
@@ -317,7 +317,8 @@ const buildIngredientsCards = () => {
   cards.push(
     {
       type: 'question',
-      text: 'Ok, time to look at some ingredients.\n\nSwipe right for yes, left for no, and up for maybe\n\n(Swipe to continue)',
+      text: 'Ok, time to look at some ingredients.',
+      subText: 'Swipe right for yes, left for no, and up for maybe\n\n(Swipe to continue)',
       yupQuery: '',
     }
   );
@@ -345,7 +346,8 @@ const buildCusineCards = () => {
   cards.push(
     {
       type: 'question',
-      text: 'Alright, let\'s look at some cuisines\n\nSwipe right for any cuisine you would like to view recipes for\n\n(Swipe to continue)',
+      text: 'Alright, let\'s look at some cuisines',
+      subText: 'Swipe right for any cuisine you would like to view recipes for\n\n(Swipe to continue)',
       yupQuery: '',
     }
   );
@@ -374,7 +376,8 @@ const cuisineCards = buildCusineCards();
 const nutritionCards = [
   {
     type: 'question',
-    text: 'Good for you! 💪\n\nSwipe right for everything you want to keep into account:\n\n(Swipe to continue)',
+    text: 'Good for you! 💪',
+    subText: 'Swipe right for everything you want to keep into account: \n\n (Swipe to continue)',
     yupQuery: ''
   },
   {
@@ -445,7 +448,8 @@ const xmasCard = [
 const timeCard = [
   {
     type: 'question',
-    text: 'Are you in a rush? 🏃‍♀️💨\n\n (We\'ll limit cooking times to less than 30 mins)',
+    text: 'Are you in a rush? 🏃‍♀️💨',
+    subText: '(We\'ll limit cooking times to less than 30 mins)',
     yupQuery: '&maxTotalTimeInSeconds=1800',
     yupLastCard: true,
     nopeUpdateCards: xmasCard,
@@ -489,32 +493,66 @@ class Card extends React.Component {
     this.props.trx.updateCurrentRecipe(this.props.id, "swipe")
   }
 
+
   render() {
 
     const image = (
-      <Image
-        style={{width:325, height: 325}}
-        source={{uri: this.props.image}}
-      />
+      <TouchableHighlight onPress={this.detailsButtonPress}>
+        <Image
+          style={{width:325, height: 325, borderRadius: 5}}
+          source={{uri: this.props.image}}
+        />
+      </TouchableHighlight>
     )
 
-    return (
-      <View style={[styles.card, {backgroundColor: this.props.color || 'black'}]}>
-        <Text
-          style={{fontSize:18, color:"white", fontWeight:"bold", textAlign: 'center'}}
-        >{this.props.text}
-        </Text>
-        {image}
-        <Button
-          onPress={this.detailsButtonPress}
-          title="Details"
-          color="white"
-        />
+    const getRating = () => {
+      const ratingN = this.props.rating
+      console.log(ratingN)
+      let ratingS = ""
+      for (var i = 0; i < ratingN; i++) {
+        ratingS += "⭐"
+      }
+      return ratingS
+    }
+
+    const recipeRating = getRating();
+
+    const cardRender = this.props.type === "question" || this.props.type === "addFilters" ?
+    (<View style={styles.question_card_container}>
+        <Text style={styles.question_card}>{this.props.text}</Text>
+        <Text style={styles.question_card_sub}>{this.props.subText}</Text>
+        <View style={{position: "absolute", bottom: 20}}>
         <Button
           onPress={this.props.reset}
           title="Start New Search"
-          color="grey"
+          color="#0F2F47"
+
         />
+        </View>
+      </View>) :
+
+      (<View style={styles.recipe_card_container}>
+        <Text
+          style={styles.recipe_card}
+        >{this.props.text}
+        </Text>
+        {image}
+        <View style={{flexDirection: 'row'}}>
+          <Text style={{padding: 10, fontFamily: "arimo-regular", color:"#0F2F47"}}>Rating: {recipeRating}</Text>
+          <Text style={{padding: 10, fontFamily: "arimo-regular", color:"#0F2F47"}}>⏲ Prep Time: {this.props.time} mins</Text>
+        </View>
+        <View style={{marginTop: 15}}>
+          <Button
+            onPress={this.props.reset}
+            title="Start New Search"
+            color="#0F2F47"
+          />
+        </View>
+      </View>)
+
+    return (
+      <View>
+      {cardRender}
       </View>
     )
   }
@@ -603,7 +641,7 @@ export default class extends React.Component {
     if (!this.moreQuestions || this.prevDeck === "xmas" || this.prevDeck === "ingredients") {
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
         this.index += this.deckSize;
-        const OGquery = `http://172.46.3.120:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}&swipeChefToken=${swipeChefToken}`
+        const OGquery = `http://172.46.0.120:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}&swipeChefToken=${swipeChefToken}`
         const encodedQuery = encodeURI(OGquery)
         console.log('-----------this.query---------------', encodedQuery)
         fetch(encodedQuery, {
@@ -624,7 +662,8 @@ export default class extends React.Component {
             let largeImage = image.substring(0, image.length - 5)
             largeImage += "s1200-c"
             console.log(largeImage)
-            newCards.push({text: match.recipeName, image: largeImage, backgroundColor: "black", id: match.id})
+            const timeInMins = Math.round(match.totalTimeInSeconds / 60);
+            newCards.push({text: match.recipeName, image: largeImage, id: match.id, rating: match.rating, time: timeInMins})
           }
           newCards[newCards.length - 1].lastCard = true;
           this.nextDeck = newCards;
@@ -789,7 +828,7 @@ export default class extends React.Component {
 
   lastCard = () => {
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-    const OGquery = `http://172.46.3.120:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}&swipeChefToken=${swipeChefToken}`
+    const OGquery = `http://172.46.0.120:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}&swipeChefToken=${swipeChefToken}`
     const encodedQuery = encodeURI(OGquery)
     console.log('-----------this.query---------------', encodedQuery)
     fetch(encodedQuery, {
@@ -809,7 +848,8 @@ export default class extends React.Component {
         let largeImage = image.substring(0, image.length - 5)
         largeImage += "s1200-c"
         console.log(largeImage)
-        newCards.push({text: match.recipeName, image: largeImage, backgroundColor: "black", id: match.id})
+        const timeInMins = Math.round(match.totalTimeInSeconds / 60);
+        newCards.push({text: match.recipeName, image: largeImage, rating: match.rating, time: timeInMins, id: match.id})
       }
       if (this.moreQuestions && this.prevDeck !== "xmas" && this.prevDeck !== "ingredients") {
        newCards.push(
@@ -861,18 +901,47 @@ export default class extends React.Component {
   }
 }
 
-const height = '90%';
+const height = '95%';
 
 const styles = StyleSheet.create({
-  card: {
+  noMoreCardsText: {
+    fontSize: 22,
+    textAlign: 'center'
+  },
+  question_card_container: {
+    backgroundColor:'#C53A32',
     justifyContent: 'center',
     alignItems: 'center',
     height,
     width: 350,
     borderRadius:10
   },
-  noMoreCardsText: {
-    fontSize: 22,
-    textAlign: 'center'
+   question_card: {
+    fontSize: 35,
+    color:"#E9E2BB",
+    textAlign: 'center',
+    fontFamily: "fredokaone-regular"
+  },
+  question_card_sub: {
+    fontSize: 20,
+    color:"#E9E2BB",
+    textAlign: 'center',
+    fontFamily: "fredokaone-regular",
+    padding: 20
+  },
+  recipe_card_container: {
+    backgroundColor:"#E88532",
+    justifyContent: 'center',
+    alignItems: 'center',
+    height,
+    width: 350,
+    borderRadius:10
+  },
+  recipe_card: {
+    fontSize: 25,
+    color:"#0F2F47",
+    textAlign: 'center',
+    fontFamily:"pacifico-regular",
+    marginBottom: 10
   }
 })

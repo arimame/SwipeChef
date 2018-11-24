@@ -48,7 +48,6 @@ class Register extends React.Component {
     console.log(registerInputs)
 
     fetch(`http://172.46.0.120:3000/users`, {
-
         method: 'POST',
         headers:
           {"Accept": "application/json",

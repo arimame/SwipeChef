@@ -19,7 +19,7 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {
-      currentScreen: "fridge",
+      currentScreen: "loading",
       previousScreen: null,
       currentRecipe: null,
       currentUser: 2,
@@ -70,7 +70,7 @@ export default class App extends React.Component {
       previousScreen: this.state.previousScreen,
       currentRecipe: this.state.currentRecipe,
       currentUser: this.state.currentUser,
-      fontLoaded: this.state.fontLoaded
+      fontLoaded: this.state.fontLoaded,
       visitor: this.state.visitor,
       usernameToVisit: this.state.usernameToVisit
     }
@@ -170,7 +170,9 @@ export default class App extends React.Component {
   async componentDidMount() {
     await Font.loadAsync({
     'pacifico-regular': require('./assets/fonts/Pacifico/Pacifico-Regular.ttf'),
-    'arimo-regular': require('./assets/fonts/Arimo/Arimo-Regular.ttf')
+    'arimo-regular': require('./assets/fonts/Arimo/Arimo-Regular.ttf'),
+    'amaranth-regular': require('./assets/fonts/Amaranth/Amaranth-Regular.ttf'),
+    'fredokaone-regular': require('./assets/fonts/Fredoka_One/FredokaOne-Regular.ttf')
   });
     this.setState({ fontLoaded: true });
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
@@ -191,7 +193,7 @@ export default class App extends React.Component {
           if (results._bodyInit.includes('400')) {
             this.trx.updateCurrentScreen('loading', 'register')
           } else {
-            this.trx.updateCurrentScreen('loading', 'fridge')
+            this.trx.updateCurrentScreen('loading', 'swipe')
           }
         })
       } else {
