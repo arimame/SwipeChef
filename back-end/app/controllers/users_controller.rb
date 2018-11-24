@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   skip_before_action :verify_authenticity_token
 
+
   def new
 
   end
@@ -8,6 +9,12 @@ class UsersController < ApplicationController
 
   def create
     user = User.new(user_create_params)
+
+    username = params[:username]
+
+    username_downcase = username.downcase
+
+    user.username = username_downcase
 
     user.vegan = false
     user.vegetarian = false
@@ -144,7 +151,12 @@ class UsersController < ApplicationController
 
         filename_body = original_filename.slice(0, extension_index)
 
-        filename_extension = original_filename.slice(extension_index,)
+        filename_extension = original_filename.slice(extension_index, original_filename.length)
+        puts filename_extension
+        puts "filename extension ------------------------"
+
+        puts original_filename
+        puts "original_filename -------------------------"
 
         name = filename_body + user_id.to_s + filename_extension
 

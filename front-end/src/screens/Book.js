@@ -20,7 +20,8 @@ class Book extends React.Component {
       userTagline: null,
       userName: null,
       imagePicker: false,
-      editTagline: false
+      editTagline: false,
+      areFriends: false
     }
 
 
@@ -123,7 +124,7 @@ class Book extends React.Component {
        console.log("---------------------------------------GET BOOKS")
        console.log(results)
        const parsedResults = JSON.parse(results._bodyInit)
-          this.setState({bookItems: parsedResults})
+          this.setState({bookItems: parsedResults.user_book_recipes, areFriends: parsedResults.are_friends})
       }).then(results => {
         fetch(`http://172.46.3.249:3000/users?swipeChefToken=${swipeChefToken}&usernameToVisit=${usernameToVisit}`, {
           method: "GET",
@@ -138,7 +139,7 @@ class Book extends React.Component {
           this.setState({
             userImage: userInfoParsed.photo,
             userTagline: userInfoParsed.tagline,
-            userName: userInfoParsed.username
+            username: userInfoParsed.username
           })
 
         })
@@ -150,6 +151,42 @@ class Book extends React.Component {
 
   onFriendsPress = (e) => {
     this.props.trx.updateCurrentScreen("book", "friends")
+  }
+
+  addToFriendsPress = (e) => {
+    AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+        fetch(`http://172.46.3.249:3000/friend_add?swipeChefToken=${swipeChefToken}`, {
+          method: 'POST',
+          headers: {
+          "Accept": "application/json",
+          'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `usernameToVisit=${this.props.stateVars.usernameToVisit}`
+      }).then(results => {
+        parsedResults = JSON.parse(results._bodyInit)
+        console.log(parsedResults)
+        this.setState({areFriends: true})
+
+      })
+    })
+  }
+
+  removeFromFriendsPress = (e) => {
+    AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+        fetch(`http://172.46.3.249:3000/friend_remove?swipeChefToken=${swipeChefToken}`, {
+          method: 'DELETE',
+          headers: {
+          "Accept": "application/json",
+          'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `usernameToVisit=${this.props.stateVars.usernameToVisit}`
+      }).then(results => {
+        parsedResults = JSON.parse(results._bodyInit)
+        console.log(parsedResults)
+        this.setState({areFriends: false})
+
+      })
+    })
   }
 
   render () {
@@ -168,7 +205,9 @@ class Book extends React.Component {
 
     const imagePickerRender = this.state.imagePicker && !this.props.stateVars.visitor ? (<ImagePickerComponent trx={this.trx} stateVars={this.props.stateVars} />) : <Text></Text>
 
-    const friendsButton = this.props.stateVars.visitor ? <View></View> : <Button onPress={this.onFriendsPress} title="Your Friends" color="blue" />
+    const friendsButton = this.props.stateVars.visitor ? <View></View> : <Button onPress={this.onFriendsPress} title="My Favourite Chefs" color="blue" />
+
+    const addToFriendsButton = this.props.stateVars.visitor ? (this.state.areFriends ? <Button onPress={this.removeFromFriendsPress} title="Unfollow" color="red" /> : <Button onPress={this.addToFriendsPress} title="Follow" color="green" />) : <View></View>
 
     console.log("----------------------USER VARS")
     console.log(userVars)
@@ -182,6 +221,7 @@ class Book extends React.Component {
           </View>
           {imagePickerRender}
           {friendsButton}
+          {addToFriendsButton}
           <Text>book</Text>
           {bookItemsRender}
         </ScrollView>

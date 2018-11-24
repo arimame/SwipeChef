@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import {StyleSheet, Text, View, Image, Button, AsyncStorage} from 'react-native';
 import {SearchBar} from 'react-native-elements';
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
-import ToggleSwitch from 'toggle-switch-react-native'
 import SearchableDropdown from 'react-native-searchable-dropdown';
 
 import Navbar from "../partials/Navbar";
+import FriendList from "../partials/FriendList";
 
 
 class Friends extends React.Component {
@@ -17,7 +17,8 @@ class Friends extends React.Component {
       fetchCounter: 0,
       allUsers: [],
       filteredUsers: [],
-      items: []
+      items: [],
+      friendsList: []
     }
   }
 
@@ -47,11 +48,10 @@ class Friends extends React.Component {
     username = e.name
     this.props.trx.startVisiting(username)
 
-
   }
 
   componentDidMount() {
-    AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+    AsyncStorage.getItem('swipeChefToken').then((swipeChefToken) => {
       fetch(`http://172.46.3.249:3000/friend_search?swipeChefToken=${swipeChefToken}`, {
         method: "GET",
         headers: {
@@ -64,22 +64,25 @@ class Friends extends React.Component {
         this.setState({allUsers: parsedResults})
       })
     })
-
+    AsyncStorage.getItem('swipeChefToken').then((swipeChefToken) => {
+      fetch(`http://172.46.3.249:3000/friends?swipeChefToken=${swipeChefToken}`, {
+        method: "GET",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        }
+      }).then(results => {
+        parsedResults = JSON.parse(results._bodyInit)
+        this.setState({friendsList: parsedResults})
+      })
+    })
 
   }
 
 
-
- //<SearchBar
-          // clearIcon={{ color: 'grey' }}
-          // searchIcon={false} // You could have passed `null` too
-          // onChangeText={this.updateSearchText}
-          // //onClear={someMethod}
-          // placeholder='Search for friends...' />
-
   render () {
     matchingUsernames = this.state.items
-    console.log(this.state.items, "------------------ this state items")
+    console.log(this.state.friendsList, "------------------ this state items")
 
     return (
       <View>
@@ -110,7 +113,7 @@ class Friends extends React.Component {
           resetValue={false}
           underlineColorAndroid="transparent"
         />
-
+        <FriendList style={{position: 'absolute', bottom: 0}}stateVars={this.props.stateVars} trx={this.props.trx} friendsList={this.state.friendsList}/>
       </View>
     )
   }

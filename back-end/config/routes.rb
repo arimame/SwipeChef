@@ -19,6 +19,12 @@ Rails.application.routes.draw do
 
   get '/friend_search' => 'friends#search'
 
+  post '/friend_add' => 'friends#add'
+
+  delete '/friend_remove' => 'friends#destroy'
+
+  get 'friends' => 'friends#show'
+
   resources :fridges, only: [:create, :index, :destroy]
 
   resources :books, only: [:create, :index, :destroy]

@@ -11,15 +11,27 @@ class BooksController < ApplicationController
 
       if params[:usernameToVisit].length >= 1
         @user = User.find_by username: params[:usernameToVisit]
+
+        following_id = @user['id']
+
+        are_friends = Friend.exists?(user_id: user_id, following_id: following_id)
+
       else
         @user = User.find(user_id)
+
+        are_friends = nil
+
       end
 
+
       @user_book = @user.books
-      @user_book_recipes = @user_book.map {|book_item| Recipe.find(book_item['recipe_id'])}
+      user_book_recipes = @user_book.map {|book_item| Recipe.find(book_item['recipe_id'])}
+
+      user_book_response = {user_book_recipes: user_book_recipes, are_friends: are_friends}
+
 
       respond_to do |format|
-        format.json { render json: @user_book_recipes.to_json }
+        format.json { render json: user_book_response.to_json }
       end
     rescue
       respond_to do |format|
