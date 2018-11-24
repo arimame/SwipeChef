@@ -180,7 +180,7 @@ export default class App extends React.Component {
       console.log(swipeChefToken)
       console.log("---------------------------- SWIPE CHEF TOKEN")
       if (swipeChefToken) {
-        fetch(`http://172.46.0.120:3000/verify_token?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.0.254:3000/verify_token?swipeChefToken=${swipeChefToken}`, {
           method: "GET",
           headers: {
             "Accept": "application/json",
