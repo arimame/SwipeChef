@@ -18,7 +18,7 @@ console.log(props.stateVars.currentScreen);
     newScreen: "swipe"
   };
   const bookButton = {
-    icon: "notebook",
+    icon: "book-open-variant",
     newScreen: "book"
   };
   const backButton = {
@@ -39,7 +39,7 @@ console.log(props.stateVars.currentScreen);
     case "swipe":
       buttonLeft = bookButton;
       buttonRight = fridgeButton;
-      title = "SwipeChef"
+      title = null
       break;
     case "fridge":
       buttonLeft = swipeButton;
@@ -54,13 +54,13 @@ console.log(props.stateVars.currentScreen);
       } else {
         buttonLeft = settingsButton;
         buttonRight = swipeButton;
-        title = "My Coookbook";
+        title = "My Cookbook";
       }
       break;
     case "details":
       buttonLeft = backButton;
       buttonRight = null;
-      title = "SwipeChef";
+      title = null;
       break;
     case "setting":
       buttonLeft = null;
@@ -70,12 +70,12 @@ console.log(props.stateVars.currentScreen);
     case "register":
       buttonLeft = null;
       buttonRight = null;
-      title = "SwipeChef";
+      title = null;
       break;
     case "login":
       buttonLeft = null;
       buttonRight = null;
-      title = "SwipeChef";
+      title = null;
       break;
     case "friends":
       buttonLeft = backButton;
@@ -98,20 +98,18 @@ console.log(props.stateVars.currentScreen);
     props.trx.updateCurrentScreen(props.stateVars.currentScreen, buttonRight.newScreen)
   }
 
-  const buttonLeftRender = buttonLeft ?  (<Icon name = {buttonLeft.icon} style={{textAlign: "center", fontSize: 40}} onPress={leftButtonPress}/>) : <Text></Text>
-  const buttonRightRender = buttonRight ?  (<Icon name = {buttonRight.icon} style={{textAlign: "center", fontSize: 40}} onPress={rightButtonPress}/>) : <Text></Text>
-
+  const buttonLeftRender = buttonLeft ?  (<Icon name = {buttonLeft.icon} style={{textAlign: "center", fontSize: 40, color: "#F3C05F"}} onPress={leftButtonPress}/>) : <Text></Text>
+  const buttonRightRender = buttonRight ?  (<Icon name = {buttonRight.icon} style={{textAlign: "center", fontSize: 40, color: "#F3C05F"}} onPress={rightButtonPress}/>) : <Text></Text>
+  const setTitle = title ? (<Text style={{textAlign: "center"}}><Text style={{fontSize: 30, color: "#E9E2BB", fontFamily: "pacifico-regular"}}>{title}</Text></Text>) : <Text style={{textAlign: "center"}}><Text style={{fontSize: 30, color: "#E9E2BB", fontFamily: "pacifico-regular"}}>Swipe</Text><Text style={{fontSize: 30, color: "#F3C05F", fontFamily: "arimo-regular"}}>Chef</Text></Text>
   return (
-    <View style={{flexDirection: 'row', paddingTop: 35, paddingBottom: 15, backgroundColor: "#006442", justifyContent: "center"}}>
-      <View style={{width: widthPercentageToDP('15%')}}>
+    <View style={{flexDirection: 'row', paddingTop: 35, paddingBottom: 15, backgroundColor: "#0F2F47", justifyContent: "center"}}>
+      <View style={{width: widthPercentageToDP('15%'),  paddingTop: 8, paddingLeft: 20}}>
       {buttonLeftRender}
       </View>
       <View style={{width: widthPercentageToDP('70%')}}>
-        <Text style={{textAlign: "center", fontSize: 30, color: "white"}}>
-          {title}
-        </Text>
+        {props.stateVars.fontLoaded ? setTitle : null }
       </View>
-      <View style={{width: widthPercentageToDP('15%')}}>
+      <View style={{width: widthPercentageToDP('15%'), paddingTop: 8, paddingRightt: 20}}>
         {buttonRightRender}
       </View>
     </View>

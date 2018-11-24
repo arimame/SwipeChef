@@ -13,7 +13,6 @@ function FriendListitem(props) {
 
   return (
     <View>
-
       <View style={{flexDirection: 'row', borderColor: "black", borderWidth: 0.5 , justifyContent: "center", marginBottom: 10}}>
         <View style={{width: widthPercentageToDP('25%'), height: heightPercentageToDP('12%'), borderColor: "black", borderWidth: 0.5}}>
           <TouchableHighlight onPress={selectFriend} >

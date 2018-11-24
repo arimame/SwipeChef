@@ -12,6 +12,8 @@ import Register from './src/screens/Register'
 import Loading from './src/screens/Loading'
 import Friends from './src/screens/Friends'
 
+import { Font } from 'expo';
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -21,6 +23,7 @@ export default class App extends React.Component {
       previousScreen: null,
       currentRecipe: null,
       currentUser: 2,
+      fontLoaded: false,
       visitor: false,
       usernameToVisit: ""
     }
@@ -67,6 +70,7 @@ export default class App extends React.Component {
       previousScreen: this.state.previousScreen,
       currentRecipe: this.state.currentRecipe,
       currentUser: this.state.currentUser,
+      fontLoaded: this.state.fontLoaded,
       visitor: this.state.visitor,
       usernameToVisit: this.state.usernameToVisit
     }
@@ -160,13 +164,23 @@ export default class App extends React.Component {
     //   )
     // }
   }
-  componentDidMount() {
+
+
+
+  async componentDidMount() {
+    await Font.loadAsync({
+    'pacifico-regular': require('./assets/fonts/Pacifico/Pacifico-Regular.ttf'),
+    'arimo-regular': require('./assets/fonts/Arimo/Arimo-Regular.ttf'),
+    'amaranth-regular': require('./assets/fonts/Amaranth/Amaranth-Regular.ttf'),
+    'fredokaone-regular': require('./assets/fonts/Fredoka_One/FredokaOne-Regular.ttf')
+  });
+    this.setState({ fontLoaded: true });
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
       console.log("---------------------------- SWIPE CHEF TOKEN")
       console.log(swipeChefToken)
       console.log("---------------------------- SWIPE CHEF TOKEN")
       if (swipeChefToken) {
-        fetch(`http://172.46.3.249:3000/verify_token?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.0.120:3000/verify_token?swipeChefToken=${swipeChefToken}`, {
           method: "GET",
           headers: {
             "Accept": "application/json",

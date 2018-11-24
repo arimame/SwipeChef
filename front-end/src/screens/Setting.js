@@ -35,7 +35,7 @@ class Setting extends React.Component {
 
   componentDidMount() {
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-      fetch(`http://172.46.3.249:3000/user_settings?swipeChefToken=${swipeChefToken}`, {
+      fetch(`http://172.46.0.120:3000/user_settings?swipeChefToken=${swipeChefToken}`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -74,7 +74,7 @@ class Setting extends React.Component {
 
     submitSettingsUpdate = (setting, setting_value) => {
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-        fetch(`http://172.46.3.249:3000/users?swipeChefToken=${swipeChefToken}&setting=${setting}&setting_value=${setting_value}`, {
+        fetch(`http://172.46.0.120:3000/users?swipeChefToken=${swipeChefToken}&setting=${setting}&setting_value=${setting_value}`, {
           method: 'PATCH',
           headers: {
           "Accept": "application/json",
@@ -84,113 +84,116 @@ class Setting extends React.Component {
       })
     }
 
-    const settingButtons = this.state.loading ? (<View></View>) : (<ScrollView style={{margin: 10}}>
-      <View>
+    const settingButtons = this.state.loading ? (<View></View>) : (<ScrollView>
+       <Text style={{fontSize: 22, fontFamily: "pacifico-regular", color: '#0F2F47', marginLeft: 5}}>Diet</Text>
+        <View style={{margin: 10}}>
         <ToggleSwitch
                 isOn={this.state.vegan}
-                onColor='green'
-                offColor='red'
-                label='Vegan'
+                onColor= "#E88532"
+                offColor='#F3C05F'
+                label='Vegan                 '
                 labelStyle={{color: 'black', fontWeight: '900'}}
-                size='large'
+                size='medium'
                 onToggle={this.onToggleBuilder('vegan')}
             /></View>
         <View style={{margin: 10}}>
         <ToggleSwitch
                 isOn={this.state.vegetarian}
-                onColor='green'
-                offColor='red'
+                onColor="#E88532"
+                offColor='#F3C05F'
                 label='Vegetarian        '
                 labelStyle={{color: 'black', fontWeight: '900'}}
-                size='large'
+                size='medium'
                 onToggle={this.onToggleBuilder('vegetarian')}
             /></View>
+        <Text style={{fontSize: 22, fontFamily: "pacifico-regular", color: '#0F2F47', marginTop: 10, marginLeft: 5}}>Allergies</Text>
         <View style={{margin: 10}}>
         <ToggleSwitch
                 isOn={this.state.gluten_allergy}
-                onColor='green'
-                offColor='red'
+                onColor="#E88532"
+                offColor='#F3C05F'
                 label='Gluten Allergy  '
                 labelStyle={{color: 'black', fontWeight: '900'}}
-                size='large'
+                size='medium'
                 onToggle={this.onToggleBuilder('gluten_allergy')}
             /></View>
         <View style={{margin: 10}}>
         <ToggleSwitch
                 isOn={this.state.peanut_allergy}
-                onColor='green'
-                offColor='red'
+                onColor="#E88532"
+                offColor='#F3C05F'
                 label='Peanut Allergy  '
                 labelStyle={{color: 'black', fontWeight: '900'}}
-                size='large'
+                size='medium'
                 onToggle={this.onToggleBuilder('peanut_allergy')}
             /></View>
           <View style={{margin: 10}}>
           <ToggleSwitch
                 isOn={this.state.seafood_allergy}
-                onColor='green'
-                offColor='red'
+                onColor="#E88532"
+                offColor='#F3C05F'
                 label='Seafood Allergy'
                 labelStyle={{color: 'black', fontWeight: '900'}}
-                size='large'
+                size='medium'
                 onToggle={this.onToggleBuilder('seafood_allergy')}
             /></View>
           <View style={{margin: 10}}>
           <ToggleSwitch
                 isOn={this.state.dairy_allergy}
-                onColor='green'
-                offColor='red'
+                onColor="#E88532"
+                offColor='#F3C05F'
                 label='Dairy Allergy      '
                 labelStyle={{color: 'black', fontWeight: '900'}}
-                size='large'
+                size='medium'
                 onToggle={this.onToggleBuilder('dairy_allergy')}
             /></View>
           <View style={{margin: 10}}>
           <ToggleSwitch
                 isOn={this.state.egg_allergy}
-                onColor='green'
-                offColor='red'
+                onColor="#E88532"
+                offColor='#F3C05F'
                 label='Egg Allergy        '
                 labelStyle={{color: 'black', fontWeight: '900'}}
-                size='large'
+                size='medium'
                 onToggle={this.onToggleBuilder('egg_allergy')}
             /></View>
           <View style={{margin: 10}}>
           <ToggleSwitch
                 isOn={this.state.soy_allergy}
-                onColor='green'
-                offColor='red'
+                onColor="#E88532"
+                offColor='#F3C05F'
                 label='Soy Allergy        '
                 labelStyle={{color: 'black', fontWeight: '900'}}
-                size='large'
+                size='medium'
                 onToggle={this.onToggleBuilder('soy_allergy')}
             /></View>
           <View style={{margin: 10}}>
           <ToggleSwitch
                 isOn={this.state.tree_nut_allergy}
-                onColor='green'
-                offColor='red'
+                onColor="#E88532"
+                offColor='#F3C05F'
                 label='Tree nut Allergy'
-                labelStyle={{color: 'black', fontWeight: '900'}}
-                size='large'
+                labelStyle={{color: "#0F2F47", fontWeight: '900'}}
+                size='medium'
                 onToggle={this.onToggleBuilder('tree_nut_allergy')}
             /></View>
           <View style={{margin: 10}}>
           <ToggleSwitch
                 isOn={this.state.wheat_allergy}
-                onColor='green'
-                offColor='red'
+                onColor="#E88532"
+                offColor='#F3C05F'
                 label='Wheat Allergy     '
                 labelStyle={{color: 'black', fontWeight: '900'}}
-                size='large'
+                size='medium'
                 ref='wheat_allergy'
                 onToggle={this.onToggleBuilder('wheat_allergy')}
             /></View>
+            <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 50}}>
             <Button
                 title="Logout"
-                color="red"
+                color='#C53A32'
                 onPress={this.logMeOut}
-            />
+            /></View>
           </ScrollView>)
 
 

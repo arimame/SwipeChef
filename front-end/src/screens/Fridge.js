@@ -19,7 +19,7 @@ class Fridge extends React.Component  {
     removeItem = (itemId) => {
 
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-        fetch(`http://172.46.3.249:3000/fridges/${itemId}?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.0.120:3000/fridges/${itemId}?swipeChefToken=${swipeChefToken}`, {
         method: "DELETE",
         headers: {
           "Accept": "application/json",
@@ -43,7 +43,7 @@ class Fridge extends React.Component  {
 
     addToBook = (itemId) => {
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-        fetch(`http://172.46.3.249:3000/books?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.0.120:3000/books?swipeChefToken=${swipeChefToken}`, {
           method: 'POST',
           headers:
             {"Accept": "application/json",
@@ -64,7 +64,7 @@ class Fridge extends React.Component  {
   }
   componentDidMount() {
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-      fetch(`http://172.46.3.249:3000/fridges?swipeChefToken=${swipeChefToken}`, {
+      fetch(`http://172.46.0.120:3000/fridges?swipeChefToken=${swipeChefToken}`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -83,16 +83,27 @@ class Fridge extends React.Component  {
     const fridgeItemsRender = this.state.fridgeItems ? (<List recipeItems={this.state.fridgeItems} stateVars={this.props.stateVars} trx={this.trx} />) : <Text></Text>
 
    return (
-      <View style={{flex:1}}>
-        <Navbar stateVars={this.props.stateVars} style={{height: heightPercentageToDP('10%')}} trx={this.trx} />
-        <View style={{height: heightPercentageToDP('90%')}} >
-          <Text>Fridge</Text>
+      <View style={styles.container}>
+        <Navbar stateVars={this.props.stateVars} style={styles.navbar} trx={this.trx} />
+        <View style={styles.recipeContainer} >
           {fridgeItemsRender}
         </View>
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  navbar: {
+    height: heightPercentageToDP('10%'),
+  },
+  recipeContainer: {
+    height: heightPercentageToDP('90%')
+  }
+});
 
 
 export default Fridge;

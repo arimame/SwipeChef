@@ -15,7 +15,6 @@ const listElements = props.friendsList.map((friend) =>
 
   return (
     <View>
-      <Text>FUCK</Text>
       {listElements}
     </View>
   )
