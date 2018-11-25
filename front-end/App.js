@@ -11,6 +11,7 @@ import Login from './src/screens/Login'
 import Register from './src/screens/Register'
 import Loading from './src/screens/Loading'
 import Friends from './src/screens/Friends'
+import GroceryList from './src/screens/GroceryList'
 
 import { Font } from 'expo';
 
@@ -25,7 +26,26 @@ export default class App extends React.Component {
       currentUser: 2,
       fontLoaded: false,
       visitor: false,
-      usernameToVisit: ""
+      usernameToVisit: "",
+      currentList: [
+        {
+          ingredients: [
+            "8 ounces spaghetti",
+            "2 tablespoons extra-virgin olive oil",
+            "1/2 cup fresh French style breadcrumbs",
+            "Kosher salt and freshly ground black pepper, to taste",
+            "Kosher salt and freshly ground black pepper, to taste",
+            "8 tablespoons unsalted butter",
+            "3 cloves garlic, minced",
+            "8 ounces cremini mushrooms, thinly sliced",
+            "4 sprigs thyme",
+            "2 tablespoons chopped fresh parsley leaves",
+          ],
+          name: "Brown Butter Mushroom Pasta",
+          servings: 4,
+        }
+      ],
+      portions: 2
     }
 
     updateCurrentScreen = (curScreen, newScreen) => {
@@ -54,12 +74,38 @@ export default class App extends React.Component {
                       previousScreen: 'book'})
     }
 
+    addToList = (id) => {
+      fetch(`http://172.46.0.254:3000/recipes/${id}`, {
+        method: "GET",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        }
+      }).then(results => {
+        const parsedResults = JSON.parse(results._bodyInit);
+        for (const obj of this.state.currentList) {
+          if (parsedResults.name === obj.name) {
+            return;
+          }
+        }
+        this.setState({currentList: this.state.currentList.concat([
+          {
+            name: parsedResults.name,
+            ingredients: parsedResults.ingredientLines,
+            servings: parsedResults.numberOfServings
+          }
+        ])})
+        console.log(this.state.currentList);
+      })
+    }
+
     this.trx = {
       updateCurrentScreen: updateCurrentScreen,
       updateCurrentRecipe: updateCurrentRecipe,
       updateCurrentUser: updateCurrentUser,
       startVisiting: startVisiting,
-      endVisiting: endVisiting
+      endVisiting: endVisiting,
+      addToList: addToList
     }
   }
 
@@ -72,7 +118,9 @@ export default class App extends React.Component {
       currentUser: this.state.currentUser,
       fontLoaded: this.state.fontLoaded,
       visitor: this.state.visitor,
-      usernameToVisit: this.state.usernameToVisit
+      usernameToVisit: this.state.usernameToVisit,
+      currentList: this.state.currentList, 
+      portions: this.state.portions
     }
 
     switch (this.state.currentScreen) {
@@ -136,6 +184,13 @@ export default class App extends React.Component {
           return (
             <View style={{flex:1}}>
               <Friends trx={this.trx} stateVars={stateVars}/>
+            </View>
+          );
+        break;
+          case "grocery":
+          return (
+            <View style={{flex:1}}>
+              <GroceryList trx={this.trx} stateVars={stateVars}/>
             </View>
           );
         break;

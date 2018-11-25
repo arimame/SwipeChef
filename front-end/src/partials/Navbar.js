@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import {StyleSheet, Text, View, Image, Button} from 'react-native';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
+import { list } from 'tcomb';
 
 
 function Navbar (props) {
@@ -25,10 +26,13 @@ console.log(props.stateVars.currentScreen);
     icon: "keyboard-backspace",
     newScreen: props.stateVars.previousScreen
   }
-
   const settingsButton = {
     icon: "settings-outline",
     newScreen: "setting"
+  }
+  const listButton = {
+    icon: "playlist-edit",
+    newScreen: "grocery"
   }
 
   let buttonLeft;
@@ -43,7 +47,7 @@ console.log(props.stateVars.currentScreen);
       break;
     case "fridge":
       buttonLeft = swipeButton;
-      buttonRight = null;
+      buttonRight = listButton;
       title = "My Fridge"
       break;
     case "book":
@@ -81,6 +85,11 @@ console.log(props.stateVars.currentScreen);
       buttonLeft = backButton;
       buttonRight = null;
       title = "My Friends";
+      break;
+    case "grocery":
+      buttonLeft = fridgeButton;
+      buttonRight = null;
+      title = "My Grocery List"
       break;
     default:
       console.log("error!!!! the button is wrong");

@@ -30,6 +30,10 @@ function Listitem (props) {
     props.trx.updateCurrentRecipe(props.recipe.api_ref, props.stateVars.currentScreen)
   }
 
+  listButtonPress = (e) => {
+    props.trx.addToList(props.recipe.api_ref)
+  }
+
   console.log("------------------------------- props ----- currentScreen")
   console.log(props.stateVars.currentScreen)
 
@@ -57,8 +61,11 @@ function Listitem (props) {
             <View style={styles.delete_button}><Icon name="trash-can" onPress={deleteButtonPress} style={{fontSize: 30, textAlign: "center", color:"#E88532"
 }}/></View>
             <View style={styles.add_button}><TouchableOpacity onPress={addToBookButtonPress}>{addToBookText}</TouchableOpacity></View>
-            <View style={styles.list_button}><Icon name="playlist-edit" style={{fontSize: 30, textAlign: "center", color:"#E88532"
-}}/></View>
+            <View style={styles.list_button}>
+              <TouchableOpacity onPress={listButtonPress}>
+                <Icon name="playlist-edit" style={{fontSize: 30, textAlign: "center", color:"#E88532"}}/>
+              </TouchableOpacity>
+            </View>
 
           </View>
         </View>
