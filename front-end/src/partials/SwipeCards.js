@@ -313,6 +313,84 @@ const flavourDeck = [
   }
 ]
 
+const dessertIngredientsDeck = [
+  {
+    type: 'question',
+    text: 'Chocolate 🍫',
+    yupQuery: '&q=chocolate',
+    nopeQuery: '&excludedIngredient[]=chocolate'
+  },
+  {
+    type: 'question',
+    text: 'Strawberry 🍓',
+    yupQuery: '&q=strawberry',
+    nopeQuery: '&excludedIngredient[]=strawberries'
+  },
+  {
+    type: 'question',
+    text: 'Lemon 🍋',
+    yupQuery: '&q=lemon',
+    nopeQuery: '&excludedIngredient[]=lemon'
+  },
+  {
+    type: 'question',
+    text: 'Blueberry',
+    yupQuery: '&q=blueberry',
+    nopeQuery: '&excludedIngredient[]=blueberries'
+  },
+  {
+    type: 'question',
+    text: 'Banana 🍌',
+    yupQuery: '&q=banana',
+    nopeQuery: '&excludedIngredient[]=banana'
+  },
+  {
+    type: 'question',
+    text: 'Vanilla 🍦',
+    yupQuery: '&q=vanilla',
+    nopeQuery: '&excludedIngredient[]=vanilla'
+  },
+  {
+    type: 'question',
+    text: 'Pineapple 🍍',
+    yupQuery: '&q=pineapple',
+    nopeQuery: '&excludedIngredient[]=pineapple'
+  },
+  {
+    type: 'question',
+    text: 'Peach 🍑',
+    yupQuery: '&q=peach',
+    nopeQuery: '&excludedIngredient[]=peach'
+  },
+  {
+    type: 'question',
+    text: 'Raspberry',
+    yupQuery: '&q=raspberry',
+    nopeQuery: '&excludedIngredient[]=raspberries'
+  }
+]
+
+const dessertFlavourDeck = [
+  {
+    type: 'question',
+    text: 'Are you craving something sweet? 🍬',
+    yupQuery: '&flavor.sweet.min=0.3',
+    nopeQuery: '&flavor.sweet.max=0.3'
+  },
+  {
+    type: 'question',
+    text: 'Are you craving something salty? 🥨',
+    yupQuery: '&flavor.salty.min=0.3',
+    nopeQuery: '&flavor.salty.max=0.3'
+  },
+  {
+    type: 'question',
+    text: 'Are you craving something tart?',
+    yupQuery: '&flavor.bitter.min=0.3',
+    nopeQuery: '&flavor.bitter.max=0.3'
+  }
+]
+
 const buildIngredientsCards = () => {
   const cards = [];
   cards.push(
@@ -327,17 +405,11 @@ const buildIngredientsCards = () => {
   for (const num of indexArr) {
     cards.push(ingredientsDeck[num])
   }
+  
   cards[cards.length - 1].yupLastCard = true;
   cards[cards.length - 1].nopeLastCard = true;
   cards[cards.length - 1].prevDeck = "ingredients";
-  cards.push(
-    {
-      type: 'question',
-      text: '',
-      color: 'white',
-      yupQuery: ''
-    }
-  )
+  cards.push({type: 'blank'})
   return cards;
 }
 
@@ -359,20 +431,80 @@ const buildCusineCards = () => {
   cards[cards.length - 1].yupLastCard = true;
   cards[cards.length - 1].nopeLastCard = true;
   cards[cards.length - 1].prevDeck = "cuisine";
-  cards.push(
-    {
-      type: 'question',
-      text: '',
-      color: 'white',
-      yupQuery: ''
-    }
-  )
+  cards.push({type: 'blank'})
   return cards;
 }
 
-const ingredientsCards = buildIngredientsCards();
+const buildDessertCards = () => {
+  const cards = [];
+  cards.push(dessertFlavourDeck[Math.floor(Math.random() * 3)]);
+  cards.push(
+    {
+      type: 'question',
+      text: 'Ok, time to look at some flavours.',
+      subText: 'Swipe right for yes or left for no\n\n(Swipe to continue)',
+      yupQuery: '',
+    }
+  );
+  const indexArr = uniqueNumArr(dessertIngredientsDeck.length, 3);
+  for (const num of indexArr) {
+    cards.push(dessertIngredientsDeck[num])
+  }
+  cards[cards.length - 1].yupLastCard = true;
+  cards[cards.length - 1].nopeLastCard = true;
+  cards[cards.length - 1].prevDeck = "dessert";
+  cards.push({type: 'blank'})
+  return cards;
+}
 
-const cuisineCards = buildCusineCards();
+var ingredientsCards = buildIngredientsCards();
+var cuisineCards = buildCusineCards();
+var dessertCards = buildDessertCards();
+
+const updateIngredientsCards = () => {
+  const indexArr = uniqueNumArr(ingredientsDeck.length, 5);
+  for (let i = 0; i < 0 + indexArr.length; i++) {
+    ingredientsCards[i+1] = ingredientsDeck[indexArr[i]]
+    ingredientsCards[i+1].yupLastCard = false;
+    ingredientsCards[i+1].nopeLastCard = false;
+  }
+  setTimeout(() => {
+    ingredientsCards[ingredientsCards.length - 2].yupLastCard = true;
+    ingredientsCards[ingredientsCards.length - 2].nopeLastCard = true;
+    ingredientsCards[ingredientsCards.length - 2].prevDeck = "ingredients";
+  }, 50)
+}
+
+const updateCuisineCards = () => {
+  cuisineCards[0] = flavourDeck[Math.floor(Math.random() * 4)];
+  const indexArr = uniqueNumArr(cuisineDeck.length, 5);
+  for (let i = 0; i < 0 + indexArr.length; i++) {
+    cuisineCards[i+2] = cuisineDeck[indexArr[i]]
+    cuisineCards[i+2].yupLastCard = false;
+    cuisineCards[i+2].nopeLastCard = false;
+  }
+  setTimeout(() => {
+    cuisineCards[cuisineCards.length - 2].yupLastCard = true;
+    cuisineCards[cuisineCards.length - 2].nopeLastCard = true;
+    cuisineCards[cuisineCards.length - 2].prevDeck = "cuisine";
+  }, 50)
+}
+
+const updateDessertCards = () => {
+  dessertCards[0] = dessertFlavourDeck[Math.floor(Math.random() * 3)];
+  const indexArr = uniqueNumArr(dessertIngredientsDeck.length, 3);
+  console.log(indexArr);
+  for (let i = 0; i < 0 + indexArr.length; i++) {
+    dessertCards[i+2] = dessertIngredientsDeck[indexArr[i]]
+    dessertCards[i+2].yupLastCard = false;
+    dessertCards[i+2].nopeLastCard = false;
+  }
+  setTimeout(() => {
+    dessertCards[dessertCards.length - 2].yupLastCard = true;
+    dessertCards[dessertCards.length - 2].nopeLastCard = true;
+    dessertCards[dessertCards.length - 2].prevDeck = "dessert";
+  }, 50)
+}
 
 const nutritionCards = [
   {
@@ -405,10 +537,7 @@ const nutritionCards = [
     prevDeck: "nutrition"
   },
   {
-    type: 'question',
-    text: '',
-    color: 'white',
-    yupQuery: ''
+    type: 'blank',
   }
 ]
 
@@ -422,10 +551,7 @@ const health = [
     prevDeck: "nutrition"
   },
   {
-    type: 'question',
-    text: '',
-    color: 'white',
-    yupQuery: ''
+    type: 'blank'
   },
 ]
 
@@ -439,10 +565,21 @@ const xmasCard = [
     nopeUpdateCards: health
   },
   {
+    type: 'blank'
+  },
+]
+
+const xmasDessertCard = [
+  {
     type: 'question',
-    text: '',
-    color: 'white',
-    yupQuery: ''
+    text: 'Want to browse Christmas recipes? ❄🎄',
+    yupQuery: '&allowedHoliday[]=holiday^holiday-christmas',
+    yupLastCard: true,
+    prevDeck: "dessert",
+    nopeUpdateCards: dessertCards
+  },
+  {
+    type: 'blank'
   },
 ]
 
@@ -457,10 +594,7 @@ const timeCard = [
     prevDeck: "time"
   },
   {
-    type: 'question',
-    text: '',
-    color: 'white',
-    yupQuery: ''
+    type: 'blank'
   },
 ]
 
@@ -481,7 +615,7 @@ const courseCards = [
     type: 'question',
     text: 'Dessert? 🤤',
     yupQuery: '&allowedCourse[]=course^course-Desserts',
-    yupUpdateCards: timeCard
+    yupUpdateCards: xmasDessertCard
   }
 ]
 
@@ -559,10 +693,7 @@ const tutorialCards = [
     nopeUpdateCards: courseCards
   },
   {
-    type: 'question',
-    text: '',
-    color: 'white',
-    yupQuery: ''
+    type: 'blank'
   },
 ]
 
@@ -577,10 +708,7 @@ const welcomeCard = [
     nopeUpdateCards: courseCards
   },
   {
-    type: 'question',
-    text: '',
-    color: 'white',
-    yupQuery: ''
+    type: 'blank'
   },
 ]
 
@@ -628,6 +756,8 @@ class Card extends React.Component {
         <Text style={styles.question_card}>{this.props.text}</Text>
         {icon}
         <Text style={styles.question_card_sub}>{this.props.subText}</Text>
+      </View>) : (this.props.type === "blank" ? (
+        <View style={styles.blank_card_container}>
         <View style={{position: "absolute", bottom: 20}}>
         <Button
           onPress={this.props.reset}
@@ -636,7 +766,8 @@ class Card extends React.Component {
 
         />
         </View>
-      </View>) :
+      </View>
+      ) :
 
       (<View style={styles.recipe_card_container}>
         <Text
@@ -656,6 +787,7 @@ class Card extends React.Component {
           />
         </View>
       </View>)
+      )
 
     return (
       <View>
@@ -684,7 +816,7 @@ export default class extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cards: [{type: 'question', text: '', color: 'white', yupQuery: '' }]
+      cards: [{type: 'blank'}]
     };
     this.index = 0;
     this.prevDeck = null;
@@ -695,31 +827,41 @@ export default class extends React.Component {
   }
 
   componentDidMount() {
-    (async () => {
-      try {
-        const storedState = await AsyncStorage.getItem("state");
-        const storedIndex = await AsyncStorage.getItem("index");
-        const storedPrevDeck = await AsyncStorage.getItem("prevDeck");
-        const storedQuery = await AsyncStorage.getItem("query");
-        const storedNextDeck = await AsyncStorage.getItem("nextDeck");
 
-        const cards = JSON.parse(storedNextDeck).cards;
-        if (storedState) {
-          this.setState(JSON.parse(storedState));
-          this.index = Number(storedIndex);
-          this.prevDeck = storedPrevDeck;
-          this.query = storedQuery || "";
-          if (cards !== "false") {
-            this.nextDeck = cards;
+    if (this.props.stateVars.previousScreen === "login" || this.props.stateVars.previousScreen === "register") {
+      this.setState({cards: welcomeCard});
+    } else {
+
+      (async () => {
+        try {
+          const storedState = await AsyncStorage.getItem("state");
+          const storedIndex = await AsyncStorage.getItem("index");
+          const storedPrevDeck = await AsyncStorage.getItem("prevDeck");
+          const storedQuery = await AsyncStorage.getItem("query");
+          const storedNextDeck = await AsyncStorage.getItem("nextDeck");
+
+          const cards = JSON.parse(storedNextDeck).cards;
+
+          console.log("STORED STATE")
+          console.log(storedState)
+          if (storedState) {
+            this.setState(JSON.parse(storedState));
+            this.index = Number(storedIndex);
+            this.prevDeck = storedPrevDeck;
+            this.query = storedQuery || "";
+            if (cards !== "false") {
+              this.nextDeck = cards;
+            }
+          else {
+            this.setState({cards: welcomeCard});
           }
-         else {
-          this.setState({cards: welcomeCard});
         }
-      }
-      } catch (error) {
-        console.log(error);
-      }
-    })();
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+
+    }
   }
 
   componentWillUnmount() {
@@ -745,7 +887,7 @@ export default class extends React.Component {
   }
 
   componentDidUpdate() {
-    if (!this.moreQuestions || this.prevDeck === "xmas" || this.prevDeck === "ingredients") {
+    if (!this.moreQuestions || this.prevDeck === "xmas" || this.prevDeck === "ingredients" || this.prevDeck === "dessert") {
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
         this.index += this.deckSize;
         const OGquery = `http://172.46.0.254:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}&swipeChefToken=${swipeChefToken}`
@@ -780,6 +922,9 @@ export default class extends React.Component {
   }
 
   reset = () => {
+    updateDessertCards();
+    updateCuisineCards();
+    updateIngredientsCards();
     (async () => {
       try {
         await AsyncStorage.removeItem("state");
@@ -791,7 +936,7 @@ export default class extends React.Component {
         console.log(error)
       }
     })();
-    this.setState({cards: welcomeCard});
+    this.setState({cards: courseCards});
     this.index = 0;
     this.prevDeck = null;
     this.query = '';
@@ -958,7 +1103,7 @@ export default class extends React.Component {
         const timeInMins = Math.round(match.totalTimeInSeconds / 60);
         newCards.push({text: match.recipeName, image: largeImage, rating: match.rating, time: timeInMins, id: match.id})
       }
-      if (this.moreQuestions && this.prevDeck !== "xmas" && this.prevDeck !== "ingredients") {
+      if (this.moreQuestions && this.prevDeck !== "xmas" && this.prevDeck !== "ingredients" && this.prevDeck !== "dessert") {
        newCards.push(
          {
            type: 'addFilters',
@@ -968,13 +1113,7 @@ export default class extends React.Component {
       } else {
         newCards[newCards.length - 1].lastCard = true;
       }
-        newCards.push(
-          {
-            type: 'question',
-            text: '',
-            color: 'white',
-          }
-        )
+        newCards.push({type: 'blank'})
 
         console.log("-------------")
         console.log('NEWCARDS', newCards)
@@ -1036,6 +1175,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: "fredokaone-regular",
     padding: 20
+  },
+  blank_card_container: {
+    backgroundColor:'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height,
+    width: 350,
+    borderRadius:10
   },
   recipe_card_container: {
     backgroundColor:"#E88532",
