@@ -3,6 +3,7 @@
 
 import React, { Component } from 'react';
 import {StyleSheet, Text, View, Image, Button, AsyncStorage, TouchableHighlight} from 'react-native';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import SwipeCards from 'react-native-swipe-cards';
 
@@ -484,6 +485,105 @@ const courseCards = [
   }
 ]
 
+const tutorialCards = [
+  {
+    type: 'question',
+    text: 'Swipe left on a question card to respond \'no\'',
+    subText: '(Swipe left to continue)',
+    icon: 'gesture-swipe-left',
+    yupQuery: ''
+  },
+  {
+    type: 'question',
+    text: 'Swipe right on a question card to respond \'yes\'',
+    subText: '(Swipe right to continue)',
+    icon: 'gesture-swipe-right',
+    yupQuery: ''
+  },
+  {
+    type: 'question',
+    text: 'Tap a picture of a recipe to view more information about it',
+    subText: '(Swipe to continue)',
+    icon: 'gesture-tap',
+    yupQuery: ''
+  },
+  {
+    type: 'question',
+    text: 'Swipe left on a recipe card to view the next recipe',
+    subText: '(Swipe left to continue)',
+    icon: 'gesture-swipe-left',
+    yupQuery: ''
+  },
+  {
+    type: 'question',
+    text: 'Swipe right on a recipe card to add the recipe to your fridge',
+    subText: '(Swipe right to continue)',
+    icon: 'gesture-swipe-right',
+    yupQuery: ''
+  },
+  {
+    type: 'question',
+    text: 'Your Fridge',
+    subText: 'Recipes in your fridge expire in 10 days\n\n(Swipe to continue)',
+    icon: "fridge",
+    yupQuery: ''
+  },
+  {
+    type: 'question',
+    text: 'Your Cookbook',
+    subText: 'Save your favourite recipes by adding them to your cookbook. Your cookbook can be shared with other chefs.\n\n(Swipe to continue)',
+    icon: "book-open-variant",
+    yupQuery: ''
+  },
+  {
+    type: 'question',
+    text: 'Your Settings',
+    subText: 'Specify diet preferences and allergies in your settings (accessible through your cookbook)\n\n(Swipe to continue)',
+    icon: "settings-outline",
+    yupQuery: ''
+  },
+  {
+    type: 'question',
+    text: 'Your Grocery List',
+    subText: 'Add a recipe to your grocery list from your fridge or cookbook\n\n(Swipe to continue)',
+    icon: "playlist-edit",
+    yupQuery: ''
+  },
+  {
+    type: 'question',
+    text: 'You\'re all set! Happy swiping!',
+    subText: '(Swipe to continue)',
+    icon: 'emoticon-happy',
+    yupQuery: '',
+    yupUpdateCards: courseCards,
+    nopeUpdateCards: courseCards
+  },
+  {
+    type: 'question',
+    text: '',
+    color: 'white',
+    yupQuery: ''
+  },
+]
+
+const welcomeCard = [
+  {
+    type: 'question',
+    text: 'Welcome to SwipeChef!',
+    subText: 'Would you like to view the tutorial?\n\nSwipe right for \'yes\' or left for \'no\'',
+    icon: "silverware-fork-knife",
+    yupQuery: '',
+    yupUpdateCards: tutorialCards,
+    nopeUpdateCards: courseCards
+  },
+  {
+    type: 'question',
+    text: '',
+    color: 'white',
+    yupQuery: ''
+  },
+]
+
 class Card extends React.Component {
   constructor(props) {
     super(props);
@@ -517,9 +617,16 @@ class Card extends React.Component {
 
     const recipeRating = getRating();
 
+    const icon = this.props.icon ? (
+      <Icon name = {this.props.icon} style={{textAlign: "center", fontSize: 60, color: "#F3C05F"}} />
+    ) : (
+      <View></View>
+    )
+
     const cardRender = this.props.type === "question" || this.props.type === "addFilters" ?
     (<View style={styles.question_card_container}>
         <Text style={styles.question_card}>{this.props.text}</Text>
+        {icon}
         <Text style={styles.question_card_sub}>{this.props.subText}</Text>
         <View style={{position: "absolute", bottom: 20}}>
         <Button
@@ -606,7 +713,7 @@ export default class extends React.Component {
             this.nextDeck = cards;
           }
          else {
-          this.setState({cards: courseCards});
+          this.setState({cards: welcomeCard});
         }
       }
       } catch (error) {
@@ -684,7 +791,7 @@ export default class extends React.Component {
         console.log(error)
       }
     })();
-    this.setState({cards: courseCards});
+    this.setState({cards: welcomeCard});
     this.index = 0;
     this.prevDeck = null;
     this.query = '';
@@ -920,7 +1027,8 @@ const styles = StyleSheet.create({
     fontSize: 35,
     color:"#E9E2BB",
     textAlign: 'center',
-    fontFamily: "fredokaone-regular"
+    fontFamily: "fredokaone-regular",
+    padding: 20
   },
   question_card_sub: {
     fontSize: 20,

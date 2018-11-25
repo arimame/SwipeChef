@@ -12,7 +12,7 @@ function Listitem (props) {
   console.log("------------------Listitem view")
   const msNow = Date.now();
   const msDiff = msNow - Date.parse(props.recipe.created_at);
-  const expireDays = Math.floor((864000000 - msDiff) / 86400000);
+  const expireDays = Math.ceil((864000000 - msDiff) / 86400000);
   const expireDaysRender = props.stateVars.currentScreen === "fridge" ? <Text style={styles.expire}>Expires in: {expireDays} days</Text> : <Text></Text>
 
   console.log("-------BUTTON--------", props.recipe)
