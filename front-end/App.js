@@ -99,13 +99,23 @@ export default class App extends React.Component {
       })
     }
 
+    deleteList = () => {
+      this.setState({currentList: []})
+    }
+
+    updatePortions = (newPortion) => {
+      this.setState({portions: newPortion})
+    }
+
     this.trx = {
       updateCurrentScreen: updateCurrentScreen,
       updateCurrentRecipe: updateCurrentRecipe,
       updateCurrentUser: updateCurrentUser,
       startVisiting: startVisiting,
       endVisiting: endVisiting,
-      addToList: addToList
+      addToList: addToList,
+      updatePortions: updatePortions,
+      deleteList: deleteList
     }
   }
 

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import {StyleSheet, Text, View, Image, Button, TextInput, TouchableHighlight, AsyncStorage, ActivityIndicator} from 'react-native';
-import {Checkbox, CheckBox} from 'react-native-elements'
+import {CheckBox} from 'react-native-elements'
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 import t from 'tcomb-form-native'
 import Navbar from "../partials/Navbar";
+
+const Fraction = require('fraction.js')
 
 
 class Ingredient extends React.Component {
@@ -21,16 +23,19 @@ class Ingredient extends React.Component {
 
     const number = this.props.ingredient.match(/\d+([\/.]\d+)?/g)
 
-    const multipliedNum = number ? parseFloat(number[0]) * multiplier : ""
+    const multipliedNum = number ? eval(number[0]) * multiplier : ""
+
+    const fraction = multipliedNum ? (new Fraction(multipliedNum)).toFraction(true) : ""
 
     const text = this.props.ingredient.replace(number, "");
 
-    const displayedValue = String(multipliedNum) + text
+    const displayedValue = fraction + text
 
-    console.log("NUMBER", number, "TEXT", text)
+    console.log("FRACTION", fraction, "TEXT", text)
 
     return (
       <CheckBox
+        size={20}
         title={displayedValue}
         checked={this.state.checked}
         onPress={() => this.setState({checked: !this.state.checked})}

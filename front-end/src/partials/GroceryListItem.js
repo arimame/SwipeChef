@@ -14,10 +14,29 @@ function GroceryListItem(props) {
 
   return (
     <View>
-      <Text>{props.recipe.name}</Text>
+      <View style={styles.list_info_container}>
+      <Text adjustsFontSizeToFit numberOfLines={1} style={styles.recipe_name}>{props.recipe.name}</Text>
+      </View>
       {ingredients}
     </View>
   )
 }
 
 export default GroceryListItem;
+
+const styles = StyleSheet.create({
+
+  list_info_container: {
+    margin: 10,
+    borderColor: '#0F2F47',
+    borderWidth: 2,
+    borderRadius: 5,
+  },
+  recipe_name: {
+    textAlign: 'center',
+    fontFamily: "pacifico-regular",
+    color: '#0F2F47',
+    lineHeight: 50,
+    backgroundColor: '#F3C05F',
+  }
+})
