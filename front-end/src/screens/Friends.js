@@ -52,7 +52,7 @@ class Friends extends React.Component {
 
   componentDidMount() {
     AsyncStorage.getItem('swipeChefToken').then((swipeChefToken) => {
-      fetch(`http://172.46.0.254:3000/friend_search?swipeChefToken=${swipeChefToken}`, {
+      fetch(`http://172.46.0.120:3000/friend_search?swipeChefToken=${swipeChefToken}`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -65,7 +65,7 @@ class Friends extends React.Component {
       })
     })
     AsyncStorage.getItem('swipeChefToken').then((swipeChefToken) => {
-      fetch(`http://172.46.0.254:3000/friends?swipeChefToken=${swipeChefToken}`, {
+      fetch(`http://172.46.0.120:3000/friends?swipeChefToken=${swipeChefToken}`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -109,7 +109,7 @@ class Friends extends React.Component {
           itemsContainerStyle={{ maxHeight: 140 }}
           items={matchingUsernames}
           defaultIndex={2}
-          placeholder="placeholder"
+          placeholder="search for username"
           resetValue={false}
           underlineColorAndroid="transparent"
         />
@@ -119,5 +119,7 @@ class Friends extends React.Component {
   }
 
 }
+
+
 
 export default Friends;

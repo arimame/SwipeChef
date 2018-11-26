@@ -16,7 +16,7 @@ class Details extends React.Component  {
   }
 
   componentDidMount() {
-    fetch(`http://172.46.0.254:3000/recipes/${this.props.stateVars.currentRecipe}`, {
+    fetch(`http://172.46.0.120:3000/recipes/${this.props.stateVars.currentRecipe}`, {
 
       method: "GET",
       headers: {
@@ -157,7 +157,6 @@ const styles = StyleSheet.create({
   rating_time: {
     textAlign: "center",
     width: widthPercentageToDP('37.5%'),
-    lineHeight: 23,
     fontFamily: "arimo-regular"
   },
 
