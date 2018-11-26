@@ -28,7 +28,7 @@ export default class App extends React.Component {
       visitor: false,
       usernameToVisit: "",
       currentList: [],
-      portions: 2, 
+      portions: 2,
       webView: false
     }
 
@@ -59,7 +59,7 @@ export default class App extends React.Component {
     }
 
     addToList = (id) => {
-      fetch(`http://172.46.0.254:3000/recipes/${id}`, {
+      fetch(`http://172.46.3.249:3000/recipes/${id}`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -83,6 +83,19 @@ export default class App extends React.Component {
       })
     }
 
+    addToFridge = (recipe_id) => {
+      AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
+        fetch(`http://172.46.3.249:3000/fridges?swipeChefToken=${swipeChefToken}`, {
+            method: 'POST',
+            headers:
+              {"Accept": "application/json",
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `recipe_id=${recipe_id}` // <-- Post parameters
+          })
+        })
+    }
+
     deleteList = () => {
       this.setState({currentList: []})
     }
@@ -104,7 +117,8 @@ export default class App extends React.Component {
       addToList: addToList,
       updatePortions: updatePortions,
       deleteList: deleteList,
-      toggleWebView: toggleWebView
+      toggleWebView: toggleWebView,
+      addToFridge: addToFridge
     }
   }
 
@@ -118,8 +132,8 @@ export default class App extends React.Component {
       fontLoaded: this.state.fontLoaded,
       visitor: this.state.visitor,
       usernameToVisit: this.state.usernameToVisit,
-      currentList: this.state.currentList, 
-      portions: this.state.portions, 
+      currentList: this.state.currentList,
+      portions: this.state.portions,
       webView: this.state.webView
     }
 
@@ -235,7 +249,7 @@ export default class App extends React.Component {
       console.log(swipeChefToken)
       console.log("---------------------------- SWIPE CHEF TOKEN")
       if (swipeChefToken) {
-        fetch(`http://172.46.0.254:3000/verify_token?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.3.249:3000/verify_token?swipeChefToken=${swipeChefToken}`, {
           method: "GET",
           headers: {
             "Accept": "application/json",

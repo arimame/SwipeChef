@@ -47,7 +47,7 @@ export default class ImagePickerComponent extends React.Component {
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
         data.append("swipeChefToken", swipeChefToken)
 
-        fetch('http://172.46.0.254:3000/users', {
+        fetch('http://172.46.3.249:3000/users', {
           method: 'PATCH',
           headers: {
           //'Accept': 'application/json',
@@ -58,7 +58,7 @@ export default class ImagePickerComponent extends React.Component {
       }).then(() => {
         this.props.trx.setUserImage(`images/userimage${this.props.userVars.bookUser}${extension}?num=${randNum}`)
         this.props.trx.updateCurrentScreen('book', 'loading')
-        setTimeout(()=> {this.props.trx.updateCurrentScreen('book', 'book')}, 1)
+        setTimeout(()=> {this.props.trx.updateCurrentScreen('book', 'book')}, 300)
       })
     }
   };

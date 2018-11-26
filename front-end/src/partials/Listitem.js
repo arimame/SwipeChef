@@ -18,8 +18,12 @@ function Listitem (props) {
   console.log("-------BUTTON--------", props.recipe)
 
 
-  addToBookButtonPress = (e) => {
-    props.trx.addToBook(props.recipe.id)
+  addToButtonPress = (e) => {
+    if (props.stateVars.currentScreen === "fridge") {
+      props.trx.addToBook(props.recipe.id)
+    } else {
+      props.trx.addToFridge(props.recipe.id)
+    }
   }
 
   deleteButtonPress = (e) => {
@@ -37,7 +41,9 @@ function Listitem (props) {
   console.log("------------------------------- props ----- currentScreen")
   console.log(props.stateVars.currentScreen)
 
-  addToBookText = props.stateVars.currentScreen === "fridge" ? <Icon name="book-open-variant" style={{fontSize: 30, textAlign: "center", color:"#E88532"}}  /> : <Text></Text>
+  addToText = props.stateVars.currentScreen === "fridge" ? <Icon name="book-open-variant" style={{fontSize: 30, textAlign: "center", color:"#E88532"}}  /> : (props.stateVars.currentScreen === "book" && props.stateVars.visitor ? <Icon name="fridge" style={{fontSize: 30, textAlign: "center", color:"#E88532"}}  /> : <Text></Text>)
+
+  deleteText = props.stateVars.visitor? <Text></Text> : <Icon name="trash-can" onPress={deleteButtonPress} style={{fontSize: 30, textAlign: "center", color:"#E88532"}}/>
 
     return (
       <View style={styles.list_container}>
@@ -58,15 +64,13 @@ function Listitem (props) {
             {expireDaysRender}
           </View>
           <View style={styles.button_container}>
-            <View style={styles.delete_button}><Icon name="trash-can" onPress={deleteButtonPress} style={{fontSize: 30, textAlign: "center", color:"#E88532"
-}}/></View>
-
+            <View style={styles.delete_button}>{deleteText}</View>
             <View style={styles.list_button}>
               <TouchableOpacity onPress={listButtonPress}>
                 <Icon name="playlist-edit" style={{fontSize: 30, textAlign: "center", color:"#E88532"}}/>
               </TouchableOpacity>
             </View>
-            <View style={styles.add_button}><TouchableOpacity onPress={addToBookButtonPress}>{addToBookText}</TouchableOpacity></View>
+            <View style={styles.add_button}><TouchableOpacity onPress={addToButtonPress}>{addToText}</TouchableOpacity></View>
           </View>
         </View>
       </View>

@@ -890,7 +890,7 @@ export default class extends React.Component {
     if (!this.moreQuestions || this.prevDeck === "xmas" || this.prevDeck === "ingredients" || this.prevDeck === "dessert") {
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
         this.index += this.deckSize;
-        const OGquery = `http://172.46.0.254:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}&swipeChefToken=${swipeChefToken}`
+        const OGquery = `http://172.46.3.249:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}&swipeChefToken=${swipeChefToken}`
         const encodedQuery = encodeURI(OGquery)
         console.log('-----------this.query---------------', encodedQuery)
         fetch(encodedQuery, {
@@ -972,7 +972,7 @@ export default class extends React.Component {
     else {
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
         console.log(`Yup for ${card.text}`)
-        fetch(`http://172.46.0.254:3000/recipes`, {
+        fetch(`http://172.46.3.249:3000/recipes`, {
           method: 'POST',
           headers:
             {"Accept": "application/json",
@@ -981,7 +981,7 @@ export default class extends React.Component {
           body: `api_ref=${card.id}&name=${card.text}&image=${card.image}` // <-- Post parameters
         }).then( results => {
            let parsedResults = JSON.parse(results._bodyInit);
-           fetch(`http://172.46.0.254:3000/fridges?swipeChefToken=${swipeChefToken}`, {
+           fetch(`http://172.46.3.249:3000/fridges?swipeChefToken=${swipeChefToken}`, {
             method: 'POST',
             headers:
               {"Accept": "application/json",
@@ -1078,7 +1078,7 @@ export default class extends React.Component {
 
   lastCard = () => {
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-    const OGquery = `http://172.46.0.254:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}&swipeChefToken=${swipeChefToken}`
+    const OGquery = `http://172.46.3.249:3000?query=${this.query}&maxResult=${this.deckSize}&start=${this.index}&swipeChefToken=${swipeChefToken}`
     const encodedQuery = encodeURI(OGquery)
     console.log('-----------this.query---------------', encodedQuery)
     fetch(encodedQuery, {

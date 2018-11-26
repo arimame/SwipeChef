@@ -17,7 +17,7 @@ function FriendListitem(props) {
         <View style={{width: widthPercentageToDP('25%'), height: heightPercentageToDP('13%')}}>
           <TouchableHighlight onPress={selectFriend} >
           <Image
-            source={{uri: `http://172.46.0.254:3000/${props.friend.photo}`}}
+            source={{uri: `http://172.46.3.249:3000/${props.friend.photo}`}}
             style= {{width: widthPercentageToDP('25%'), height: heightPercentageToDP('13%'), borderRadius: 5}}
           />
           </TouchableHighlight>
