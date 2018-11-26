@@ -12,8 +12,8 @@ console.log("------------------List view")
 console.log(props.recipeItems)
 
 
-const listElements = props.recipeItems.map((recipe) =>
-  <Listitem recipe={recipe} trx={props.trx} stateVars={props.stateVars} />
+const listElements = props.recipeItems.map((recipe, index) =>
+  <Listitem recipe={recipe} trx={props.trx} stateVars={props.stateVars} key={index}/>
 )
 
 

@@ -10,7 +10,7 @@ function FriendList (props) {
 
 
 const listElements = props.friendsList.map((friend) =>
- <FriendListitem friend={friend} trx={props.trx}/>
+ <FriendListitem friend={friend} trx={props.trx} key={friend.username}/>
 )
 
   return (
