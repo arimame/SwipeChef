@@ -10,9 +10,10 @@ function Userinfo (props) {
   console.log("------------------------ Userimage USERINFO RENDER")
   console.log(props.userVars.userImage)
 
+  let randNum = Math.round(Math.random() * 50,0)
+
   imageName = `http://172.46.3.249:3000/${props.userVars.userImage}?spaghetti=${randNum}`
 
-  let randNum = Math.round(Math.random() * 50,0)
 
 //
   const userImage = props.userVars.userImage && props.userVars.userImage.includes("gstatic") ? <Image source={{uri:`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmGRbg0zgj_aGlIjzN0t8bA6RCJjP5Puc3jxyltW2n0kg86cerug`}} style= {{width: 150, height: 150, borderColor: "#C53A32", borderRadius: 5, borderWidth: 2}} /> : <Image key={imageName} source={{uri: imageName}} style= {{width: 150, height: 150, borderColor: "#C53A32", borderRadius: 5, borderWidth: 2}} /> ;
