@@ -18,8 +18,8 @@ class GroceryList extends React.Component {
 
   render () {
 
-    const items = this.props.stateVars.currentList.map((recipe) => 
-      <GroceryListItem stateVars={this.props.stateVars} trx={this.props.trx} recipe={recipe} />
+    const items = this.props.stateVars.currentList.map((recipe, index) =>
+      <GroceryListItem stateVars={this.props.stateVars} trx={this.props.trx} recipe={recipe} key={index}/>
     )
 
     const display = this.props.stateVars.currentList.length > 0 ? (
@@ -29,8 +29,8 @@ class GroceryList extends React.Component {
             <Text style={{textAlign: "center", fontSize:24, fontFamily: "pacifico-regular", color: '#0F2F47'}}>Portions: </Text>
           </View>
           <View style={{width: widthPercentageToDP('50%')}}>
-            <NumericInput 
-              type='up-down' 
+            <NumericInput
+              type='up-down'
               onChange={this.plusMinusOnPress}
               iconStyle={{color: "#E9E2BB"}}
               upDownButtonsBackgroundColor='#E88532'
