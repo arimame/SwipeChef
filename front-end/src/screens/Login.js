@@ -16,7 +16,8 @@ const options = {
   fields: {
     password: {
       password: true,
-      secureTextEntry: true
+      secureTextEntry: true,
+      error: "email and password do not match"
     }
   }
 };
@@ -39,7 +40,7 @@ class Login extends React.Component {
 
   submitLogin = (e) => {
     let loginInputs = this.refs.form.getValue()
-    fetch(`http://172.46.3.249:3000/users/login`, {
+    fetch(`http://172.46.0.120:3000/users/login`, {
         method: 'POST',
         headers:
           {"Accept": "application/json",
@@ -73,10 +74,10 @@ class Login extends React.Component {
       <Navbar stateVars={this.props.stateVars} style={{height: heightPercentageToDP('10%')}} trx={this.props.trx} />
        <View style={styles.container}>
         <Form type={User} options={options} ref="form" />
-         <TouchableHighlight style={styles.button} onPress={submitLogin} underlayColor='#99d9f4'>
+         <TouchableHighlight style={styles.button} onPress={submitLogin} underlayColor="#f46969">
           <Text style={styles.buttonText}>Login</Text>
         </TouchableHighlight>
-        <Text>Need an account? <Text onPress={buttonPressToRegister}> Sign up.</Text></Text>
+        <Text>Need an account? <Text style={{fontWeight: 'bold'}} onPress={buttonPressToRegister}> Sign up.</Text></Text>
       </View>
       </View>
 
@@ -95,13 +96,13 @@ const styles = StyleSheet.create({
   },
     buttonText: {
     fontSize: 18,
-    color: 'white',
+    color: "#E9E2BB",
     alignSelf: 'center'
   },
   button: {
     height: 36,
-    backgroundColor: '#FAAF08',
-    borderColor: '#48BBEC',
+    backgroundColor: '#C53A32',
+    borderColor: '#C53A32',
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: 10,
