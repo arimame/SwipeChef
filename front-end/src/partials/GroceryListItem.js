@@ -8,8 +8,8 @@ import Ingredient from "../partials/Ingredient"
 
 function GroceryListItem(props) {
 
-  const ingredients = props.recipe.ingredients.map((ingredient) =>
-    <Ingredient stateVars={props.stateVars} trx={props.trx} ingredient={ingredient} recipe={props.recipe} />
+  const ingredients = props.recipe.ingredients.map((ingredient, index) =>
+    <Ingredient stateVars={props.stateVars} trx={props.trx} ingredient={ingredient} recipe={props.recipe} key={index}/>
   )
 
   return (

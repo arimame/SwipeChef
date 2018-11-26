@@ -21,7 +21,8 @@ const options = {
     },
     confirmPassword: {
     password: true,
-    secureTextEntry: true
+    secureTextEntry: true,
+    error: "passwords don't match"
   }
   }
 };
@@ -83,10 +84,10 @@ class Register extends React.Component {
       <Navbar stateVars={this.props.stateVars} style={{height: heightPercentageToDP('10%')}} trx={this.props.trx} />
        <View style={styles.container}>
         <Form type={User} options={options} ref="form" />
-         <TouchableHighlight style={styles.button} onPress={submitRegister} underlayColor='#99d9f4'>
+         <TouchableHighlight style={styles.button} onPress={submitRegister} underlayColor="#f46969">
           <Text style={styles.buttonText}>Sign up</Text>
         </TouchableHighlight>
-        <Text>Already have an account? <Text onPress={buttonPressToLogin}>Login.</Text></Text>
+        <Text>Already have an account? <Text style={{fontWeight: 'bold'}} onPress={buttonPressToLogin}>Login.</Text></Text>
       </View>
       </View>
 
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
-    color: 'white',
+    color: "#E9E2BB",
     alignSelf: 'center'
   },
   button: {

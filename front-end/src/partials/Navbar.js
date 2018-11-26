@@ -84,7 +84,7 @@ console.log(props.stateVars.currentScreen);
     case "friends":
       buttonLeft = backButton;
       buttonRight = null;
-      title = "My Friends";
+      title = "My Fav Chefs";
       break;
     case "grocery":
       buttonLeft = fridgeButton;

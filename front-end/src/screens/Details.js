@@ -57,8 +57,8 @@ class Details extends React.Component  {
         return ourNutrition.includes(object.attribute)
       })
 
-      const ourNutritionListRender= ourNutritionList.map((object) =>
-          <Text style={styles.nutrition_item}>{object.description} : {object.value} {object.unit.name}s</Text>
+      const ourNutritionListRender= ourNutritionList.map((object, index) =>
+          <Text style={styles.nutrition_item} key={index}>{object.description} : {object.value} {object.unit.name}s</Text>
         );
 
     const getRating = () => {

@@ -973,7 +973,6 @@ export default class extends React.Component {
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
         console.log(`Yup for ${card.text}`)
         fetch(`http://172.46.0.254:3000/recipes`, {
-
           method: 'POST',
           headers:
             {"Accept": "application/json",
@@ -983,7 +982,6 @@ export default class extends React.Component {
         }).then( results => {
            let parsedResults = JSON.parse(results._bodyInit);
            fetch(`http://172.46.0.254:3000/fridges?swipeChefToken=${swipeChefToken}`, {
-
             method: 'POST',
             headers:
               {"Accept": "application/json",
