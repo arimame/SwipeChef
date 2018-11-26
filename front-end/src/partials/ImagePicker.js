@@ -57,6 +57,8 @@ export default class ImagePickerComponent extends React.Component {
         })
       }).then(() => {
         this.props.trx.setUserImage(`images/userimage${this.props.userVars.bookUser}${extension}?num=${randNum}`)
+        this.props.trx.updateCurrentScreen('book', 'loading')
+        setTimeout(()=> {this.props.trx.updateCurrentScreen('book', 'book')}, 1)
       })
     }
   };
