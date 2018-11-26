@@ -28,7 +28,7 @@ class UsersController < ApplicationController
     user.wheat_allergy = false
 
     user.query_string = ""
-    user.photo = "https://i.stack.imgur.com/l60Hf.png"
+    user.photo = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmGRbg0zgj_aGlIjzN0t8bA6RCJjP5Puc3jxyltW2n0kg86cerug"
 
     if user.save
 
@@ -120,7 +120,8 @@ class UsersController < ApplicationController
       @userResponse = {
         username: @user.username,
         photo: @user.photo,
-        tagline: @user.tagline
+        tagline: @user.tagline,
+        bookUser: @user.id
       }
       puts @userResponse
       puts "----------------------------user Response Photo"
@@ -163,15 +164,29 @@ class UsersController < ApplicationController
         path = File.join("public", "images", name)
         File.open(path, "wb") { |f| f.write(params[:photo].read) }
 
+
+
         @user = User.find(user_id)
         @user.photo = "images/#{name}"
+
+        photo = @user.photo
         @user.save
+
+        respond_to do |format|
+          format.json { render json: photo.to_json}
+        end
+
+
       end
 
       if user_params[:tagline]
         @user = User.find(user_id)
         @user.tagline = user_params[:tagline]
         @user.save
+
+        respond_to do |format|
+          format.json { render json: "hello".to_json}
+        end
 
       end
 
@@ -208,12 +223,11 @@ class UsersController < ApplicationController
 
         @user.save
 
+        respond_to do |format|
+          format.json { render json: "hello".to_json}
+        end
+
       end
-
-    respond_to do |format|
-      format.json { render json: "hello".to_json}
-    end
-
 
   end
 

@@ -21,7 +21,8 @@ class Book extends React.Component {
       userName: null,
       imagePicker: false,
       editTagline: false,
-      areFriends: false
+      areFriends: false,
+      bookUser: null
     }
 
 
@@ -49,7 +50,7 @@ class Book extends React.Component {
                       editTagline: false})
 
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-        fetch(`http://172.46.0.254:3000/users?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.3.249:3000/users?swipeChefToken=${swipeChefToken}`, {
           method: 'PATCH',
           headers: {
           //'Accept': 'application/json',
@@ -63,7 +64,7 @@ class Book extends React.Component {
     // removes item from book
     removeItem = (itemId) => {
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-        fetch(`http://172.46.0.254:3000/books/${itemId}?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.3.249:3000/books/${itemId}?swipeChefToken=${swipeChefToken}`, {
         method: "DELETE",
         headers: {
           "Accept": "application/json",
@@ -91,7 +92,7 @@ class Book extends React.Component {
 
 // function fetchBooks() {
 //   const token = AsyncStorage.get("token")
-//   fetch('http://172.46.0.254:3000/books', {
+//   fetch('http://172.46.3.249:3000/books', {
 //       method: "GET",
 //       headers: {
 //         "Accept": "application/json",
@@ -114,7 +115,7 @@ class Book extends React.Component {
     console.log("FETCH--------------------");
 
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-      fetch(`http://172.46.0.254:3000/books?swipeChefToken=${swipeChefToken}&usernameToVisit=${usernameToVisit}`, {
+      fetch(`http://172.46.3.249:3000/books?swipeChefToken=${swipeChefToken}&usernameToVisit=${usernameToVisit}`, {
 
         method: "GET",
         headers: {
@@ -127,7 +128,7 @@ class Book extends React.Component {
        const parsedResults = JSON.parse(results._bodyInit)
           this.setState({bookItems: parsedResults.user_book_recipes, areFriends: parsedResults.are_friends})
       }).then(results => {
-        fetch(`http://172.46.0.254:3000/users?swipeChefToken=${swipeChefToken}&usernameToVisit=${usernameToVisit}`, {
+        fetch(`http://172.46.3.249:3000/users?swipeChefToken=${swipeChefToken}&usernameToVisit=${usernameToVisit}`, {
           method: "GET",
           headers: {
             "Accept": "application/json",
@@ -140,7 +141,8 @@ class Book extends React.Component {
           this.setState({
             userImage: userInfoParsed.photo,
             userTagline: userInfoParsed.tagline,
-            username: userInfoParsed.username
+            username: userInfoParsed.username,
+            bookUser: userInfoParsed.bookUser
           })
 
         })
@@ -156,7 +158,7 @@ class Book extends React.Component {
 
   addToFriendsPress = (e) => {
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-        fetch(`http://172.46.0.254:3000/friend_add?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.3.249:3000/friend_add?swipeChefToken=${swipeChefToken}`, {
           method: 'POST',
           headers: {
           "Accept": "application/json",
@@ -174,7 +176,7 @@ class Book extends React.Component {
 
   removeFromFriendsPress = (e) => {
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-        fetch(`http://172.46.0.254:3000/friend_remove?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.3.249:3000/friend_remove?swipeChefToken=${swipeChefToken}`, {
           method: 'DELETE',
           headers: {
           "Accept": "application/json",
@@ -197,7 +199,8 @@ class Book extends React.Component {
       userTagline: this.state.userTagline,
       username: this.state.username,
       editTagline: this.state.editTagline,
-      imagePicker: this.state.imagePicker
+      imagePicker: this.state.imagePicker,
+      bookUser: this.state.bookUser
     }
 
 
