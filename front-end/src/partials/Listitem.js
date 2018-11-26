@@ -45,7 +45,7 @@ function Listitem (props) {
         <TouchableHighlight onPress={this.detailsButtonPress}>
           <Image
             source={{uri: props.recipe.image}}
-            style= {{width:90, height: 90, borderRadius: 5}}
+            style= {{width: widthPercentageToDP('25%'), height: heightPercentageToDP('13%'), borderRadius: 5}}
           />
         </TouchableHighlight>
         </View>
@@ -60,13 +60,13 @@ function Listitem (props) {
           <View style={styles.button_container}>
             <View style={styles.delete_button}><Icon name="trash-can" onPress={deleteButtonPress} style={{fontSize: 30, textAlign: "center", color:"#E88532"
 }}/></View>
-            <View style={styles.add_button}><TouchableOpacity onPress={addToBookButtonPress}>{addToBookText}</TouchableOpacity></View>
+
             <View style={styles.list_button}>
               <TouchableOpacity onPress={listButtonPress}>
                 <Icon name="playlist-edit" style={{fontSize: 30, textAlign: "center", color:"#E88532"}}/>
               </TouchableOpacity>
             </View>
-
+            <View style={styles.add_button}><TouchableOpacity onPress={addToBookButtonPress}>{addToBookText}</TouchableOpacity></View>
           </View>
         </View>
       </View>
@@ -105,7 +105,8 @@ const styles = StyleSheet.create({
   recipe_name: {
     textAlign: 'center',
     fontFamily: "pacifico-regular",
-    color: "#0F2F47"
+    color: "#0F2F47",
+    lineHeight: 30
 },
   expire_container: {
     height: heightPercentageToDP('3%')
