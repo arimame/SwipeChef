@@ -97,9 +97,15 @@ console.log(props.stateVars.currentScreen);
   }
 
   leftButtonPress = (e) => {
-    props.trx.updateCurrentScreen(props.stateVars.currentScreen, buttonLeft.newScreen)
-    if (props.stateVars.visitor) {
-      props.trx.endVisiting()
+
+    if (props.stateVars.webView) {
+      props.trx.toggleWebView()
+    } else {
+
+      props.trx.updateCurrentScreen(props.stateVars.currentScreen, buttonLeft.newScreen)
+      if (props.stateVars.visitor) {
+        props.trx.endVisiting()
+      }
     }
   }
 

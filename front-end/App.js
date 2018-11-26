@@ -45,7 +45,8 @@ export default class App extends React.Component {
           servings: 4,
         }
       ],
-      portions: 2
+      portions: 2, 
+      webView: false
     }
 
     updateCurrentScreen = (curScreen, newScreen) => {
@@ -107,6 +108,10 @@ export default class App extends React.Component {
       this.setState({portions: newPortion})
     }
 
+    toggleWebView = () => {
+      this.setState({webView: !this.state.webView})
+    }
+
     this.trx = {
       updateCurrentScreen: updateCurrentScreen,
       updateCurrentRecipe: updateCurrentRecipe,
@@ -115,7 +120,8 @@ export default class App extends React.Component {
       endVisiting: endVisiting,
       addToList: addToList,
       updatePortions: updatePortions,
-      deleteList: deleteList
+      deleteList: deleteList,
+      toggleWebView: toggleWebView
     }
   }
 
@@ -130,7 +136,8 @@ export default class App extends React.Component {
       visitor: this.state.visitor,
       usernameToVisit: this.state.usernameToVisit,
       currentList: this.state.currentList, 
-      portions: this.state.portions
+      portions: this.state.portions, 
+      webView: this.state.webView
     }
 
     switch (this.state.currentScreen) {
