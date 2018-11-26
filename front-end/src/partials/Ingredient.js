@@ -18,16 +18,30 @@ class Ingredient extends React.Component {
   }
 
   render () {
+    // console.log("TEST", eval("1 1/2"));
 
     const multiplier = this.props.stateVars.portions / this.props.recipe.servings
 
-    const number = this.props.ingredient.match(/\d+([\/.]\d+)?/g)
+    //const number = this.props.ingredient.match(/\d+([\/.]\d+)?/g)
+    const number = this.props.ingredient.match(/\d+(?:(?: \d+)*\/\d+)?/g)
+    console.log("NUMBER:", number)
 
-    const multipliedNum = number ? eval(number[0]) * multiplier : ""
+    // const multipliedNum = number ? eval(number[0]) * multiplier : ""
+
+    let multipliedNum;
+    if (number && number[0].indexOf(' ') >= 0) {
+      console.log("IM IN HERE");
+      const step = number[0].match(/\d+([\/.]\d+)?/g);
+      multipliedNum = (eval(step[0]) + eval(step[1])) * multiplier
+    } else if (number) {
+      multipliedNum =  eval(number[0]) * multiplier;
+    } else {
+      multipliedNum = ""
+    }
 
     const fraction = multipliedNum ? (new Fraction(multipliedNum)).toFraction(true) : ""
 
-    const text = this.props.ingredient.replace(number, "");
+    const text = number ? this.props.ingredient.replace(number[0], "") : this.props.ingredient;
 
     const displayedValue = fraction + text
 

@@ -93,8 +93,8 @@ class Details extends React.Component  {
               numberOfLines={1} style={styles.recipe_name}>{this.state.recipeInfo.name}</Text>
               </View>
               <View style={styles.rating_time_container}>
-                <View style={styles.rating_time}><Text><Text style={styles.rating_time}>Rating: </Text><Text style={styles.rating_time}>{recipeRating}</Text></Text></View>
-                <View style={styles.rating_time}><Text><Text style={styles.rating_time}>⏲: </Text><Text style={styles.rating_time}>{this.state.recipeInfo.totalTime}</Text></Text></View>
+                <View style={styles.rating_time}><Text style={styles.rating_time}>Rating: {recipeRating}</Text></View>
+                <View style={styles.rating_time}><Text style={styles.rating_time}>⏲: {this.state.recipeInfo.totalTime}</Text></View>
               </View>
             </View>
           </View>
@@ -183,9 +183,7 @@ const styles = StyleSheet.create({
   rating_time: {
     textAlign: "center",
     width: widthPercentageToDP('37.5%'),
-    lineHeight: 23,
     fontFamily: "arimo-regular",
-    lineHeight: heightPercentageToDP('4%')
 
   },
 

@@ -32,7 +32,7 @@ export default class App extends React.Component {
           ingredients: [
             "8 ounces spaghetti",
             "2 tablespoons extra-virgin olive oil",
-            "1/2 cup fresh French style breadcrumbs",
+            "1 1/2 cup fresh French style breadcrumbs",
             "Kosher salt and freshly ground black pepper, to taste",
             "Kosher salt and freshly ground black pepper, to taste",
             "8 tablespoons unsalted butter",
