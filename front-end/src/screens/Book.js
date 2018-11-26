@@ -21,7 +21,8 @@ class Book extends React.Component {
       userName: null,
       imagePicker: false,
       editTagline: false,
-      areFriends: false
+      areFriends: false,
+      bookUser: null
     }
 
 
@@ -140,7 +141,8 @@ class Book extends React.Component {
           this.setState({
             userImage: userInfoParsed.photo,
             userTagline: userInfoParsed.tagline,
-            username: userInfoParsed.username
+            username: userInfoParsed.username,
+            bookUser: userInfoParsed.bookUser
           })
 
         })
@@ -197,7 +199,8 @@ class Book extends React.Component {
       userTagline: this.state.userTagline,
       username: this.state.username,
       editTagline: this.state.editTagline,
-      imagePicker: this.state.imagePicker
+      imagePicker: this.state.imagePicker,
+      bookUser: this.state.bookUser
     }
 
 

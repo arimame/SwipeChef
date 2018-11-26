@@ -405,7 +405,7 @@ const buildIngredientsCards = () => {
   for (const num of indexArr) {
     cards.push(ingredientsDeck[num])
   }
-  
+
   cards[cards.length - 1].yupLastCard = true;
   cards[cards.length - 1].nopeLastCard = true;
   cards[cards.length - 1].prevDeck = "ingredients";

@@ -27,24 +27,7 @@ export default class App extends React.Component {
       fontLoaded: false,
       visitor: false,
       usernameToVisit: "",
-      currentList: [
-        {
-          ingredients: [
-            "8 ounces spaghetti",
-            "2 tablespoons extra-virgin olive oil",
-            "1 1/2 cup fresh French style breadcrumbs",
-            "Kosher salt and freshly ground black pepper, to taste",
-            "Kosher salt and freshly ground black pepper, to taste",
-            "8 tablespoons unsalted butter",
-            "3 cloves garlic, minced",
-            "8 ounces cremini mushrooms, thinly sliced",
-            "4 sprigs thyme",
-            "2 tablespoons chopped fresh parsley leaves",
-          ],
-          name: "Brown Butter Mushroom Pasta",
-          servings: 4,
-        }
-      ],
+      currentList: [],
       portions: 2, 
       webView: false
     }
