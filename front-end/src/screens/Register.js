@@ -58,7 +58,7 @@ class Register extends React.Component {
       return
     }
 
-    fetch(`http://192.168.0.20:3000/users`, {
+    fetch(`http://172.46.0.254:3000/users`, {
         method: 'POST',
         headers:
           {"Accept": "application/json",
@@ -89,7 +89,7 @@ class Register extends React.Component {
     })
   }
 
-  errorMessageText = this.state.errorMessage ? <Text>{this.state.errorMessage}</Text> : <Text></Text>
+  errorMessageText = this.state.errorMessage ? <Text styke={{color:"red"}}>{this.state.errorMessage}</Text> : <Text></Text>
 
     return (
       <View>

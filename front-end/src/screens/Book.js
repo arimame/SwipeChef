@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import {ScrollView, StyleSheet, Text, View, Image, Button, AsyncStorage} from 'react-native';
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 import {Permissions} from 'expo';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+
 
 import SwipeCards from "../partials/SwipeCards";
 import Navbar from "../partials/Navbar";
@@ -50,7 +52,7 @@ class Book extends React.Component {
                       editTagline: false})
 
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-        fetch(`http://192.168.0.20:3000/users?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.0.254:3000/users?swipeChefToken=${swipeChefToken}`, {
           method: 'PATCH',
           headers: {
           //'Accept': 'application/json',
@@ -64,7 +66,7 @@ class Book extends React.Component {
     // removes item from book
     removeItem = (itemId) => {
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-        fetch(`http://192.168.0.20:3000/books/${itemId}?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.0.254:3000/books/${itemId}?swipeChefToken=${swipeChefToken}`, {
         method: "DELETE",
         headers: {
           "Accept": "application/json",
@@ -92,7 +94,7 @@ class Book extends React.Component {
 
 // function fetchBooks() {
 //   const token = AsyncStorage.get("token")
-//   fetch('http://192.168.0.20:3000/books', {
+//   fetch('http://172.46.0.254:3000/books', {
 //       method: "GET",
 //       headers: {
 //         "Accept": "application/json",
@@ -115,7 +117,7 @@ class Book extends React.Component {
     console.log("FETCH--------------------");
 
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-      fetch(`http://192.168.0.20:3000/books?swipeChefToken=${swipeChefToken}&usernameToVisit=${usernameToVisit}`, {
+      fetch(`http://172.46.0.254:3000/books?swipeChefToken=${swipeChefToken}&usernameToVisit=${usernameToVisit}`, {
 
         method: "GET",
         headers: {
@@ -128,7 +130,7 @@ class Book extends React.Component {
        const parsedResults = JSON.parse(results._bodyInit)
           this.setState({bookItems: parsedResults.user_book_recipes, areFriends: parsedResults.are_friends})
       }).then(results => {
-        fetch(`http://192.168.0.20:3000/users?swipeChefToken=${swipeChefToken}&usernameToVisit=${usernameToVisit}`, {
+        fetch(`http://172.46.0.254:3000/users?swipeChefToken=${swipeChefToken}&usernameToVisit=${usernameToVisit}`, {
           method: "GET",
           headers: {
             "Accept": "application/json",
@@ -158,7 +160,7 @@ class Book extends React.Component {
 
   addToFriendsPress = (e) => {
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-        fetch(`http://192.168.0.20:3000/friend_add?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.0.254:3000/friend_add?swipeChefToken=${swipeChefToken}`, {
           method: 'POST',
           headers: {
           "Accept": "application/json",
@@ -176,7 +178,7 @@ class Book extends React.Component {
 
   removeFromFriendsPress = (e) => {
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-        fetch(`http://192.168.0.20:3000/friend_remove?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.0.254:3000/friend_remove?swipeChefToken=${swipeChefToken}`, {
           method: 'DELETE',
           headers: {
           "Accept": "application/json",
@@ -209,7 +211,7 @@ class Book extends React.Component {
 
     const imagePickerRender = this.state.imagePicker && !this.props.stateVars.visitor ? (<ImagePickerComponent trx={this.trx} stateVars={this.props.stateVars} />) : <Text></Text>
 
-    const friendsButton = this.props.stateVars.visitor ? <View></View> : <Button onPress={this.onFriendsPress} title="What are my friends cooking?" color="#0F2F47" />
+    const friendsButton = this.props.stateVars.visitor ? <View></View> : <Button onPress={this.onFriendsPress} title="What are my friends cooking? 👨‍🍳👩‍🍳" color="#0F2F47" />
 
     const addToFriendsButton = this.props.stateVars.visitor ? (this.state.areFriends ? <Button onPress={this.removeFromFriendsPress} title="Unfollow" color="#C53A32" /> : <Button onPress={this.addToFriendsPress} title="Follow" color="#0F2F47" />) : <View></View>
 
@@ -229,7 +231,7 @@ class Book extends React.Component {
           {addToFriendsButton}
           {favRecipes}
           {bookItemsRender}
-          <View style={{height:100, marginTop:20}}>
+          <View style={{height:100}}>
             {friendsButton}
           </View>
         </ScrollView>

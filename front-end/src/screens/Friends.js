@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Image, Button, AsyncStorage} from 'react-native';
+import {StyleSheet, Text, View, Image, Button, AsyncStorage, ScrollView} from 'react-native';
 import {SearchBar} from 'react-native-elements';
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 import SearchableDropdown from 'react-native-searchable-dropdown';
@@ -52,7 +52,7 @@ class Friends extends React.Component {
 
   componentDidMount() {
     AsyncStorage.getItem('swipeChefToken').then((swipeChefToken) => {
-      fetch(`http://192.168.0.20:3000/friend_search?swipeChefToken=${swipeChefToken}`, {
+      fetch(`http://172.46.0.254:3000/friend_search?swipeChefToken=${swipeChefToken}`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -65,7 +65,7 @@ class Friends extends React.Component {
       })
     })
     AsyncStorage.getItem('swipeChefToken').then((swipeChefToken) => {
-      fetch(`http://192.168.0.20:3000/friends?swipeChefToken=${swipeChefToken}`, {
+      fetch(`http://172.46.0.254:3000/friends?swipeChefToken=${swipeChefToken}`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -85,8 +85,9 @@ class Friends extends React.Component {
     console.log(this.state.friendsList, "------------------ this state items")
 
     return (
-      <View>
+      <View style={{flex:1}}>
         <Navbar stateVars={this.props.stateVars} style={{height: heightPercentageToDP('10%')}} trx={this.props.trx} />
+
         <SearchableDropdown
           onTextChange={this.updateSearchText}
           onItemSelect={this.selectFriend}
@@ -113,7 +114,9 @@ class Friends extends React.Component {
           resetValue={false}
           underlineColorAndroid="transparent"
         />
-        <FriendList style={{position: 'absolute', bottom: 0}}stateVars={this.props.stateVars} trx={this.props.trx} friendsList={this.state.friendsList}/>
+        <ScrollView>
+          <FriendList style={{position: 'absolute', bottom: 0}}stateVars={this.props.stateVars} trx={this.props.trx} friendsList={this.state.friendsList}/>
+        </ScrollView>
       </View>
     )
   }

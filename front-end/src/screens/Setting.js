@@ -36,7 +36,7 @@ class Setting extends React.Component {
 
   componentDidMount() {
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-      fetch(`http://192.168.0.20:3000/user_settings?swipeChefToken=${swipeChefToken}`, {
+      fetch(`http://172.46.0.254:3000/user_settings?swipeChefToken=${swipeChefToken}`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -75,7 +75,7 @@ class Setting extends React.Component {
 
     submitSettingsUpdate = (setting, setting_value) => {
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-        fetch(`http://192.168.0.20:3000/users?swipeChefToken=${swipeChefToken}&setting=${setting}&setting_value=${setting_value}`, {
+        fetch(`http://172.46.0.254:3000/users?swipeChefToken=${swipeChefToken}&setting=${setting}&setting_value=${setting_value}`, {
           method: 'PATCH',
           headers: {
           "Accept": "application/json",

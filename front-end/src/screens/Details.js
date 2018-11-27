@@ -18,7 +18,7 @@ class Details extends React.Component  {
   }
 
   componentDidMount() {
-    fetch(`http://192.168.0.20:3000/recipes/${this.props.stateVars.currentRecipe}`, {
+    fetch(`http://172.46.0.254:3000/recipes/${this.props.stateVars.currentRecipe}`, {
 
       method: "GET",
       headers: {
@@ -46,8 +46,8 @@ class Details extends React.Component  {
     }
 
     else if (this.state.recipeInfo) {
-      const ingredients = this.state.recipeInfo.ingredientLines.map((ingredient) =>
-        ({key: ingredient})
+      const ingredients = this.state.recipeInfo.ingredientLines.map((ingredient, index) =>
+        ({key: index.toString(), name: ingredient})
       )
       //console.log(ingredients);
 
@@ -105,7 +105,7 @@ class Details extends React.Component  {
           <View style={styles.ingredients_container}>
             <FlatList
               data={ingredients}
-              renderItem={({item}) => <Text>• {item.key}</Text>}
+              renderItem={({item}) => <Text>• {item.name}</Text>}
               style={{margin: 10}}
             />
           </View>
@@ -116,7 +116,7 @@ class Details extends React.Component  {
             <Text style={styles.nutrition_title}>Nutrition</Text>
             {ourNutritionListRender}
           </View>
-          <View style={{flexDirection: "row", justifyContent:"center", alignItems:"center", marginTop:10}}>
+          <View style={{flexDirection: "row", justifyContent:"center", alignItems:"center", marginTop:10, marginBottom: 50}}>
             <Button
               // onPress={() => Linking.openURL(this.state.recipeInfo.source.sourceRecipeUrl)}
               onPress={this.props.trx.toggleWebView}

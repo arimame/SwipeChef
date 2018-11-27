@@ -19,7 +19,7 @@ class Fridge extends React.Component  {
     removeItem = (itemId) => {
 
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-        fetch(`http://192.168.0.20:3000/fridges/${itemId}?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.0.254:3000/fridges/${itemId}?swipeChefToken=${swipeChefToken}`, {
         method: "DELETE",
         headers: {
           "Accept": "application/json",
@@ -43,7 +43,7 @@ class Fridge extends React.Component  {
 
     addToBook = (itemId) => {
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-        fetch(`http://192.168.0.20:3000/books?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://172.46.0.254:3000/books?swipeChefToken=${swipeChefToken}`, {
           method: 'POST',
           headers:
             {"Accept": "application/json",
@@ -64,7 +64,7 @@ class Fridge extends React.Component  {
   }
   componentDidMount() {
     AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-      fetch(`http://192.168.0.20:3000/fridges?swipeChefToken=${swipeChefToken}`, {
+      fetch(`http://172.46.0.254:3000/fridges?swipeChefToken=${swipeChefToken}`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -95,13 +95,14 @@ class Fridge extends React.Component  {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+
   },
   navbar: {
     height: heightPercentageToDP('10%'),
   },
   recipeContainer: {
-    height: heightPercentageToDP('90%')
+    height: heightPercentageToDP('90%'),
   }
 });
 

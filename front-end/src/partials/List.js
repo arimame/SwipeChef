@@ -18,7 +18,7 @@ const listElements = props.recipeItems.map((recipe, index) =>
 
 
   return (
-    <View style={{flex:1, marginTop: 10}}>
+    <View style={{flex:1, marginTop: 10, marginBottom: 50}}>
     <ScrollView>
     {listElements}
     </ScrollView>
