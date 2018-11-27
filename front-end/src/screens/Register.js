@@ -31,6 +31,7 @@ const options = {
 class Register extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {errorMessage: null}
   }
 
   render () {
@@ -48,6 +49,15 @@ class Register extends React.Component {
     console.log("--------------------------- REGISTER INPUTS")
     console.log(registerInputs)
 
+    if (!registerInputs || !registerInputs.password || !registerInputs.confirmPassword || !registerInputs.username || !registerInputs.email ) {
+      this.setState({errorMessage: "All fields are required."})
+      return
+    }
+    if (!registerInputs || registerInputs.confirmPassword != registerInputs.password ) {
+      this.setState({errorMessage: "Passwords must match"})
+      return
+    }
+
     fetch(`http://172.46.3.249:3000/users`, {
         method: 'POST',
         headers:
@@ -56,7 +66,7 @@ class Register extends React.Component {
         },
         body: `email=${registerInputs.email}&username=${registerInputs.username}&password=${registerInputs.password}&password_confirmation=${registerInputs.confirmPassword}` // <-- Post parameters
     }).then(results => {
-      if (results._bodyInit.slice(0,2) != '400') {
+      if (!results._bodyInit.includes('400')) {
         console.log(results)
         var storeData = async () => {
           try {
@@ -74,10 +84,12 @@ class Register extends React.Component {
         //})
 
       } else {
-        console.log(results)
+        this.setState({errorMessage: "Username already taken."})
       }
     })
   }
+
+  errorMessageText = this.state.errorMessage ? <Text>{this.state.errorMessage}</Text> : <Text></Text>
 
     return (
       <View>
@@ -87,6 +99,7 @@ class Register extends React.Component {
          <TouchableHighlight style={styles.button} onPress={submitRegister} underlayColor="#f46969">
           <Text style={styles.buttonText}>Sign up</Text>
         </TouchableHighlight>
+        {errorMessageText}
         <Text>Already have an account? <Text style={{fontWeight: 'bold'}} onPress={buttonPressToLogin}>Login.</Text></Text>
       </View>
       </View>

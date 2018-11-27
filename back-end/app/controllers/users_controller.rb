@@ -30,7 +30,7 @@ class UsersController < ApplicationController
     user.query_string = ""
     user.photo = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmGRbg0zgj_aGlIjzN0t8bA6RCJjP5Puc3jxyltW2n0kg86cerug"
 
-    if user.save
+    if params[:password] == params[:password_confirmation] && user.save
 
       payload = {id: user.id.to_s}
 

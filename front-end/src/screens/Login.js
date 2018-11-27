@@ -26,7 +26,8 @@ const options = {
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { text: 'Useless Placeholder' };
+    this.state = {  text: 'Useless Placeholder',
+                    errorMessage: null };
   }
 
   render () {
@@ -63,11 +64,13 @@ class Login extends React.Component {
       this.props.trx.updateCurrentUser(results)
       this.props.trx.updateCurrentScreen("login", "swipe")
     } else {
-      console.log(results)
+      this.setState({errorMessage: "Password and email do not match."})
     }
   })
     //console.log(loginInputs.email)
   }
+
+  errorMessageText = this.state.errorMessage ? <Text style={{color: 'red'}}>{this.state.errorMessage}</Text> : <Text></Text>
 
     return (
       <View>
@@ -77,6 +80,7 @@ class Login extends React.Component {
          <TouchableHighlight style={styles.button} onPress={submitLogin} underlayColor="#f46969">
           <Text style={styles.buttonText}>Login</Text>
         </TouchableHighlight>
+        {errorMessageText}
         <Text>Need an account? <Text style={{fontWeight: 'bold'}} onPress={buttonPressToRegister}> Sign up.</Text></Text>
       </View>
       </View>
