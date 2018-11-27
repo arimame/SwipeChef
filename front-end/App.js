@@ -59,7 +59,7 @@ export default class App extends React.Component {
     }
 
     addToList = (id) => {
-      fetch(`http://172.46.3.249:3000/recipes/${id}`, {
+      fetch(`http://192.168.0.20:3000/recipes/${id}`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -85,7 +85,7 @@ export default class App extends React.Component {
 
     addToFridge = (recipe_id) => {
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
-        fetch(`http://172.46.3.249:3000/fridges?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://192.168.0.20:3000/fridges?swipeChefToken=${swipeChefToken}`, {
             method: 'POST',
             headers:
               {"Accept": "application/json",
@@ -249,7 +249,7 @@ export default class App extends React.Component {
       console.log(swipeChefToken)
       console.log("---------------------------- SWIPE CHEF TOKEN")
       if (swipeChefToken) {
-        fetch(`http://172.46.3.249:3000/verify_token?swipeChefToken=${swipeChefToken}`, {
+        fetch(`http://192.168.0.20:3000/verify_token?swipeChefToken=${swipeChefToken}`, {
           method: "GET",
           headers: {
             "Accept": "application/json",

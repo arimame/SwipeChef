@@ -11,8 +11,8 @@ export default class ImagePickerComponent extends React.Component {
     let { image } = this.state;
 
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text onPress={this._pickImage} style={{textAlign: "right", fontFamily: "pacifico-regular", color:"#0F2F47"}}>edit</Text>
+      <View style={{width:110, backgroundColor:"white", opacity:0.6, zIndex:100, borderRadius:10}}>
+      <Text onPress={this._pickImage} style={{paddingLeft:5, paddingRight:10, paddingTop:10, textAlign: "right", fontFamily: "pacifico-regular", color:"#0F2F47"}}>edit photo</Text>
       </View>
     );
   }
@@ -45,7 +45,7 @@ export default class ImagePickerComponent extends React.Component {
       AsyncStorage.getItem('swipeChefToken').then(swipeChefToken => {
         data.append("swipeChefToken", swipeChefToken)
 
-        fetch('http://172.46.3.249:3000/users', {
+        fetch('http://192.168.0.20:3000/users', {
           method: 'PATCH',
           headers: {
           //'Accept': 'application/json',

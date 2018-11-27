@@ -12,10 +12,10 @@ function Userinfo (props) {
 
   let randNum = Math.round(Math.random() * 50,0)
 
-  imageName = `http://172.46.3.249:3000/${props.userVars.userImage}?spaghetti=${randNum}`
+  imageName = `http://192.168.0.20:3000/${props.userVars.userImage}?spaghetti=${randNum}`
 
 
-  const userImage = props.userVars.userImage && props.userVars.userImage.includes("gstatic") ? <Image source={{uri:`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmGRbg0zgj_aGlIjzN0t8bA6RCJjP5Puc3jxyltW2n0kg86cerug`}} style= {{width: 150, height: 150, borderColor: "#C53A32", borderRadius: 5, borderWidth: 2}} /> : <Image key={imageName} source={{uri: imageName}} style= {{width: 150, height: 150, borderColor: "#C53A32", borderRadius: 5, borderWidth: 2}} /> ;
+  const userImage = props.userVars.userImage && props.userVars.userImage.includes("gstatic") ? <Image source={{uri:`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmGRbg0zgj_aGlIjzN0t8bA6RCJjP5Puc3jxyltW2n0kg86cerug`}} style= {{width: 300, height: 300, borderRadius: 5, marginTop: -25, zIndex:-1}} /> : <Image key={imageName} source={{uri: imageName}} style= {{width: 300, height: 300, borderRadius: 5, marginTop: -25, zIndex:-1}} /> ;
 
 
 
@@ -25,15 +25,15 @@ function Userinfo (props) {
       if (props.userVars.editTagline) {
         userTagline =
         <TextInput
-          style={{height: 40, borderColor: "#0F2F47", borderWidth: 2, borderRadius: 5, padding: 5}}
+          style={{height: 40, borderColor: "#0F2F47", borderWidth: 2, borderRadius: 5, padding: 5, width: 300}}
           onChangeText={(text) => taglineInput = text}
         />
       } else {
-        userTagline = <Text style={{textAlign: 'center', backgroundColor: "#C53A32", borderRadius: 5, height: 40, fontFamily: 'fredokaone-regular', fontSize: 20, color: "#E9E2BB", lineHeight: 40}}>"{props.userVars.userTagline}"</Text>
+        userTagline = <View style={{marginTop: -20, height: 40, borderRadius: 10, backgroundColor: "#C53A32", width:275, justifyContent: 'center', alignItems: 'center'}}><Text adjustsFontSizeToFit numberOfLines={1} style={{paddingLeft: 50, paddingRight: 50, textAlign: 'center', fontFamily: 'fredokaone-regular', fontSize: 18, color: "#E9E2BB", lineHeight: 40}}>"{props.userVars.userTagline}"</Text></View>
       }
 
   } else {
-    userTagline = <Text>Enter your tagline by editing your profile</Text> ;
+    userTagline = <Text></Text> ;
   }
 
   const options = {
@@ -60,24 +60,22 @@ function Userinfo (props) {
   }
 
 
-  const taglineOption = props.userVars.editTagline ? <Text onPress={submitUserTaglineButtonPress} style={{fontFamily: "pacifico-regular"}}>Submit Tagline</Text> : ( props.stateVars.visitor ? <View></View> : <Text onPress={setUserTaglineButtonPress} style={{textAlign: "right", fontFamily: "pacifico-regular", color:"#0F2F47"}}>edit</Text> )
+  const taglineOption = props.userVars.editTagline ? <Text onPress={submitUserTaglineButtonPress} style={{textAlign: "right", fontFamily: "pacifico-regular", color:"#0F2F47", marginRight:50}}>Submit Tagline</Text> : ( props.stateVars.visitor ? <View></View> : (!props.userVars.userTagline ? <Text onPress={setUserTaglineButtonPress} style={{textAlign: "right", fontFamily: "pacifico-regular", color:"#0F2F47", marginRight:50}}>add a tagline</Text> : <Text onPress={setUserTaglineButtonPress} style={{textAlign: "right", fontFamily: "pacifico-regular", color:"#0F2F47", marginRight:50}}>edit tagline</Text> ) )
 
   const imagePicker = props.stateVars.visitor ? <View></View> : (<ImagePickerComponent trx={props.trx} stateVars={props.stateVars} userVars={props.userVars}/>)
 
 
 
   return (
-    <View style={{height: heightPercentageToDP('40%')}}>
-      <View style={{height: heightPercentageToDP('20%'), justifyContent: 'center', alignItems: 'center'}}>
+    <View>
+      {imagePicker}
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
         {userImage}
       </View>
-      <View style={{height: heightPercentageToDP('5%'), justifyContent: 'center', alignItems: 'center'}}>
-        {imagePicker}
-      </View>
-      <View style={{height: heightPercentageToDP('15%'), padding: 40}}>
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
         {userTagline}
-        {taglineOption}
       </View>
+      {taglineOption}
     </View>
 
   )

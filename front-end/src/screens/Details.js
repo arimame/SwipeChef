@@ -18,7 +18,7 @@ class Details extends React.Component  {
   }
 
   componentDidMount() {
-    fetch(`http://172.46.3.249:3000/recipes/${this.props.stateVars.currentRecipe}`, {
+    fetch(`http://192.168.0.20:3000/recipes/${this.props.stateVars.currentRecipe}`, {
 
       method: "GET",
       headers: {

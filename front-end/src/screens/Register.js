@@ -58,7 +58,7 @@ class Register extends React.Component {
       return
     }
 
-    fetch(`http://172.46.3.249:3000/users`, {
+    fetch(`http://192.168.0.20:3000/users`, {
         method: 'POST',
         headers:
           {"Accept": "application/json",
